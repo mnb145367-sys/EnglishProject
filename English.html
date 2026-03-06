@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Fluency • language mastery</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f9ff;
+            color: #1e2f4d;
+            line-height: 1.5;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark mode variables */
+        body.dark-mode {
+            background-color: #121a24;
+            color: #e0e9f5;
+        }
+
+        body.dark-mode .section {
+            background: rgba(20, 35, 50, 0.8);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode .quote {
+            background: rgba(40, 60, 80, 0.7);
+            color: #d0e2f5;
+        }
+
+        body.dark-mode .leader-card {
+            background: linear-gradient(135deg, #1f2e40, #1a2737);
+        }
+
+        body.dark-mode .btn {
+            background: #2d4055;
+            color: #cfdef5;
+        }
+
+        body.dark-mode .btn-primary {
+            background: linear-gradient(115deg, #2b5780, #3f6b99);
+        }
+
+        /* --- ANIMATED EDUCATIONAL BACKGROUND --- */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(145deg, #e2f0ff 0%, #fafcff 100%);
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .bg-animation {
+            background: linear-gradient(145deg, #0b1a2a, #1a2c3f);
+        }
+
+        .floating-words {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            font-size: 0;
+        }
+
+        .floating-words span {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgba(75, 130, 190, 0.1);
+            white-space: nowrap;
+            user-select: none;
+            animation: floatWord 20s linear infinite;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        @keyframes floatWord {
+            0% { transform: translateX(100vw) translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateX(-200px) translateY(-50px) rotate(15deg); opacity: 0; }
+        }
+
+        .floating-words span:nth-child(1) { top: 15%; animation-duration: 18s; animation-delay: -2s; }
+        .floating-words span:nth-child(2) { top: 40%; animation-duration: 22s; animation-delay: -7s; }
+        .floating-words span:nth-child(3) { top: 70%; animation-duration: 25s; animation-delay: -3s; }
+        .floating-words span:nth-child(4) { top: 20%; animation-duration: 30s; animation-delay: -12s; }
+        .floating-words span:nth-child(5) { top: 85%; animation-duration: 19s; animation-delay: -5s; }
+        .floating-words span:nth-child(6) { top: 55%; animation-duration: 27s; animation-delay: -9s; }
+        .floating-words span:nth-child(7) { top: 10%; animation-duration: 24s; animation-delay: -15s; }
+        .floating-words span:nth-child(8) { top: 95%; animation-duration: 21s; animation-delay: -1s; }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- HEADER (glass) --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 6%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 20px rgba(0, 30, 60, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+            transition: background 0.3s;
+        }
+
+        body.dark-mode header {
+            background: rgba(20, 35, 50, 0.8);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(130deg, #1f4e8c, #4a8abf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logo:hover {
+            filter: drop-shadow(0 4px 8px rgba(0,100,200,0.2));
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1e3a5f;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            padding: 0.25rem 0;
+        }
+
+        body.dark-mode nav a {
+            color: #c7def5;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2b6f9e, #7fb4d9);
+            transition: width 0.25s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #1e3a5f;
+            padding: 0 0.5rem;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            color: #ffdb9f;
+        }
+
+        /* main container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto 4rem;
+            padding: 0 5%;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* section cards */
+        .section {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.15);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: transform 0.3s ease, box-shadow 0.4s, background 0.3s;
+        }
+
+        .section:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 32px 55px -10px rgba(25,85,130,0.2);
+            border-color: rgba(255,255,255,0.9);
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #103a5e;
+            margin-bottom: 1.2rem;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3 {
+            color: #b3d6f0;
+        }
+
+        h1 { font-size: clamp(2rem, 5vw, 2.8rem); letter-spacing: -0.02em; }
+        h2 { font-size: clamp(1.8rem, 4vw, 2.2rem); letter-spacing: -0.01em; }
+        h3 { font-size: clamp(1.3rem, 3vw, 1.5rem); }
+
+        p {
+            font-size: 1.1rem;
+            color: #254e77;
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+        }
+
+        body.dark-mode p {
+            color: #b5d0e8;
+        }
+
+        /* arrow section */
+        .arrow-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0.5rem 0 1.5rem;
+            color: #84b3d9;
+            font-size: 1.5rem;
+            gap: 1rem;
+        }
+
+        .arrow-section .line {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #84b3d9, transparent);
+        }
+
+        .arrow-section i {
+            font-size: 1.8rem;
+            color: #5e9fcf;
+            animation: slideDown 2.2s infinite;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-8px); opacity: 0.3; }
+            50% { transform: translateY(8px); opacity: 1; }
+            100% { transform: translateY(-8px); opacity: 0.3; }
+        }
+
+        /* quote style */
+        .quote {
+            background: rgba(220, 240, 255, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 2rem;
+            border-radius: 2rem;
+            margin: 2rem 0 1rem;
+            font-style: italic;
+            border-left: 6px solid #4e8fc9;
+            font-size: 1.2rem;
+            color: #103a5e;
+            box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
+        }
+
+        /* leader card */
+        .leader-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
+            border-radius: 2.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 350px;
+            margin: 1.5rem auto;
+            box-shadow: 0 20px 35px -8px rgba(40,100,150,0.2);
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+
+        .leader-avatar {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(145deg, #c1dcf5, #a6c9ec);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            font-size: 3.5rem;
+            color: #1f4970;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            border: 3px solid white;
+        }
+
+        .leader-name {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #175277;
+            margin-bottom: 0.25rem;
+        }
+
+        .leader-points {
+            background: #d4e9fc;
+            padding: 0.4rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #0f3d60;
+            margin: 0.8rem 0;
+            font-size: 1rem;
+        }
+
+        /* buttons */
+        .btn {
+            background: white;
+            border: none;
+            padding: 1rem 2.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1e4f7a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 16px rgba(45, 100, 150, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(2px);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+            color: #3d7cb0;
+        }
+
+        .btn:hover {
+            background: #e8f2fc;
+            transform: scale(1.04);
+            box-shadow: 0 14px 24px rgba(35, 110, 180, 0.15);
+            border-color: #b0d1f0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            box-shadow: 0 10px 20px rgba(25, 95, 155, 0.3);
+        }
+
+        .btn-primary i {
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(115deg, #1b4f78, #2d6ca3);
+        }
+
+        /* input */
+        input {
+            padding: 1rem 1.8rem;
+            border-radius: 60px;
+            border: 1px solid #c7ddef;
+            background: white;
+            font-size: 1rem;
+            width: 300px;
+            max-width: 100%;
+            margin: 0.8rem 0;
+            outline: none;
+            transition: 0.2s;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        input:focus {
+            border-color: #639fd1;
+            box-shadow: 0 0 0 3px rgba(90, 155, 215, 0.15);
+        }
+
+        /* Small helper text under input */
+        .input-hint {
+            font-size: 0.85rem;
+            color: #5f7d9c;
+            margin-top: -0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        body.dark-mode .input-hint {
+            color: #a0b8d0;
+        }
+
+        /* lesson tasks */
+        .lesson-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 8px 16px rgba(0,30,50,0.05);
+        }
+
+        body.dark-mode .task-card {
+            background: rgba(30, 45, 60, 0.8);
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #18537b;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;  /* Center the title */
+            gap: 0.8rem;
+            text-align: center;
+        }
+
+        body.dark-mode .task-title {
+            color: #b3d6f0;
+        }
+
+        .task-title i {
+            font-size: 1.8rem;
+            color: #538cc0;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: #bdd6ec;
+            margin: 1.5rem 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .deadline-info {
+            background: #d9ecfd;
+            border-radius: 60px;
+            padding: 0.7rem 2rem;
+            display: inline-block;
+            font-weight: 500;
+            color: #145580;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .instructions {
+            background: #f0f7ff;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #4e8fc9;
+        }
+
+        .instructions p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Centered text for lesson page */
+        .lesson-centered {
+            text-align: center;
+        }
+
+        /* contact cards */
+        .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem 2.2rem;
+            text-align: center;
+            flex: 1 1 200px;
+            box-shadow: 0 15px 25px -8px rgba(0,50,80,0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .contact-card i {
+            font-size: 2.2rem;
+            color: #327ab3;
+            margin-bottom: 1rem;
+        }
+
+        /* footer */
+        footer {
+            background: #103246;
+            color: #e5f0fc;
+            padding: 3rem 6% 2rem;
+            border-radius: 3rem 3rem 0 0;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode footer {
+            background: #0a1a2a;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 70%);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #aad0f5, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #c7e2fc;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-icons a {
+            color: #c7e2fc;
+            background: rgba(255,255,255,0.06);
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.25s;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background: #2f577b;
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #99bcd9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 0.8rem;
+                padding: 1rem 4%;
+            }
+            nav {
+                gap: 1rem;
+                justify-content: center;
+            }
+            .section {
+                padding: 1.8rem;
+                margin: 1.5rem 0;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            .arrow-section .line {
+                width: 40px;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 4%;
+            }
+            .section {
+                padding: 1.5rem;
+                border-radius: 1.8rem;
+            }
+            .btn {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.9rem;
+            }
+            input {
+                width: 100%;
+            }
+            .leader-avatar {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="floating-words">
+            <span>LEARN</span> <span>SPEAK</span> <span>READ</span> <span>WRITE</span>
+            <span>FLUENCY</span> <span>PRACTICE</span> <span>LISTEN</span> <span>GROW</span>
+        </div>
+    </div>
+    <div class="bg-overlay"></div>
+
+    <header>
+        <div class="logo" onclick="reload()">Fluency</div>
+        <nav>
+            <a onclick="openPage('home')">Home</a>
+            <a onclick="openPage('about')">About</a>
+            <a onclick="openPage('services')">Services</a>
+            <a onclick="openPage('contact')">Contact</a>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="home">
+            <div class="section">
+                <h1>Master English through daily practice</h1>
+                <p>Fluency is a structured, no‑fluff program: every day a new lesson with video, reading, vocabulary and speaking. Clear progress, real results.</p>
+                <div class="quote">
+                    “Language is the road map of a culture. It tells you where its people come from and where they are going.” – Rita Mae Brown
+                </div>
+            </div>
+
+            <div class="arrow-section">
+                <span class="line"></span>
+                <i class="fa-solid fa-chevron-down"></i>
+                <span class="line"></span>
+            </div>
+
+            <div class="section">
+                <h2>How the program works</h2>
+                <p>– One 20‑minute lesson delivered daily<br>
+                   – Focus on real‑life phrases and pronunciation<br>
+                   – Vocabulary from context, not lists<br>
+                   – Speaking tasks with community feedback<br>
+                   – Progress dashboard to track consistency</p>
+                <p>We believe in steady, measurable improvement – no miracles, just disciplined practice.</p>
+            </div>
+
+            <div class="arrow-section">
+                <span class="line"></span>
+                <i class="fa-solid fa-chevron-down"></i>
+                <span class="line"></span>
+            </div>
+
+            <div class="section" style="text-align: center;">
+                <h2>Top performer</h2>
+                <div class="leader-card">
+                    <div class="leader-avatar">
+                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="صورة حاتم" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
+                    </div>
+                    <div class="leader-name">Hatim</div>
+                    <div class="leader-points"><i class="fa-regular fa-star"></i> 72 points</div>
+                    <p style="margin-top: 0.8rem;">Most consistent learner this month</p>
+                </div>
+            </div>
+
+            <div class="arrow-section">
+                <span class="line"></span>
+                <i class="fa-solid fa-chevron-down"></i>
+                <span class="line"></span>
+            </div>
+
+            <div class="section" style="text-align: center;">
+                <h2>Start today's lesson</h2>
+                <p>Use the code provided by your instructor.</p>
+                <button class="btn btn-primary" onclick="startLesson()"><i class="fa-regular fa-circle-play"></i> Begin lesson</button>
+            </div>
+        </div>
+
+        <!-- LESSON PAGE -->
+        <div id="lessonPage" class="hidden">
+            <div class="section lesson-centered">
+                <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
+                <input id="codeInput" type="text" placeholder="e.g. 1234" maxlength="4" pattern="\d*" inputmode="numeric" onkeypress="return isNumberKey(event)">
+                <div class="input-hint">The code is sent by the coordinator.</div>
+                <button class="btn btn-primary" onclick="checkCode()">Access</button>
+            </div>
+
+            <div id="lessonContent" class="hidden">
+                <div class="section lesson-centered">
+                    <h2>Today's session</h2>
+                    <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
+                    <div class="deadline-info" id="deadlineDisplay"></div>
+                    
+                    <div class="instructions">
+                        <p><strong>Instructions</strong></p>
+                        <p>• Watch the video carefully. You can use subtitles.</p>
+                        <p>• Answer the reflection questions in your notebook.</p>
+                        <p>• Read the passage aloud at least twice.</p>
+                        <p>• Learn the vocabulary words and try to use them in a sentence.</p>
+                        <p>• Record your speaking task and share it in the WhatsApp group.</p>
+                        <p>• All tasks must be submitted before the deadline above.</p>
+                    </div>
+                </div>
+
+                <div class="lesson-tasks">
+                    <!-- Task 1: Video (no number) -->
+                    <div class="task-card">
+                        <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                        </div>
+                        <p>Listen actively. You may use subtitles the first time.</p>
+                    </div>
+
+                    <!-- Task 2: Reflection (no number) -->
+                    <div class="task-card">
+                        <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
+                        <p>• What is the main message? (one sentence)</p>
+                        <p>• Write down one new expression you learned.</p>
+                        <p>• Do you agree with the speaker's view? Why?</p>
+                    </div>
+
+                    <!-- Task 3: Reading (no number) -->
+                    <div class="task-card">
+                        <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+                        <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7;">
+                            “Consistency is more important than intensity. Practicing for fifteen minutes every day yields better results than studying for two hours once a week. The brain builds language pathways through regular exposure.”
+                        </div>
+                    </div>
+
+                    <!-- Task 4: Vocabulary (no number) -->
+                    <div class="task-card">
+                        <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+                        <ul style="margin-left: 1.8rem; color:#1d4f79;">
+                            <li><strong>persistence</strong> – continuing despite difficulty</li>
+                            <li><strong>momentum</strong> – force that keeps something moving</li>
+                            <li><strong>consistency</strong> – doing the same thing regularly</li>
+                            <li><strong>exposure</strong> – contact with something (e.g. language)</li>
+                            <li><strong>discipline</strong> – controlled behaviour to achieve a goal</li>
+                        </ul>
+                    </div>
+
+                    <!-- Task 5: Speaking (no number) -->
+                    <div class="task-card">
+                        <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
+                        <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
+                        <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div id="about" class="hidden">
+            <div class="section">
+                <h2>About Fluency</h2>
+                <p>Fluency was created for adult learners who want practical English skills without hype. Our curriculum focuses on the most useful words and sentence structures, repeated until they become automatic.</p>
+                <p>We combine short video clips, graded reading passages, and daily speaking drills. Every lesson builds on previous ones, reinforcing vocabulary in context.</p>
+                <p>No gamification gimmicks – just honest, structured practice. The only thing we track is your consistency, because that's what truly matters.</p>
+            </div>
+        </div>
+
+        <!-- SERVICES PAGE (with dashes) -->
+        <div id="services" class="hidden">
+            <div class="section">
+                <h2>What we offer</h2>
+                <p>– Daily video lesson with comprehension check</p>
+                <p>– Reading passage + vocabulary focus</p>
+                <p>– Weekly speaking task with peer feedback</p>
+                <p>– Personal progress report (streak, points, areas to improve)</p>
+                <p>– Access to WhatsApp community for questions & practice</p>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="contact" class="hidden">
+            <div class="section">
+                <h2>Contact & community</h2>
+                <p>Reach out directly or join our learning group.</p>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <i class="fa-regular fa-user"></i>
+                        <h3>Amer Abdulrhman</h3>
+                        <p>Program Director</p>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fa-regular fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+966 55 259 7139</p>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fa-regular fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>mnb145367@gmail.com</p>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Fluency</div>
+            <div class="footer-links">
+                <a href="#" onclick="openPage('home'); return false;">Home</a>
+                <a href="#" onclick="openPage('about'); return false;">About</a>
+                <a href="#" onclick="openPage('services'); return false;">Services</a>
+                <a href="#" onclick="openPage('contact'); return false;">Contact</a>
+                <a href="#" onclick="startLesson(); return false;">Lesson</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                <a onclick="showTempMessage()"><i class="fa-brands fa-twitter"></i></a>
+                <a onclick="showTempMessage()"><i class="fa-brands fa-instagram"></i></a>
+                <a onclick="showTempMessage()"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Fluency Language Program — real progress, no exaggeration. | Director: Amer Abdulrhman</p>
+        </div>
+    </footer>
+
+    <script>
+        // === Existing functions ===
+        function reload() { location.reload(); }
+
+        function openPage(page) {
+            const pages = ['home','lessonPage','about','services','contact'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            document.getElementById(page).classList.remove('hidden');
+        }
+
+        function startLesson() {
+            openPage('lessonPage');
+            document.getElementById('lessonContent').classList.add('hidden');
+        }
+
+        const lessonCode = "1234";
+
+        function checkCode() {
+            const input = document.getElementById('codeInput');
+            if (input.value === lessonCode) {
+                document.getElementById('lessonContent').classList.remove('hidden');
+                displayDeadline();
+                input.value = '';
+            } else {
+                alert('Incorrect code. Please try again.');
+                input.style.borderColor = '#cc7b7b';
+                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
+            }
+        }
+
+        function displayDeadline() {
+            const now = new Date();
+            const deadline = new Date(now);
+            deadline.setDate(now.getDate() + 2);
+            const year = deadline.getFullYear();
+            const month = String(deadline.getMonth() + 1).padStart(2, '0');
+            const day = String(deadline.getDate()).padStart(2, '0');
+            const dateString = `${year}-${month}-${day}`;
+            document.getElementById('deadlineDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${dateString} (23:59 your local time)`;
+        }
+
+        function showTempMessage() {
+            alert("Social media links will be added soon. Stay tuned!");
+        }
+
+        // Allow only numbers in code input
+        function isNumberKey(evt) {
+            const charCode = evt.which ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
+            return true;
+        }
+
+        document.getElementById('codeInput')?.addEventListener('keypress', e => {
+            if (e.key === 'Enter') checkCode();
+        });
+
+        // === Dark Mode ===
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
+            document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
+        }
+    </script>
+</body>
+</html>
