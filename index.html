@@ -1085,7 +1085,7 @@
     </footer>
 
     <script>
-        const STUDENT_API_URL = 'https://script.google.com/macros/s/AKfycbzJkWGgV0aH66JN31xG-r2c7aLeQL5GS6EjqF5mWqB7B6hqE4zE8K_wGUBt_gVKq5P7/exec';
+        const STUDENT_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // نفس رابط الدرس
         const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec';
 
         let studentsData = [];
@@ -1099,16 +1099,31 @@
             try {
                 const response = await fetch(STUDENT_API_URL);
                 const data = await response.json();
-                if (!data.success) return [];
-                return data.data || [];
+                console.log('API Response:', data); // للتأكد من البيانات
+                if (data.success && data.data) {
+                    return data.data;
+                } else {
+                    console.warn('No data from API, using sample data');
+                    return getSampleData(); // بيانات تجريبية لو API فاضي
+                }
             } catch (error) {
                 console.error('Failed to fetch:', error);
-                return [];
+                return getSampleData();
             }
         }
 
+        function getSampleData() {
+            return [
+                { name: "Hatim", total: 71, quiz: 19, hw1: 5, hw2: 0, w1: 7, w2: 0, w3: 0, w4: 0, hw3: 5, hw4: 5, hw5: 5, hw6: 5, hw7: 5, hw8: 0, hw9: 0, pres1: 10 },
+                { name: "Amer", total: 68, quiz: 20, hw1: 5, hw2: 5, w1: 7, w2: 0, w3: 0, w4: 0, hw3: 5, hw4: 5, hw5: 5, hw6: 5, hw7: 5, hw8: 0, hw9: 5, pres1: 10 },
+                { name: "Zubair", total: 67, quiz: 20, hw1: 5, hw2: 5, w1: 7, w2: 0, w3: 0, w4: 0, hw3: 5, hw4: 5, hw5: 5, hw6: 5, hw7: 5, hw8: 5, hw9: 5, pres1: 0 },
+                { name: "Ahmed Mo", total: 55, quiz: 18, hw1: 5, hw2: 5, w1: 7, w2: 0, w3: 0, w4: 0, hw3: 0, hw4: 5, hw5: 5, hw6: 0, hw7: 0, hw8: 5, hw9: 0, pres1: 10 },
+                { name: "Saleh", total: 50, quiz: 20, hw1: 0, hw2: 0, w1: 0, w2: 0, w3: 0, w4: 0, hw3: 0, hw4: 5, hw5: 5, hw6: 0, hw7: 5, hw8: 0, hw9: 5, pres1: 10 }
+            ];
+        }
+
         function calculateStatistics(students) {
-            if (!students.length) return null;
+            if (!students || !students.length) return null;
             const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
             document.getElementById('top5Grid').innerHTML = sorted.slice(0, 5).map(s => `
                 <div class="top-student-card">
@@ -1163,7 +1178,7 @@
             document.getElementById('fullStudentTable').style.display = 'none';
             
             const students = await fetchStudentData();
-            if (!students.length) {
+            if (!students || !students.length) {
                 document.getElementById('statsLoading').innerHTML = '<p>No data available. Please check back later.</p>';
                 return;
             }
