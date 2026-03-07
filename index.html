@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* RESET & BASE */
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
             font-size: 1.15rem;
         }
 
-        /* Dark mode variables */
+        /* ===== DARK MODE ===== */
         body.dark-mode {
             background-color: #121a24;
             color: #e0e9f5;
@@ -81,7 +81,7 @@
             background: #5e9fcf;
         }
 
-        /* --- ANIMATED EDUCATIONAL BACKGROUND --- */
+        /* ===== ANIMATED BACKGROUND ===== */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -144,7 +144,7 @@
             pointer-events: none;
         }
 
-        /* --- HEADER (glass) --- */
+        /* ===== HEADER ===== */
         header {
             display: flex;
             justify-content: space-between;
@@ -217,7 +217,6 @@
             width: 100%;
         }
 
-        /* Dark mode toggle */
         .dark-mode-toggle {
             background: none;
             border: none;
@@ -231,7 +230,7 @@
             color: #ffdb9f;
         }
 
-        /* main container */
+        /* ===== MAIN CONTAINER ===== */
         .container {
             max-width: 1200px;
             margin: 2rem auto 4rem;
@@ -240,7 +239,7 @@
             z-index: 5;
         }
 
-        /* section cards */
+        /* ===== CARDS ===== */
         .section {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
@@ -286,7 +285,6 @@
             color: #b5d0e8;
         }
 
-        /* arrow section */
         .arrow-section {
             display: flex;
             justify-content: center;
@@ -315,7 +313,6 @@
             100% { transform: translateY(-8px); opacity: 0.3; }
         }
 
-        /* quote style */
         .quote {
             background: rgba(220, 240, 255, 0.7);
             backdrop-filter: blur(4px);
@@ -329,7 +326,7 @@
             box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
         }
 
-        /* leader card - for top performer */
+        /* ===== TOP PERFORMER CARD ===== */
         .leader-card {
             background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
             border-radius: 2.5rem;
@@ -382,7 +379,7 @@
             font-size: 1.1rem;
         }
 
-        /* top 5 students grid (home page) - from API */
+        /* ===== TOP 5 GRID ===== */
         .top5-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -417,7 +414,7 @@
             font-weight: 500;
         }
 
-        /* buttons */
+        /* ===== BUTTONS ===== */
         .btn {
             background: white;
             border: none;
@@ -463,7 +460,7 @@
             background: linear-gradient(115deg, #1b4f78, #2d6ca3);
         }
 
-        /* input */
+        /* ===== INPUT ===== */
         input {
             padding: 1rem 1.8rem;
             border-radius: 60px;
@@ -483,7 +480,6 @@
             box-shadow: 0 0 0 3px rgba(90, 155, 215, 0.15);
         }
 
-        /* Small helper text under input */
         .input-hint {
             font-size: 0.9rem;
             color: #5f7d9c;
@@ -494,7 +490,7 @@
             color: #a0b8d0;
         }
 
-        /* lesson tasks */
+        /* ===== LESSON TASKS ===== */
         .lesson-tasks {
             display: flex;
             flex-direction: column;
@@ -593,12 +589,10 @@
             color: #254e77;
         }
 
-        /* Centered text for lesson page */
         .lesson-centered {
             text-align: center;
         }
 
-        /* Progress bar and step indicator */
         .progress-container {
             display: flex;
             align-items: center;
@@ -633,7 +627,7 @@
             display: none !important;
         }
 
-        /* contact cards */
+        /* ===== CONTACT CARDS ===== */
         .contact-grid {
             display: flex;
             flex-wrap: wrap;
@@ -658,7 +652,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Statistics page specific styles */
+        /* ===== STATISTICS PAGE ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -738,7 +732,7 @@
             border-radius: 4px;
         }
 
-        /* Custom popup for completion message */
+        /* ===== CUSTOM POPUP ===== */
         .custom-popup {
             position: fixed;
             top: 50%;
@@ -794,7 +788,7 @@
             transform: scale(1.05);
         }
 
-        /* Loading spinner */
+        /* ===== LOADING SPINNER ===== */
         .loading-spinner {
             display: inline-block;
             width: 50px;
@@ -809,7 +803,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Notification */
+        /* ===== NOTIFICATION ===== */
         .notification {
             position: fixed;
             top: 20px;
@@ -828,7 +822,7 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* footer */
+        /* ===== FOOTER ===== */
         footer {
             background: #103246;
             color: #e5f0fc;
@@ -932,7 +926,7 @@
             display: none;
         }
 
-        /* Responsive design */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -1293,7 +1287,7 @@
         let studentsData = [];
         let chartsInitialized = false;
         let categoryChart, distributionChart;
-        let lessonCode = "1234"; // Default
+        let lessonCode = "1234"; // Default value, will be updated from cloud
         let currentTask = 1;
         const totalTasks = 5;
 
@@ -1318,8 +1312,11 @@
         }
 
         function applyLessonData(data) {
-            // Update lesson code
-            if (data.lessonCode) lessonCode = data.lessonCode;
+            // Update lesson code (THIS IS THE FIX)
+            if (data.lessonCode) {
+                lessonCode = data.lessonCode;
+                console.log('Lesson code updated to:', lessonCode);
+            }
             
             // Update marks
             const marksElement = document.querySelector('.marks-info');
@@ -1667,10 +1664,11 @@
         // ============================================
         function checkCode() {
             const input = document.getElementById('codeInput');
+            console.log('Entered code:', input.value, 'Expected code:', lessonCode); // Debug log
             if (input.value === lessonCode) {
                 document.getElementById('lessonContent').classList.remove('hidden');
                 document.getElementById('lessonCodeSection').style.display = 'none';
-                displayDeadline();
+                // No need to call displayDeadline() as it's already set by applyLessonData
                 showTask(1);
                 input.value = '';
             } else {
@@ -1724,10 +1722,6 @@
         function closePopupAndGoHome() {
             document.getElementById('completionPopup').classList.add('hidden');
             openPage('home');
-        }
-
-        function displayDeadline() {
-            // Already handled by applyLessonData
         }
 
         // ============================================
