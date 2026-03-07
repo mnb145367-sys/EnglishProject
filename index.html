@@ -1281,13 +1281,13 @@
         // روابط API منفصلة
         // ============================================
         const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec'; // API الطلاب
-        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // API الدروس (الجديد)
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // API الدروس
 
         // Global variables
         let studentsData = [];
         let chartsInitialized = false;
         let categoryChart, distributionChart;
-        let lessonCode = "1234"; // Default value, will be updated from cloud
+        let lessonCode = "1234"; // Default value
         let currentTask = 1;
         const totalTasks = 5;
 
@@ -1296,9 +1296,21 @@
         // ============================================
         async function loadLessonFromCloud() {
             try {
+                console.log('Loading lesson from cloud...');
                 const response = await fetch(LESSON_API_URL);
                 const result = await response.json();
-                if (result.success && result.data) {
+                console.log('Lesson API response:', result);
+                
+                if (result && result.data) {
+                    // تحديث lessonCode أولاً
+                    if (result.data.lessonCode) {
+                        lessonCode = String(result.data.lessonCode); // تأكد من تحويله إلى نص
+                        console.log('Lesson code updated to:', lessonCode);
+                        
+                        // تخزين الكود في localStorage للاستخدام المستقبلي
+                        localStorage.setItem('fluencyLessonCode', lessonCode);
+                    }
+                    
                     applyLessonData(result.data);
                     console.log('✅ Lesson data loaded from cloud.');
                 } else {
@@ -1312,19 +1324,19 @@
         }
 
         function applyLessonData(data) {
-            // Update lesson code (THIS IS THE FIX)
+            // تحديث كود الدرس
             if (data.lessonCode) {
-                lessonCode = data.lessonCode;
-                console.log('Lesson code updated to:', lessonCode);
+                lessonCode = String(data.lessonCode);
+                console.log('Applying lesson code:', lessonCode);
             }
             
-            // Update marks
+            // تحديث العلامات
             const marksElement = document.querySelector('.marks-info');
             if (marksElement && data.marks) {
                 marksElement.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
             }
             
-            // Update deadline
+            // تحديث الموعد النهائي
             if (data.deadline) {
                 const deadlineElement = document.getElementById('deadlineDisplay');
                 if (deadlineElement) {
@@ -1332,13 +1344,13 @@
                 }
             }
             
-            // Update video
+            // تحديث الفيديو
             if (data.videoUrl) {
                 const videoFrame = document.querySelector('#task1 iframe');
                 if (videoFrame) videoFrame.src = data.videoUrl;
             }
             
-            // Update questions
+            // تحديث الأسئلة
             if (data.questions) {
                 const task2 = document.getElementById('task2');
                 if (task2) {
@@ -1350,7 +1362,7 @@
                 }
             }
             
-            // Update reading
+            // تحديث النص القرائي
             if (data.reading) {
                 const task3 = document.getElementById('task3');
                 if (task3) {
@@ -1363,7 +1375,7 @@
                 }
             }
             
-            // Update vocabulary
+            // تحديث المفردات
             if (data.vocabulary) {
                 const task4 = document.getElementById('task4');
                 if (task4) {
@@ -1381,12 +1393,20 @@
             }
         }
 
-        // Backup from localStorage
+        // تحميل من localStorage
         function loadSavedLessonData() {
             const saved = localStorage.getItem('fluencyLessonData');
             if (saved) {
                 try {
-                    applyLessonData(JSON.parse(saved));
+                    const data = JSON.parse(saved);
+                    applyLessonData(data);
+                    
+                    // تحديث lessonCode من localStorage أيضاً
+                    const savedCode = localStorage.getItem('fluencyLessonCode');
+                    if (savedCode) {
+                        lessonCode = savedCode;
+                        console.log('Loaded lesson code from localStorage:', lessonCode);
+                    }
                 } catch (e) {
                     console.error('Error parsing local backup', e);
                 }
@@ -1645,8 +1665,15 @@
 
         function openPage(page) {
             const pages = ['home','lessonPage','about','services','statistics','contact'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-            document.getElementById(page).classList.remove('hidden');
+            pages.forEach(p => {
+                const element = document.getElementById(p);
+                if (element) element.classList.add('hidden');
+            });
+            
+            const targetElement = document.getElementById(page);
+            if (targetElement) {
+                targetElement.classList.remove('hidden');
+            }
 
             if (page === 'statistics') {
                 renderStatisticsPage();
@@ -1664,14 +1691,21 @@
         // ============================================
         function checkCode() {
             const input = document.getElementById('codeInput');
-            console.log('Entered code:', input.value, 'Expected code:', lessonCode); // Debug log
-            if (input.value === lessonCode) {
+            const enteredCode = input.value.trim();
+            
+            console.log('Entered code:', enteredCode);
+            console.log('Expected code:', lessonCode);
+            console.log('Code types:', typeof enteredCode, typeof lessonCode);
+            
+            // Convert both to strings for comparison
+            if (enteredCode === String(lessonCode)) {
+                console.log('✅ Code correct!');
                 document.getElementById('lessonContent').classList.remove('hidden');
                 document.getElementById('lessonCodeSection').style.display = 'none';
-                // No need to call displayDeadline() as it's already set by applyLessonData
                 showTask(1);
                 input.value = '';
             } else {
+                console.log('❌ Code incorrect!');
                 alert('Incorrect code. Please try again.');
                 input.style.borderColor = '#cc7b7b';
                 setTimeout(() => input.style.borderColor = '#c7ddef', 800);
@@ -1767,16 +1801,27 @@
 
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
-            document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
-            document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (icon) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
         }
 
         // ============================================
         // INITIAL LOAD
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
+            // Load saved lesson code from localStorage first
+            const savedCode = localStorage.getItem('fluencyLessonCode');
+            if (savedCode) {
+                lessonCode = savedCode;
+                console.log('Initial lesson code from localStorage:', lessonCode);
+            }
+            
             loadTopPerformer();           // من localStorage
             await loadLessonFromCloud();   // من API الدروس
+            
             const students = await fetchStudentData(); // من API الطلاب
             if (students.length) calculateStatistics(students);
         });
