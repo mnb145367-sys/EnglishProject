@@ -26,7 +26,7 @@
             font-size: 1.15rem;
         }
 
-        /* Dark mode variables - improved */
+        /* Dark mode variables */
         body.dark-mode {
             background-color: #121a24;
             color: #e0e9f5;
@@ -331,7 +331,7 @@
             box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
         }
 
-        /* leader card */
+        /* leader card - for top performer */
         .leader-card {
             background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
             border-radius: 2.5rem;
@@ -358,6 +358,13 @@
             color: #1f4970;
             box-shadow: 0 8px 16px rgba(0,0,0,0.05);
             border: 3px solid white;
+            overflow: hidden;
+        }
+
+        .leader-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .leader-name {
@@ -377,7 +384,7 @@
             font-size: 1.1rem;
         }
 
-        /* top 5 students grid (home page) */
+        /* top 5 students grid (home page) - from API */
         .top5-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -804,6 +811,25 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1e5a88;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         /* footer */
         footer {
             background: #103246;
@@ -1018,18 +1044,19 @@
                 <span class="line"></span>
             </div>
 
+            <!-- TOP PERFORMER - INDEPENDENT FROM API -->
             <div class="section" style="text-align: center;">
                 <h2>Top performer</h2>
                 <div class="leader-card" id="topPerformerCard">
-                    <div class="leader-avatar">
-                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Hatim" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
+                    <div class="leader-avatar" id="topPerformerAvatar">
+                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Top Student" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
                     </div>
                     <div class="leader-name" id="topPerformerName">Hatim</div>
                     <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
-                    <p style="margin-top: 0.8rem;">Most consistent learner this month</p>
+                    <p style="margin-top: 0.8rem;" id="topPerformerBadge">Most consistent learner this month</p>
                 </div>
 
-                <!-- Top 5 Students Section -->
+                <!-- Top 5 Students Section (from API) -->
                 <h3 style="margin-top: 3rem;">Top 5 Students</h3>
                 <div class="top5-grid" id="top5Grid"></div>
             </div>
@@ -1060,7 +1087,7 @@
                 <div class="section lesson-centered">
                     <h2>Today's session</h2>
                     <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
-                    <div class="marks-info"><i class="fa-regular fa-star"></i> 5 Marks</div>
+                    <div class="marks-info" id="marksDisplay"><i class="fa-regular fa-star"></i> 5 Marks</div>
                     <div class="deadline-info" id="deadlineDisplay"></div>
                     
                     <!-- Instructions box -->
@@ -1105,7 +1132,7 @@
                     <div class="task-card hidden-task" id="task3">
                         <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
                         <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
-                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others...”
+                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
                         </div>
                     </div>
 
@@ -1124,7 +1151,7 @@
                     <!-- Task 5: Speaking -->
                     <div class="task-card hidden-task" id="task5">
                         <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
-                        <p>Read the passage from task 3 aloud. Record and share in WhatsApp group.</p>
+                        <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
                         <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
                     </div>
                 </div>
@@ -1259,15 +1286,131 @@
 
     <script>
         // ============================================
-        // CONFIGURATION - YOUR API ENDPOINT
+        // CONFIGURATION - GOOGLE SHEETS API
         // ============================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec';
         
-        // Global variable to store student data
+        // Global variables
         let studentsData = [];
-        let categories = {};
-        let distribution = {};
         let chartsInitialized = false;
+        let categoryChart, distributionChart;
+
+        // ============================================
+        // LOAD TOP PERFORMER (INDEPENDENT)
+        // ============================================
+        function loadTopPerformer() {
+            const saved = localStorage.getItem('fluencyTopPerformer');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    
+                    // Update name
+                    const nameEl = document.getElementById('topPerformerName');
+                    if (nameEl && data.name) nameEl.textContent = data.name;
+                    
+                    // Update points
+                    const pointsEl = document.getElementById('topPerformerPoints');
+                    if (pointsEl && data.points) {
+                        pointsEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.points} points`;
+                    }
+                    
+                    // Update badge
+                    const badgeEl = document.getElementById('topPerformerBadge');
+                    if (badgeEl && data.badge) badgeEl.textContent = data.badge;
+                    
+                    // Update avatar
+                    if (data.avatar) {
+                        const avatarImg = document.querySelector('#topPerformerAvatar img');
+                        if (avatarImg) avatarImg.src = data.avatar;
+                    }
+                    
+                    console.log('✅ Top Performer loaded from admin');
+                } catch (e) {
+                    console.error('Error loading top performer:', e);
+                }
+            }
+        }
+
+        // ============================================
+        // LOAD LESSON DATA FROM ADMIN
+        // ============================================
+        function loadSavedLessonData() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    
+                    // Update lesson code
+                    if (data.lessonCode) window.lessonCode = data.lessonCode;
+                    
+                    // Update marks
+                    const marksElement = document.querySelector('.marks-info');
+                    if (marksElement && data.marks) {
+                        marksElement.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
+                    }
+                    
+                    // Update deadline
+                    if (data.deadline) {
+                        const deadlineElement = document.getElementById('deadlineDisplay');
+                        if (deadlineElement) {
+                            deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
+                        }
+                    }
+                    
+                    // Update video
+                    if (data.videoUrl) {
+                        const videoFrame = document.querySelector('#task1 iframe');
+                        if (videoFrame) videoFrame.src = data.videoUrl;
+                    }
+                    
+                    // Update questions
+                    if (data.questions) {
+                        const task2 = document.getElementById('task2');
+                        if (task2) {
+                            const questionsHtml = data.questions.split('\n').filter(q => q.trim()).map(q => `<p>${q}</p>`).join('');
+                            task2.innerHTML = `
+                                <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
+                                ${questionsHtml}
+                            `;
+                        }
+                    }
+                    
+                    // Update reading
+                    if (data.reading) {
+                        const task3 = document.getElementById('task3');
+                        if (task3) {
+                            task3.innerHTML = `
+                                <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+                                <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
+                                    “${data.reading}”
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    // Update vocabulary
+                    if (data.vocabulary) {
+                        const task4 = document.getElementById('task4');
+                        if (task4) {
+                            const vocabHtml = data.vocabulary.split('\n').filter(v => v.trim()).map(v => {
+                                const parts = v.split('–');
+                                return `<li><strong>${parts[0].trim()}</strong> – ${parts[1]?.trim() || ''}</li>`;
+                            }).join('');
+                            task4.innerHTML = `
+                                <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+                                <ul style="margin-left: 1.8rem; color: inherit;">
+                                    ${vocabHtml}
+                                </ul>
+                            `;
+                        }
+                    }
+                    
+                    console.log('✅ Lesson data loaded from admin');
+                } catch (e) {
+                    console.error('Error loading lesson data:', e);
+                }
+            }
+        }
 
         // ============================================
         // API FUNCTIONS
@@ -1282,7 +1425,6 @@
                     return [];
                 }
                 
-                console.log('Data loaded:', data);
                 return data.data || [];
             } catch (error) {
                 console.error('Failed to fetch:', error);
@@ -1291,17 +1433,10 @@
         }
 
         function calculateStatistics(students) {
-            if (!students.length) return;
+            if (!students.length) return null;
             
             // Sort by total
             const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
-            
-            // Update top performer (Hatim)
-            const topStudent = sorted[0];
-            if (topStudent) {
-                document.getElementById('topPerformerName').textContent = topStudent.name || 'Hatim';
-                document.getElementById('topPerformerPoints').innerHTML = `<i class="fa-regular fa-star"></i> ${topStudent.total || 0} points`;
-            }
             
             // Update top 5 grid in home page
             const top5Grid = document.getElementById('top5Grid');
@@ -1318,7 +1453,7 @@
                 quiz: 0, homework: 0, weekly: 0, presentation: 0
             };
             
-            let quizCount = 0, hwCount = 0, weeklyCount = 0, presCount = 0;
+            let quizCount = 0, weeklyCount = 0, presCount = 0;
             
             students.forEach(s => {
                 if (s.quiz) { categories.quiz += s.quiz; quizCount++; }
@@ -1342,7 +1477,7 @@
             categories.presentation = presCount ? (categories.presentation / presCount).toFixed(1) : 0;
             
             // Grade distribution
-            distribution = {
+            const distribution = {
                 excellent: students.filter(s => s.total >= 70).length,
                 good: students.filter(s => s.total >= 50 && s.total < 70).length,
                 needsWork: students.filter(s => s.total < 50).length
@@ -1355,7 +1490,7 @@
         // RENDER STATISTICS PAGE
         // ============================================
         async function renderStatisticsPage() {
-            // Show loading, hide content
+            // Show loading
             document.getElementById('statsLoading').style.display = 'block';
             document.getElementById('statsCards').style.display = 'none';
             document.getElementById('top5Heading').style.display = 'none';
@@ -1436,16 +1571,14 @@
             // Create/Update charts
             if (!chartsInitialized) {
                 createCategoryChart(stats.categories);
-                createDistributionChart(distribution);
+                createDistributionChart(stats.distribution);
                 chartsInitialized = true;
             } else {
-                updateCharts(stats.categories, distribution);
+                updateCharts(stats.categories, stats.distribution);
             }
         }
 
         // Chart functions
-        let categoryChart, distributionChart;
-
         function createCategoryChart(catData) {
             const ctx = document.getElementById('categoryChart').getContext('2d');
             categoryChart = new Chart(ctx, {
@@ -1531,7 +1664,7 @@
         // ============================================
         // LESSON CODE & NAVIGATION
         // ============================================
-        const lessonCode = "1234";
+        let lessonCode = "1234"; // Default, will be overridden by admin data
         let currentTask = 1;
         const totalTasks = 5;
 
@@ -1597,6 +1730,22 @@
         }
 
         function displayDeadline() {
+            // This will be overridden by admin data if available
+            const saved = localStorage.getItem('fluencyLessonData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.deadline) {
+                        const deadlineElement = document.getElementById('deadlineDisplay');
+                        if (deadlineElement) {
+                            deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
+                        }
+                        return;
+                    }
+                } catch (e) {}
+            }
+            
+            // Default if no admin data
             const now = new Date();
             const deadline = new Date(now);
             deadline.setDate(now.getDate() + 2);
@@ -1621,6 +1770,15 @@
         document.getElementById('codeInput')?.addEventListener('keypress', e => {
             if (e.key === 'Enter') checkCode();
         });
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
 
         // ============================================
         // DARK MODE
@@ -1648,13 +1806,16 @@
         // ============================================
         // INITIAL LOAD
         // ============================================
-        async function initializeHomePage() {
-            const students = await fetchStudentData();
-            calculateStatistics(students);
-        }
-        
-        // Load data for home page
-        initializeHomePage();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load data from admin first
+            loadTopPerformer();
+            loadSavedLessonData();
+            
+            // Then fetch from API for top 5 grid
+            fetchStudentData().then(students => {
+                calculateStatistics(students);
+            });
+        });
     </script>
 </body>
 </html>
