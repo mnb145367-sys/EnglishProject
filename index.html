@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Fluency • Language Mastery</title>
-    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* RESET & BASE */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Calibri', 'Inter', sans-serif;
             background-color: #f4f9ff;
@@ -25,13 +21,10 @@
             transition: background-color 0.3s, color 0.3s;
             font-size: 1.15rem;
         }
-
-        /* Dark mode variables */
         body.dark-mode {
             background-color: #121a24;
             color: #e0e9f5;
         }
-
         body.dark-mode .section,
         body.dark-mode .task-card,
         body.dark-mode .stats-card,
@@ -50,40 +43,25 @@
             color: #e0e9f5 !important;
             border-color: rgba(255,255,255,0.1) !important;
         }
-
         body.dark-mode .quote {
             background: rgba(40, 60, 80, 0.8);
             color: #d0e2f5;
         }
-
         body.dark-mode .btn {
             background: #2d4055;
             color: #cfdef5;
             border-color: #4a6380;
         }
-
         body.dark-mode .btn-primary {
             background: linear-gradient(115deg, #2b5780, #3f6b99);
             color: white;
         }
-
         body.dark-mode .progress-bar-container {
             background: #2d4055;
         }
-
         body.dark-mode .progress-fill {
             background: #5e9fcf;
         }
-
-        body.dark-mode .student-table .progress-bar {
-            background: #2d4055;
-        }
-
-        body.dark-mode .student-table .progress-fill {
-            background: #5e9fcf;
-        }
-
-        /* --- ANIMATED EDUCATIONAL BACKGROUND --- */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -95,18 +73,15 @@
             overflow: hidden;
             transition: background 0.3s;
         }
-
         body.dark-mode .bg-animation {
             background: linear-gradient(145deg, #0b1a2a, #1a2c3f);
         }
-
         .floating-words {
             position: absolute;
             width: 100%;
             height: 100%;
             font-size: 0;
         }
-
         .floating-words span {
             position: absolute;
             font-size: 1.2rem;
@@ -118,14 +93,12 @@
             text-transform: uppercase;
             letter-spacing: 4px;
         }
-
         @keyframes floatWord {
             0% { transform: translateX(100vw) translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 0.4; }
             90% { opacity: 0.4; }
             100% { transform: translateX(-200px) translateY(-50px) rotate(15deg); opacity: 0; }
         }
-
         .floating-words span:nth-child(1) { top: 15%; animation-duration: 18s; animation-delay: -2s; }
         .floating-words span:nth-child(2) { top: 40%; animation-duration: 22s; animation-delay: -7s; }
         .floating-words span:nth-child(3) { top: 70%; animation-duration: 25s; animation-delay: -3s; }
@@ -134,7 +107,6 @@
         .floating-words span:nth-child(6) { top: 55%; animation-duration: 27s; animation-delay: -9s; }
         .floating-words span:nth-child(7) { top: 10%; animation-duration: 24s; animation-delay: -15s; }
         .floating-words span:nth-child(8) { top: 95%; animation-duration: 21s; animation-delay: -1s; }
-
         .bg-overlay {
             position: fixed;
             top: 0;
@@ -145,8 +117,6 @@
             z-index: -1;
             pointer-events: none;
         }
-
-        /* --- HEADER (glass) --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -162,11 +132,9 @@
             border-bottom: 1px solid rgba(255,255,255,0.5);
             transition: background 0.3s;
         }
-
         body.dark-mode header {
             background: rgba(20, 35, 50, 0.8);
         }
-
         .logo {
             font-size: 2rem;
             font-weight: 700;
@@ -178,18 +146,15 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
         .logo:hover {
             filter: drop-shadow(0 4px 8px rgba(0,100,200,0.2));
         }
-
         nav {
             display: flex;
             gap: 2rem;
             align-items: center;
             flex-wrap: wrap;
         }
-
         nav a {
             text-decoration: none;
             color: #1e3a5f;
@@ -199,11 +164,9 @@
             position: relative;
             padding: 0.25rem 0;
         }
-
         body.dark-mode nav a {
             color: #c7def5;
         }
-
         nav a::after {
             content: '';
             position: absolute;
@@ -214,12 +177,9 @@
             background: linear-gradient(90deg, #2b6f9e, #7fb4d9);
             transition: width 0.25s ease;
         }
-
         nav a:hover::after {
             width: 100%;
         }
-
-        /* Dark mode toggle */
         .dark-mode-toggle {
             background: none;
             border: none;
@@ -228,12 +188,9 @@
             color: #1e3a5f;
             padding: 0 0.5rem;
         }
-
         body.dark-mode .dark-mode-toggle {
             color: #ffdb9f;
         }
-
-        /* main container */
         .container {
             max-width: 1200px;
             margin: 2rem auto 4rem;
@@ -241,8 +198,6 @@
             position: relative;
             z-index: 5;
         }
-
-        /* section cards */
         .section {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
@@ -254,41 +209,33 @@
             border: 1px solid rgba(255,255,255,0.6);
             transition: transform 0.3s ease, box-shadow 0.4s, background 0.3s;
         }
-
         .section:hover {
             transform: translateY(-6px);
             box-shadow: 0 32px 55px -10px rgba(25,85,130,0.2);
             border-color: rgba(255,255,255,0.9);
         }
-
         h1, h2, h3 {
             font-weight: 600;
             color: #103a5e;
             margin-bottom: 1.2rem;
         }
-
         body.dark-mode h1,
         body.dark-mode h2,
         body.dark-mode h3 {
             color: #b3d6f0;
         }
-
         h1 { font-size: clamp(2.2rem, 5vw, 3rem); letter-spacing: -0.02em; }
         h2 { font-size: clamp(2rem, 4vw, 2.5rem); letter-spacing: -0.01em; }
         h3 { font-size: clamp(1.5rem, 3vw, 1.8rem); }
-
         p {
             font-size: 1.2rem;
             color: #254e77;
             margin-bottom: 1.2rem;
             font-weight: 400;
         }
-
         body.dark-mode p {
             color: #b5d0e8;
         }
-
-        /* arrow section */
         .arrow-section {
             display: flex;
             justify-content: center;
@@ -298,26 +245,21 @@
             font-size: 1.6rem;
             gap: 1rem;
         }
-
         .arrow-section .line {
             width: 80px;
             height: 2px;
             background: linear-gradient(90deg, transparent, #84b3d9, transparent);
         }
-
         .arrow-section i {
             font-size: 2rem;
             color: #5e9fcf;
             animation: slideDown 2.2s infinite;
         }
-
         @keyframes slideDown {
             0% { transform: translateY(-8px); opacity: 0.3; }
             50% { transform: translateY(8px); opacity: 1; }
             100% { transform: translateY(-8px); opacity: 0.3; }
         }
-
-        /* quote style */
         .quote {
             background: rgba(220, 240, 255, 0.7);
             backdrop-filter: blur(4px);
@@ -330,8 +272,6 @@
             color: #103a5e;
             box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
         }
-
-        /* leader card - for top performer */
         .leader-card {
             background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
             border-radius: 2.5rem;
@@ -344,7 +284,6 @@
             box-shadow: 0 20px 35px -8px rgba(40,100,150,0.2);
             border: 1px solid rgba(255,255,255,0.9);
         }
-
         .leader-avatar {
             width: 130px;
             height: 130px;
@@ -360,20 +299,17 @@
             border: 3px solid white;
             overflow: hidden;
         }
-
         .leader-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .leader-name {
             font-size: 2.2rem;
             font-weight: 600;
             color: #175277;
             margin-bottom: 0.25rem;
         }
-
         .leader-points {
             background: #d4e9fc;
             padding: 0.4rem 1.8rem;
@@ -383,15 +319,12 @@
             margin: 0.8rem 0;
             font-size: 1.1rem;
         }
-
-        /* top 5 students grid (home page) - from API */
         .top5-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
-
         .top-student-card {
             background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
             border-radius: 1.5rem;
@@ -401,25 +334,20 @@
             border: 1px solid rgba(255,255,255,0.8);
             transition: transform 0.2s;
         }
-
         .top-student-card:hover {
             transform: translateY(-4px);
         }
-
         .top-student-name {
             font-size: 1.3rem;
             font-weight: 600;
             color: #175277;
             margin-bottom: 0.3rem;
         }
-
         .top-student-score {
             font-size: 1.1rem;
             color: #2b6f9e;
             font-weight: 500;
         }
-
-        /* buttons */
         .btn {
             background: white;
             border: none;
@@ -438,34 +366,27 @@
             border: 1px solid rgba(255,255,255,0.8);
             backdrop-filter: blur(2px);
         }
-
         .btn i {
             font-size: 1.2rem;
             color: #3d7cb0;
         }
-
         .btn:hover {
             background: #e8f2fc;
             transform: scale(1.04);
             box-shadow: 0 14px 24px rgba(35, 110, 180, 0.15);
             border-color: #b0d1f0;
         }
-
         .btn-primary {
             background: linear-gradient(115deg, #1e5a88, #367bb5);
             color: white;
             box-shadow: 0 10px 20px rgba(25, 95, 155, 0.3);
         }
-
         .btn-primary i {
             color: white;
         }
-
         .btn-primary:hover {
             background: linear-gradient(115deg, #1b4f78, #2d6ca3);
         }
-
-        /* input */
         input {
             padding: 1rem 1.8rem;
             border-radius: 60px;
@@ -479,13 +400,10 @@
             transition: 0.2s;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
         }
-
         input:focus {
             border-color: #639fd1;
             box-shadow: 0 0 0 3px rgba(90, 155, 215, 0.15);
         }
-
-        /* Small helper text under input */
         .input-hint {
             font-size: 0.9rem;
             color: #5f7d9c;
@@ -495,8 +413,6 @@
         body.dark-mode .input-hint {
             color: #a0b8d0;
         }
-
-        /* lesson tasks */
         .lesson-tasks {
             display: flex;
             flex-direction: column;
@@ -504,7 +420,6 @@
             margin-top: 2rem;
             position: relative;
         }
-
         .task-card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(6px);
@@ -513,11 +428,9 @@
             border: 1px solid rgba(255,255,255,0.8);
             box-shadow: 0 8px 16px rgba(0,30,50,0.05);
         }
-
         body.dark-mode .task-card {
             background: rgba(30, 45, 60, 0.8);
         }
-
         .task-title {
             font-size: 1.6rem;
             font-weight: 600;
@@ -529,16 +442,13 @@
             gap: 0.8rem;
             text-align: center;
         }
-
         body.dark-mode .task-title {
             color: #b3d6f0;
         }
-
         .task-title i {
             font-size: 1.9rem;
             color: #538cc0;
         }
-
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
@@ -550,7 +460,6 @@
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
             border: 2px solid rgba(255,255,255,0.3);
         }
-
         .video-wrapper iframe {
             position: absolute;
             top: 0;
@@ -559,7 +468,6 @@
             height: 100%;
             border: none;
         }
-
         .deadline-info {
             background: #d9ecfd;
             border-radius: 60px;
@@ -570,7 +478,6 @@
             margin: 1rem 0;
             font-size: 1.1rem;
         }
-
         .marks-info {
             background: #d9ecfd;
             border-radius: 60px;
@@ -581,7 +488,6 @@
             margin: 0.5rem 0 1rem;
             font-size: 1.1rem;
         }
-
         .instructions {
             background: #f0f7ff;
             border-radius: 1.5rem;
@@ -589,18 +495,13 @@
             margin: 1.5rem 0;
             border-left: 4px solid #4e8fc9;
         }
-
         .instructions p {
             margin-bottom: 0.5rem;
             color: #254e77;
         }
-
-        /* Centered text for lesson page */
         .lesson-centered {
             text-align: center;
         }
-
-        /* Progress bar and step indicator */
         .progress-container {
             display: flex;
             align-items: center;
@@ -624,18 +525,14 @@
             width: 0%;
             transition: width 0.3s;
         }
-
         .task-nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 2rem;
         }
-
         .hidden-task {
             display: none !important;
         }
-
-        /* contact cards */
         .contact-grid {
             display: flex;
             flex-wrap: wrap;
@@ -643,7 +540,6 @@
             justify-content: center;
             margin: 2rem 0;
         }
-
         .contact-card {
             background: white;
             border-radius: 2rem;
@@ -653,21 +549,17 @@
             box-shadow: 0 15px 25px -8px rgba(0,50,80,0.1);
             border: 1px solid rgba(255,255,255,0.8);
         }
-
         .contact-card i {
             font-size: 2.5rem;
             color: #327ab3;
             margin-bottom: 1rem;
         }
-
-        /* Statistics page specific styles */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
-
         .stats-card {
             background: white;
             border-radius: 1.5rem;
@@ -676,29 +568,24 @@
             box-shadow: 0 8px 16px rgba(0,30,50,0.05);
             border: 1px solid rgba(255,255,255,0.8);
         }
-
         .stats-number {
             font-size: 2.8rem;
             font-weight: 700;
             color: #1e5a88;
             margin-bottom: 0.5rem;
         }
-
         .stats-label {
             font-size: 1.2rem;
             color: #2b6f9e;
         }
-
         .chart-container {
             position: relative;
             height: 300px;
             margin: 2rem 0;
         }
-
         .category-chart-container {
             height: 350px;
         }
-
         .student-table {
             width: 100%;
             border-collapse: collapse;
@@ -707,7 +594,6 @@
             border-radius: 1rem;
             overflow: hidden;
         }
-
         .student-table th {
             text-align: left;
             padding: 0.8rem;
@@ -715,17 +601,14 @@
             color: #103a5e;
             font-size: 1.1rem;
         }
-
         .student-table td {
             padding: 0.8rem;
             border-bottom: 1px solid rgba(75, 130, 190, 0.1);
             font-size: 1.1rem;
         }
-
         .student-table tr:last-child td {
             border-bottom: none;
         }
-
         .student-table .progress-bar {
             width: 100px;
             height: 8px;
@@ -733,14 +616,11 @@
             border-radius: 4px;
             overflow: hidden;
         }
-
         .student-table .progress-fill {
             height: 100%;
             background: #1e5a88;
             border-radius: 4px;
         }
-
-        /* Custom popup for completion message */
         .custom-popup {
             position: fixed;
             top: 50%;
@@ -756,7 +636,6 @@
             text-align: center;
             border: 2px solid #4e8fc9;
         }
-
         .popup-overlay {
             position: fixed;
             top: 0;
@@ -766,20 +645,17 @@
             background: rgba(0,0,0,0.5);
             z-index: 999;
         }
-
         .popup-title {
             font-size: 2.2rem;
             font-weight: 700;
             color: #1e5a88;
             margin-bottom: 1rem;
         }
-
         .popup-message {
             font-size: 1.3rem;
             color: #254e77;
             margin-bottom: 2rem;
         }
-
         .popup-btn {
             background: linear-gradient(115deg, #1e5a88, #367bb5);
             color: white;
@@ -791,12 +667,9 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
         .popup-btn:hover {
             transform: scale(1.05);
         }
-
-        /* Loading spinner */
         .loading-spinner {
             display: inline-block;
             width: 50px;
@@ -806,12 +679,9 @@
             border-top-color: #1e5a88;
             animation: spin 1s ease-in-out infinite;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* Notification */
         .notification {
             position: fixed;
             top: 20px;
@@ -824,13 +694,10 @@
             z-index: 9999;
             animation: slideIn 0.3s ease;
         }
-        
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-
-        /* footer */
         footer {
             background: #103246;
             color: #e5f0fc;
@@ -841,11 +708,9 @@
             overflow: hidden;
             transition: background 0.3s;
         }
-
         body.dark-mode footer {
             background: #0a1a2a;
         }
-
         footer::before {
             content: '';
             position: absolute;
@@ -855,7 +720,6 @@
             height: 60px;
             background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 70%);
         }
-
         .footer-content {
             display: flex;
             flex-wrap: wrap;
@@ -865,7 +729,6 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .footer-logo {
             font-size: 2.2rem;
             font-weight: 700;
@@ -874,13 +737,11 @@
             background-clip: text;
             color: transparent;
         }
-
         .footer-links {
             display: flex;
             gap: 2.5rem;
             flex-wrap: wrap;
         }
-
         .footer-links a {
             color: #c7e2fc;
             text-decoration: none;
@@ -888,17 +749,14 @@
             transition: color 0.2s;
             font-size: 1.1rem;
         }
-
         .footer-links a:hover {
             color: white;
         }
-
         .social-icons {
             display: flex;
             gap: 1.2rem;
             flex-wrap: wrap;
         }
-
         .social-icons a {
             color: #c7e2fc;
             background: rgba(255,255,255,0.06);
@@ -914,13 +772,11 @@
             cursor: pointer;
             text-decoration: none;
         }
-
         .social-icons a:hover {
             background: #2f577b;
             color: white;
             transform: translateY(-5px);
         }
-
         .footer-bottom {
             text-align: center;
             margin-top: 2.5rem;
@@ -929,12 +785,9 @@
             font-size: 1rem;
             color: #99bcd9;
         }
-
         .hidden {
             display: none;
         }
-
-        /* Responsive design */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -963,7 +816,6 @@
             }
             body { font-size: 1.1rem; }
         }
-
         @media (max-width: 480px) {
             .container {
                 padding: 0 4%;
@@ -988,7 +840,6 @@
     </style>
 </head>
 <body>
-    <!-- Animated background -->
     <div class="bg-animation">
         <div class="floating-words">
             <span>LEARN</span> <span>SPEAK</span> <span>READ</span> <span>WRITE</span>
@@ -1012,7 +863,6 @@
     </header>
 
     <div class="container">
-        <!-- HOME PAGE -->
         <div id="home">
             <div class="section">
                 <h1>Master English through daily practice</h1>
@@ -1021,30 +871,21 @@
                     “Language is the road map of a culture. It tells you where its people come from and where they are going.” – Rita Mae Brown
                 </div>
             </div>
-
             <div class="arrow-section">
                 <span class="line"></span>
                 <i class="fa-solid fa-chevron-down"></i>
                 <span class="line"></span>
             </div>
-
             <div class="section">
                 <h2>How the program works</h2>
-                <p>– One 20‑minute lesson delivered daily<br>
-                   – Focus on real‑life phrases and pronunciation<br>
-                   – Vocabulary from context, not lists<br>
-                   – Speaking tasks with community feedback<br>
-                   – Progress dashboard to track consistency</p>
+                <p>– One 20‑minute lesson delivered daily<br>– Focus on real‑life phrases and pronunciation<br>– Vocabulary from context, not lists<br>– Speaking tasks with community feedback<br>– Progress dashboard to track consistency</p>
                 <p>We believe in steady, measurable improvement – no miracles, just disciplined practice.</p>
             </div>
-
             <div class="arrow-section">
                 <span class="line"></span>
                 <i class="fa-solid fa-chevron-down"></i>
                 <span class="line"></span>
             </div>
-
-            <!-- TOP PERFORMER - INDEPENDENT FROM API -->
             <div class="section" style="text-align: center;">
                 <h2>Top performer</h2>
                 <div class="leader-card" id="topPerformerCard">
@@ -1055,18 +896,14 @@
                     <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
                     <p style="margin-top: 0.8rem;" id="topPerformerBadge">Most consistent learner this month</p>
                 </div>
-
-                <!-- Top 5 Students Section (from API) -->
                 <h3 style="margin-top: 3rem;">Top 5 Students</h3>
                 <div class="top5-grid" id="top5Grid"></div>
             </div>
-
             <div class="arrow-section">
                 <span class="line"></span>
                 <i class="fa-solid fa-chevron-down"></i>
                 <span class="line"></span>
             </div>
-
             <div class="section" style="text-align: center;">
                 <h2>Start today's lesson</h2>
                 <p>Use the code provided by your instructor.</p>
@@ -1074,7 +911,6 @@
             </div>
         </div>
 
-        <!-- LESSON PAGE -->
         <div id="lessonPage" class="hidden">
             <div class="section lesson-centered" id="lessonCodeSection">
                 <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
@@ -1082,15 +918,12 @@
                 <div class="input-hint">The code is sent by the coordinator.</div>
                 <button class="btn btn-primary" onclick="checkCode()">Access</button>
             </div>
-
             <div id="lessonContent" class="hidden">
                 <div class="section lesson-centered">
                     <h2>Today's session</h2>
                     <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
                     <div class="marks-info" id="marksDisplay"><i class="fa-regular fa-star"></i> 5 Marks</div>
                     <div class="deadline-info" id="deadlineDisplay"></div>
-                    
-                    <!-- Instructions box -->
                     <div class="instructions">
                         <p><strong>Instructions</strong></p>
                         <p>• Watch the video carefully. You can use subtitles.</p>
@@ -1100,18 +933,13 @@
                         <p>• Record your speaking task and share it in the WhatsApp group.</p>
                         <p>• All tasks must be submitted before the deadline above.</p>
                     </div>
-
-                    <!-- Progress indicator (without text) -->
                     <div class="progress-container">
                         <div class="progress-bar-container">
                             <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Tasks -->
                 <div class="lesson-tasks" id="lessonTasks">
-                    <!-- Task 1: Video -->
                     <div class="task-card" id="task1">
                         <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
                         <div class="video-wrapper">
@@ -1119,24 +947,18 @@
                         </div>
                         <p>Listen actively. You may use subtitles the first time.</p>
                     </div>
-
-                    <!-- Task 2: Reflection -->
                     <div class="task-card hidden-task" id="task2">
                         <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
                         <p>• What are two main ways technology has improved daily life?</p>
                         <p>• Mention one negative effect of technology discussed.</p>
                         <p>• How does technology influence communication?</p>
                     </div>
-
-                    <!-- Task 3: Reading -->
                     <div class="task-card hidden-task" id="task3">
                         <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
                         <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
                             “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
                         </div>
                     </div>
-
-                    <!-- Task 4: Vocabulary -->
                     <div class="task-card hidden-task" id="task4">
                         <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
                         <ul style="margin-left: 1.8rem; color: inherit;">
@@ -1147,16 +969,12 @@
                             <li><strong>discipline</strong> – controlled behaviour to achieve a goal</li>
                         </ul>
                     </div>
-
-                    <!-- Task 5: Speaking -->
                     <div class="task-card hidden-task" id="task5">
                         <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
                         <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
                         <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
                     </div>
                 </div>
-
-                <!-- Navigation buttons -->
                 <div class="task-nav-buttons" id="taskNav">
                     <button class="btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
                     <button class="btn btn-primary" id="nextBtn" onclick="nextTask()">Next</button>
@@ -1164,7 +982,6 @@
             </div>
         </div>
 
-        <!-- Popup for completion message -->
         <div id="completionPopup" class="hidden">
             <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
             <div class="custom-popup">
@@ -1174,7 +991,6 @@
             </div>
         </div>
 
-        <!-- ABOUT PAGE -->
         <div id="about" class="hidden">
             <div class="section">
                 <h2>About Fluency</h2>
@@ -1184,7 +1000,6 @@
             </div>
         </div>
 
-        <!-- SERVICES PAGE -->
         <div id="services" class="hidden">
             <div class="section">
                 <h2>What we offer</h2>
@@ -1196,44 +1011,30 @@
             </div>
         </div>
 
-        <!-- STATISTICS PAGE -->
         <div id="statistics" class="hidden">
             <div class="section">
                 <h2>Student Statistics</h2>
                 <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
-
-                <!-- Loading indicator -->
                 <div id="statsLoading" style="text-align: center; padding: 2rem;">
                     <div class="loading-spinner"></div>
                     <p style="margin-top: 1rem;">Loading statistics...</p>
                 </div>
-
-                <!-- Stats Cards -->
                 <div class="stats-grid" id="statsCards" style="display: none;"></div>
-
-                <!-- Top 5 Students Table -->
                 <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
                 <table class="student-table" id="top5Table" style="display: none;"></table>
-
-                <!-- Category Performance Chart -->
                 <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
                 <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
                     <canvas id="categoryChart"></canvas>
                 </div>
-
-                <!-- Grade Distribution Chart -->
                 <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
                 <div class="chart-container" id="distributionChartContainer" style="display: none;">
                     <canvas id="distributionChart"></canvas>
                 </div>
-
-                <!-- Full Student Table -->
                 <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
                 <table class="student-table" id="fullStudentTable" style="display: none;"></table>
             </div>
         </div>
 
-        <!-- CONTACT PAGE -->
         <div id="contact" class="hidden">
             <div class="section">
                 <h2>Contact & community</h2>
@@ -1260,7 +1061,6 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">Fluency</div>
@@ -1285,146 +1085,21 @@
     </footer>
 
     <script>
-        // ============================================
-        // CONFIGURATION - GOOGLE SHEETS API
-        // ============================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec';
-        
-        // Global variables
+        const STUDENT_API_URL = 'https://script.google.com/macros/s/AKfycbzJkWGgV0aH66JN31xG-r2c7aLeQL5GS6EjqF5mWqB7B6hqE4zE8K_wGUBt_gVKq5P7/exec';
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec';
+
         let studentsData = [];
         let chartsInitialized = false;
         let categoryChart, distributionChart;
+        let lessonCode = "1234";
+        let currentTask = 1;
+        const totalTasks = 5;
 
-        // ============================================
-        // LOAD TOP PERFORMER (INDEPENDENT)
-        // ============================================
-        function loadTopPerformer() {
-            const saved = localStorage.getItem('fluencyTopPerformer');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    
-                    // Update name
-                    const nameEl = document.getElementById('topPerformerName');
-                    if (nameEl && data.name) nameEl.textContent = data.name;
-                    
-                    // Update points
-                    const pointsEl = document.getElementById('topPerformerPoints');
-                    if (pointsEl && data.points) {
-                        pointsEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.points} points`;
-                    }
-                    
-                    // Update badge
-                    const badgeEl = document.getElementById('topPerformerBadge');
-                    if (badgeEl && data.badge) badgeEl.textContent = data.badge;
-                    
-                    // Update avatar
-                    if (data.avatar) {
-                        const avatarImg = document.querySelector('#topPerformerAvatar img');
-                        if (avatarImg) avatarImg.src = data.avatar;
-                    }
-                    
-                    console.log('✅ Top Performer loaded from admin');
-                } catch (e) {
-                    console.error('Error loading top performer:', e);
-                }
-            }
-        }
-
-        // ============================================
-        // LOAD LESSON DATA FROM ADMIN
-        // ============================================
-        function loadSavedLessonData() {
-            const saved = localStorage.getItem('fluencyLessonData');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    
-                    // Update lesson code
-                    if (data.lessonCode) window.lessonCode = data.lessonCode;
-                    
-                    // Update marks
-                    const marksElement = document.querySelector('.marks-info');
-                    if (marksElement && data.marks) {
-                        marksElement.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
-                    }
-                    
-                    // Update deadline
-                    if (data.deadline) {
-                        const deadlineElement = document.getElementById('deadlineDisplay');
-                        if (deadlineElement) {
-                            deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
-                        }
-                    }
-                    
-                    // Update video
-                    if (data.videoUrl) {
-                        const videoFrame = document.querySelector('#task1 iframe');
-                        if (videoFrame) videoFrame.src = data.videoUrl;
-                    }
-                    
-                    // Update questions
-                    if (data.questions) {
-                        const task2 = document.getElementById('task2');
-                        if (task2) {
-                            const questionsHtml = data.questions.split('\n').filter(q => q.trim()).map(q => `<p>${q}</p>`).join('');
-                            task2.innerHTML = `
-                                <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-                                ${questionsHtml}
-                            `;
-                        }
-                    }
-                    
-                    // Update reading
-                    if (data.reading) {
-                        const task3 = document.getElementById('task3');
-                        if (task3) {
-                            task3.innerHTML = `
-                                <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                                <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
-                                    “${data.reading}”
-                                </div>
-                            `;
-                        }
-                    }
-                    
-                    // Update vocabulary
-                    if (data.vocabulary) {
-                        const task4 = document.getElementById('task4');
-                        if (task4) {
-                            const vocabHtml = data.vocabulary.split('\n').filter(v => v.trim()).map(v => {
-                                const parts = v.split('–');
-                                return `<li><strong>${parts[0].trim()}</strong> – ${parts[1]?.trim() || ''}</li>`;
-                            }).join('');
-                            task4.innerHTML = `
-                                <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-                                <ul style="margin-left: 1.8rem; color: inherit;">
-                                    ${vocabHtml}
-                                </ul>
-                            `;
-                        }
-                    }
-                    
-                    console.log('✅ Lesson data loaded from admin');
-                } catch (e) {
-                    console.error('Error loading lesson data:', e);
-                }
-            }
-        }
-
-        // ============================================
-        // API FUNCTIONS
-        // ============================================
         async function fetchStudentData() {
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(STUDENT_API_URL);
                 const data = await response.json();
-                
-                if (!data.success) {
-                    console.error('API Error:', data.error);
-                    return [];
-                }
-                
+                if (!data.success) return [];
                 return data.data || [];
             } catch (error) {
                 console.error('Failed to fetch:', error);
@@ -1434,27 +1109,16 @@
 
         function calculateStatistics(students) {
             if (!students.length) return null;
-            
-            // Sort by total
             const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
-            
-            // Update top 5 grid in home page
-            const top5Grid = document.getElementById('top5Grid');
-            const top5 = sorted.slice(0, 5);
-            top5Grid.innerHTML = top5.map(s => `
+            document.getElementById('top5Grid').innerHTML = sorted.slice(0, 5).map(s => `
                 <div class="top-student-card">
                     <div class="top-student-name">${s.name || 'Unknown'}</div>
                     <div class="top-student-score">${s.total || 0} pts</div>
                 </div>
             `).join('');
             
-            // Calculate category averages
-            const categories = {
-                quiz: 0, homework: 0, weekly: 0, presentation: 0
-            };
-            
+            let categories = { quiz: 0, homework: 0, weekly: 0, presentation: 0 };
             let quizCount = 0, weeklyCount = 0, presCount = 0;
-            
             students.forEach(s => {
                 if (s.quiz) { categories.quiz += s.quiz; quizCount++; }
                 if (s.hw1) categories.homework += s.hw1;
@@ -1469,28 +1133,24 @@
                 if (s.w1) { categories.weekly += s.w1; weeklyCount++; }
                 if (s.pres1) { categories.presentation += s.pres1; presCount++; }
             });
-            
-            // Calculate averages
             categories.quiz = quizCount ? (categories.quiz / quizCount).toFixed(1) : 0;
             categories.homework = (categories.homework / (students.length * 9)).toFixed(1);
             categories.weekly = weeklyCount ? (categories.weekly / weeklyCount).toFixed(1) : 0;
             categories.presentation = presCount ? (categories.presentation / presCount).toFixed(1) : 0;
             
-            // Grade distribution
-            const distribution = {
-                excellent: students.filter(s => s.total >= 70).length,
-                good: students.filter(s => s.total >= 50 && s.total < 70).length,
-                needsWork: students.filter(s => s.total < 50).length
+            return {
+                categories,
+                distribution: {
+                    excellent: students.filter(s => s.total >= 70).length,
+                    good: students.filter(s => s.total >= 50 && s.total < 70).length,
+                    needsWork: students.filter(s => s.total < 50).length
+                },
+                sorted,
+                top5: sorted.slice(0, 5)
             };
-            
-            return { categories, distribution, sorted, top5 };
         }
 
-        // ============================================
-        // RENDER STATISTICS PAGE
-        // ============================================
         async function renderStatisticsPage() {
-            // Show loading
             document.getElementById('statsLoading').style.display = 'block';
             document.getElementById('statsCards').style.display = 'none';
             document.getElementById('top5Heading').style.display = 'none';
@@ -1502,7 +1162,6 @@
             document.getElementById('fullTableHeading').style.display = 'none';
             document.getElementById('fullStudentTable').style.display = 'none';
             
-            // Fetch fresh data
             const students = await fetchStudentData();
             if (!students.length) {
                 document.getElementById('statsLoading').innerHTML = '<p>No data available. Please check back later.</p>';
@@ -1512,7 +1171,6 @@
             const stats = calculateStatistics(students);
             if (!stats) return;
             
-            // Hide loading, show content
             document.getElementById('statsLoading').style.display = 'none';
             document.getElementById('statsCards').style.display = 'grid';
             document.getElementById('top5Heading').style.display = 'block';
@@ -1524,51 +1182,29 @@
             document.getElementById('fullTableHeading').style.display = 'block';
             document.getElementById('fullStudentTable').style.display = 'table';
             
-            // Stats cards
             const totalStudents = students.length;
             const totalPoints = students.reduce((sum, s) => sum + (s.total || 0), 0);
             const activeStudents = students.filter(s => (s.total || 0) > 0).length;
-            
             document.getElementById('statsCards').innerHTML = `
-                <div class="stats-card">
-                    <div class="stats-number">${totalStudents}</div>
-                    <div class="stats-label">Total Students</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number">${totalPoints}</div>
-                    <div class="stats-label">Total Points</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number">${activeStudents}</div>
-                    <div class="stats-label">Active Students</div>
-                </div>
+                <div class="stats-card"><div class="stats-number">${totalStudents}</div><div class="stats-label">Total Students</div></div>
+                <div class="stats-card"><div class="stats-number">${totalPoints}</div><div class="stats-label">Total Points</div></div>
+                <div class="stats-card"><div class="stats-number">${activeStudents}</div><div class="stats-label">Active Students</div></div>
             `;
             
-            // Top 5 table
             document.getElementById('top5Table').innerHTML = `
                 <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
                 ${stats.top5.map(s => `
-                    <tr>
-                        <td>${s.name || 'Unknown'}</td>
-                        <td><strong>${s.total || 0}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
-                    </tr>
+                    <tr><td>${s.name || 'Unknown'}</td><td><strong>${s.total || 0}</strong></td><td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td></tr>
                 `).join('')}
             `;
             
-            // Full student table
             document.getElementById('fullStudentTable').innerHTML = `
                 <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
                 ${stats.sorted.map(s => `
-                    <tr>
-                        <td>${s.name || 'Unknown'}</td>
-                        <td><strong>${s.total || 0}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
-                    </tr>
+                    <tr><td>${s.name || 'Unknown'}</td><td><strong>${s.total || 0}</strong></td><td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td></tr>
                 `).join('')}
             `;
             
-            // Create/Update charts
             if (!chartsInitialized) {
                 createCategoryChart(stats.categories);
                 createDistributionChart(stats.distribution);
@@ -1578,7 +1214,6 @@
             }
         }
 
-        // Chart functions
         function createCategoryChart(catData) {
             const ctx = document.getElementById('categoryChart').getContext('2d');
             categoryChart = new Chart(ctx, {
@@ -1595,13 +1230,8 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#103a5e' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, max: 20, grid: { color: 'rgba(75,130,190,0.1)' } }
-                    }
+                    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#103a5e' } },
+                    scales: { y: { beginAtZero: true, max: 20, grid: { color: 'rgba(75,130,190,0.1)' } } }
                 }
             });
         }
@@ -1621,9 +1251,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    },
+                    plugins: { legend: { position: 'bottom' } },
                     cutout: '65%'
                 }
             });
@@ -1640,19 +1268,134 @@
             }
         }
 
-        // ============================================
-        // PAGE NAVIGATION
-        // ============================================
+        async function loadLessonFromCloud() {
+            try {
+                const response = await fetch(LESSON_API_URL);
+                const result = await response.json();
+                if (result.success && result.data) {
+                    updateLessonFromData(result.data);
+                    console.log('✅ Lesson data loaded from cloud');
+                } else {
+                    loadSavedLessonData();
+                }
+            } catch (error) {
+                console.error('Error loading from cloud:', error);
+                loadSavedLessonData();
+            }
+        }
+
+        function updateLessonFromData(data) {
+            if (data.lessonCode) lessonCode = data.lessonCode;
+            const marksEl = document.querySelector('.marks-info');
+            if (marksEl && data.marks) marksEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
+            const deadlineEl = document.getElementById('deadlineDisplay');
+            if (deadlineEl && data.deadline) deadlineEl.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your time)`;
+            if (data.videoUrl) {
+                const videoFrame = document.querySelector('#task1 iframe');
+                if (videoFrame) videoFrame.src = data.videoUrl;
+            }
+            if (data.questions) {
+                const task2 = document.getElementById('task2');
+                if (task2) {
+                    const questionsHtml = data.questions.split('\n').filter(q => q.trim()).map(q => `<p>${q}</p>`).join('');
+                    task2.innerHTML = `<div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>${questionsHtml}`;
+                }
+            }
+            if (data.reading) {
+                const task3 = document.getElementById('task3');
+                if (task3) {
+                    task3.innerHTML = `
+                        <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+                        <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
+                            “${data.reading}”
+                        </div>
+                    `;
+                }
+            }
+            if (data.vocabulary) {
+                const task4 = document.getElementById('task4');
+                if (task4) {
+                    const vocabHtml = data.vocabulary.split('\n').filter(v => v.trim()).map(v => {
+                        const parts = v.split('–');
+                        return `<li><strong>${parts[0].trim()}</strong> – ${parts[1]?.trim() || ''}</li>`;
+                    }).join('');
+                    task4.innerHTML = `
+                        <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+                        <ul style="margin-left: 1.8rem; color: inherit;">${vocabHtml}</ul>
+                    `;
+                }
+            }
+        }
+
+        function loadSavedLessonData() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.lessonCode) lessonCode = data.lessonCode;
+                    const marksEl = document.querySelector('.marks-info');
+                    if (marksEl && data.marks) marksEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
+                    const deadlineEl = document.getElementById('deadlineDisplay');
+                    if (deadlineEl && data.deadline) deadlineEl.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your time)`;
+                    if (data.videoUrl) {
+                        const videoFrame = document.querySelector('#task1 iframe');
+                        if (videoFrame) videoFrame.src = data.videoUrl;
+                    }
+                    if (data.questions) {
+                        const task2 = document.getElementById('task2');
+                        if (task2) {
+                            const questionsHtml = data.questions.split('\n').filter(q => q.trim()).map(q => `<p>${q}</p>`).join('');
+                            task2.innerHTML = `<div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>${questionsHtml}`;
+                        }
+                    }
+                    if (data.reading) {
+                        const task3 = document.getElementById('task3');
+                        if (task3) {
+                            task3.innerHTML = `
+                                <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+                                <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
+                                    “${data.reading}”
+                                </div>
+                            `;
+                        }
+                    }
+                    if (data.vocabulary) {
+                        const task4 = document.getElementById('task4');
+                        if (task4) {
+                            const vocabHtml = data.vocabulary.split('\n').filter(v => v.trim()).map(v => {
+                                const parts = v.split('–');
+                                return `<li><strong>${parts[0].trim()}</strong> – ${parts[1]?.trim() || ''}</li>`;
+                            }).join('');
+                            task4.innerHTML = `
+                                <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+                                <ul style="margin-left: 1.8rem; color: inherit;">${vocabHtml}</ul>
+                            `;
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+
+        function loadTopPerformer() {
+            const saved = localStorage.getItem('fluencyTopPerformer');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('topPerformerName').textContent = data.name || 'Hatim';
+                    document.getElementById('topPerformerPoints').innerHTML = `<i class="fa-regular fa-star"></i> ${data.points || 71} points`;
+                    document.getElementById('topPerformerBadge').textContent = data.badge || 'Most consistent learner this month';
+                    if (data.avatar) document.querySelector('#topPerformerAvatar img').src = data.avatar;
+                } catch (e) {}
+            }
+        }
+
         function reload() { location.reload(); }
 
         function openPage(page) {
             const pages = ['home','lessonPage','about','services','statistics','contact'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
             document.getElementById(page).classList.remove('hidden');
-
-            if (page === 'statistics') {
-                renderStatisticsPage();
-            }
+            if (page === 'statistics') renderStatisticsPage();
         }
 
         function startLesson() {
@@ -1660,13 +1403,6 @@
             document.getElementById('lessonContent').classList.add('hidden');
             document.getElementById('lessonCodeSection').style.display = 'block';
         }
-
-        // ============================================
-        // LESSON CODE & NAVIGATION
-        // ============================================
-        let lessonCode = "1234"; // Default, will be overridden by admin data
-        let currentTask = 1;
-        const totalTasks = 5;
 
         function checkCode() {
             const input = document.getElementById('codeInput');
@@ -1686,16 +1422,12 @@
         function showTask(taskNum) {
             for (let i = 1; i <= totalTasks; i++) {
                 const taskEl = document.getElementById(`task${i}`);
-                if (taskEl) {
-                    taskEl.classList.toggle('hidden-task', i !== taskNum);
-                }
+                if (taskEl) taskEl.classList.toggle('hidden-task', i !== taskNum);
             }
             const progressPercent = (taskNum / totalTasks) * 100;
             document.getElementById('progressFill').style.width = `${progressPercent}%`;
-
             const nextBtn = document.getElementById('nextBtn');
             const prevBtn = document.getElementById('prevBtn');
-            
             if (taskNum === 1) {
                 nextBtn.innerText = 'Next';
                 prevBtn.style.visibility = 'hidden';
@@ -1730,22 +1462,16 @@
         }
 
         function displayDeadline() {
-            // This will be overridden by admin data if available
             const saved = localStorage.getItem('fluencyLessonData');
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
                     if (data.deadline) {
-                        const deadlineElement = document.getElementById('deadlineDisplay');
-                        if (deadlineElement) {
-                            deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
-                        }
+                        document.getElementById('deadlineDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
                         return;
                     }
                 } catch (e) {}
             }
-            
-            // Default if no admin data
             const now = new Date();
             const deadline = new Date(now);
             deadline.setDate(now.getDate() + 2);
@@ -1755,9 +1481,6 @@
             document.getElementById('deadlineDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${year}-${month}-${day} (23:59 your local time)`;
         }
 
-        // ============================================
-        // UTILITY FUNCTIONS
-        // ============================================
         function showTempMessage() {
             alert("Social media links will be added soon. Stay tuned!");
         }
@@ -1776,13 +1499,9 @@
             notification.className = 'notification';
             notification.textContent = message;
             document.body.appendChild(notification);
-            
             setTimeout(() => notification.remove(), 3000);
         }
 
-        // ============================================
-        // DARK MODE
-        // ============================================
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.querySelector('.dark-mode-toggle i');
@@ -1803,18 +1522,10 @@
             document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
         }
 
-        // ============================================
-        // INITIAL LOAD
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Load data from admin first
             loadTopPerformer();
-            loadSavedLessonData();
-            
-            // Then fetch from API for top 5 grid
-            fetchStudentData().then(students => {
-                calculateStatistics(students);
-            });
+            loadLessonFromCloud();
+            fetchStudentData().then(students => calculateStatistics(students));
         });
     </script>
 </body>
