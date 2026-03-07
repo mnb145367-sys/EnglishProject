@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Fluency • language mastery</title>
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* RESET & BASE */
         * {
@@ -16,41 +17,70 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Calibri', 'Inter', sans-serif;
             background-color: #f4f9ff;
             color: #1e2f4d;
-            line-height: 1.5;
+            line-height: 1.6;
             overflow-x: hidden;
             transition: background-color 0.3s, color 0.3s;
+            font-size: 1.15rem; /* increased slightly */
         }
 
-        /* Dark mode variables */
+        /* Dark mode variables - improved */
         body.dark-mode {
             background-color: #121a24;
             color: #e0e9f5;
         }
 
-        body.dark-mode .section {
-            background: rgba(20, 35, 50, 0.8);
-            border-color: rgba(255,255,255,0.1);
+        body.dark-mode .section,
+        body.dark-mode .task-card,
+        body.dark-mode .stats-card,
+        body.dark-mode .contact-card,
+        body.dark-mode .leader-card,
+        body.dark-mode .top-student-card,
+        body.dark-mode .instructions,
+        body.dark-mode .deadline-info,
+        body.dark-mode .marks-info,
+        body.dark-mode .input-hint,
+        body.dark-mode .student-table,
+        body.dark-mode .student-table th,
+        body.dark-mode .student-table td,
+        body.dark-mode .custom-popup {
+            background: rgba(20, 35, 50, 0.9) !important;
+            color: #e0e9f5 !important;
+            border-color: rgba(255,255,255,0.1) !important;
         }
 
         body.dark-mode .quote {
-            background: rgba(40, 60, 80, 0.7);
+            background: rgba(40, 60, 80, 0.8);
             color: #d0e2f5;
-        }
-
-        body.dark-mode .leader-card {
-            background: linear-gradient(135deg, #1f2e40, #1a2737);
         }
 
         body.dark-mode .btn {
             background: #2d4055;
             color: #cfdef5;
+            border-color: #4a6380;
         }
 
         body.dark-mode .btn-primary {
             background: linear-gradient(115deg, #2b5780, #3f6b99);
+            color: white;
+        }
+
+        body.dark-mode .progress-bar-container {
+            background: #2d4055;
+        }
+
+        body.dark-mode .progress-fill {
+            background: #5e9fcf;
+        }
+
+        body.dark-mode .student-table .progress-bar {
+            background: #2d4055;
+        }
+
+        body.dark-mode .student-table .progress-fill {
+            background: #5e9fcf;
         }
 
         /* --- ANIMATED EDUCATIONAL BACKGROUND --- */
@@ -138,7 +168,7 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             background: linear-gradient(130deg, #1f4e8c, #4a8abf);
             -webkit-background-clip: text;
@@ -164,7 +194,7 @@
             text-decoration: none;
             color: #1e3a5f;
             font-weight: 500;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             position: relative;
             padding: 0.25rem 0;
@@ -193,7 +223,7 @@
         .dark-mode-toggle {
             background: none;
             border: none;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             cursor: pointer;
             color: #1e3a5f;
             padding: 0 0.5rem;
@@ -243,12 +273,12 @@
             color: #b3d6f0;
         }
 
-        h1 { font-size: clamp(2rem, 5vw, 2.8rem); letter-spacing: -0.02em; }
-        h2 { font-size: clamp(1.8rem, 4vw, 2.2rem); letter-spacing: -0.01em; }
-        h3 { font-size: clamp(1.3rem, 3vw, 1.5rem); }
+        h1 { font-size: clamp(2.2rem, 5vw, 3rem); letter-spacing: -0.02em; }
+        h2 { font-size: clamp(2rem, 4vw, 2.5rem); letter-spacing: -0.01em; }
+        h3 { font-size: clamp(1.5rem, 3vw, 1.8rem); }
 
         p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #254e77;
             margin-bottom: 1.2rem;
             font-weight: 400;
@@ -265,7 +295,7 @@
             align-items: center;
             margin: 0.5rem 0 1.5rem;
             color: #84b3d9;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             gap: 1rem;
         }
 
@@ -276,7 +306,7 @@
         }
 
         .arrow-section i {
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #5e9fcf;
             animation: slideDown 2.2s infinite;
         }
@@ -296,7 +326,7 @@
             margin: 2rem 0 1rem;
             font-style: italic;
             border-left: 6px solid #4e8fc9;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #103a5e;
             box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
         }
@@ -331,7 +361,7 @@
         }
 
         .leader-name {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 600;
             color: #175277;
             margin-bottom: 0.25rem;
@@ -344,7 +374,42 @@
             font-weight: 500;
             color: #0f3d60;
             margin: 0.8rem 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* top 5 students grid (home page) */
+        .top5-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .top-student-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: 0 10px 20px -5px rgba(40,100,150,0.15);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: transform 0.2s;
+        }
+
+        .top-student-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .top-student-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #175277;
+            margin-bottom: 0.3rem;
+        }
+
+        .top-student-score {
+            font-size: 1.1rem;
+            color: #2b6f9e;
+            font-weight: 500;
         }
 
         /* buttons */
@@ -354,7 +419,7 @@
             padding: 1rem 2.8rem;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #1e4f7a;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -368,7 +433,7 @@
         }
 
         .btn i {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #3d7cb0;
         }
 
@@ -399,7 +464,7 @@
             border-radius: 60px;
             border: 1px solid #c7ddef;
             background: white;
-            font-size: 1rem;
+            font-size: 1.1rem;
             width: 300px;
             max-width: 100%;
             margin: 0.8rem 0;
@@ -415,7 +480,7 @@
 
         /* Small helper text under input */
         .input-hint {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #5f7d9c;
             margin-top: -0.5rem;
             margin-bottom: 0.8rem;
@@ -430,6 +495,7 @@
             flex-direction: column;
             gap: 1.8rem;
             margin-top: 2rem;
+            position: relative;
         }
 
         .task-card {
@@ -446,13 +512,13 @@
         }
 
         .task-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: #18537b;
             margin-bottom: 1.2rem;
             display: flex;
             align-items: center;
-            justify-content: center;  /* Center the title */
+            justify-content: center;
             gap: 0.8rem;
             text-align: center;
         }
@@ -462,7 +528,7 @@
         }
 
         .task-title i {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             color: #538cc0;
         }
 
@@ -474,6 +540,8 @@
             overflow: hidden;
             background: #bdd6ec;
             margin: 1.5rem 0;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .video-wrapper iframe {
@@ -493,24 +561,71 @@
             font-weight: 500;
             color: #145580;
             margin: 1rem 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .marks-info {
+            background: #d9ecfd;
+            border-radius: 60px;
+            padding: 0.7rem 2rem;
+            display: inline-block;
+            font-weight: 500;
+            color: #145580;
+            margin: 0.5rem 0 1rem;
+            font-size: 1.1rem;
         }
 
         .instructions {
             background: #f0f7ff;
             border-radius: 1.5rem;
             padding: 1.5rem;
-            margin-top: 1.5rem;
+            margin: 1.5rem 0;
             border-left: 4px solid #4e8fc9;
         }
 
         .instructions p {
             margin-bottom: 0.5rem;
+            color: #254e77;
         }
 
         /* Centered text for lesson page */
         .lesson-centered {
             text-align: center;
+        }
+
+        /* Progress bar and step indicator */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+        }
+        .progress-bar-container {
+            width: 200px;
+            height: 8px;
+            background: #d9ecfd;
+            border-radius: 4px;
+            margin: 0 1rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #1e5a88;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .task-nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .hidden-task {
+            display: none !important;
         }
 
         /* contact cards */
@@ -533,9 +648,145 @@
         }
 
         .contact-card i {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: #327ab3;
             margin-bottom: 1rem;
+        }
+
+        /* Statistics page specific styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,30,50,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .stats-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1e5a88;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            font-size: 1.2rem;
+            color: #2b6f9e;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        .category-chart-container {
+            height: 350px;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.5);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .student-table th {
+            text-align: left;
+            padding: 0.8rem;
+            background: rgba(75, 130, 190, 0.2);
+            color: #103a5e;
+            font-size: 1.1rem;
+        }
+
+        .student-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(75, 130, 190, 0.1);
+            font-size: 1.1rem;
+        }
+
+        .student-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .student-table .progress-bar {
+            width: 100px;
+            height: 8px;
+            background: #d9ecfd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .student-table .progress-fill {
+            height: 100%;
+            background: #1e5a88;
+            border-radius: 4px;
+        }
+
+        /* Custom popup for completion message */
+        .custom-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 30px 60px rgba(0,40,80,0.3);
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid #4e8fc9;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .popup-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e5a88;
+            margin-bottom: 1rem;
+        }
+
+        .popup-message {
+            font-size: 1.3rem;
+            color: #254e77;
+            margin-bottom: 2rem;
+        }
+
+        .popup-btn {
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .popup-btn:hover {
+            transform: scale(1.05);
         }
 
         /* footer */
@@ -575,7 +826,7 @@
         }
 
         .footer-logo {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             background: linear-gradient(145deg, #aad0f5, #ffffff);
             -webkit-background-clip: text;
@@ -594,6 +845,7 @@
             text-decoration: none;
             font-weight: 400;
             transition: color 0.2s;
+            font-size: 1.1rem;
         }
 
         .footer-links a:hover {
@@ -615,7 +867,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: 0.25s;
             border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
@@ -633,7 +885,7 @@
             margin-top: 2.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #99bcd9;
         }
 
@@ -656,8 +908,8 @@
                 padding: 1.8rem;
                 margin: 1.5rem 0;
             }
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.8rem; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 2rem; }
             .arrow-section .line {
                 width: 40px;
             }
@@ -668,6 +920,7 @@
             .footer-links {
                 justify-content: center;
             }
+            body { font-size: 1.1rem; }
         }
 
         @media (max-width: 480px) {
@@ -680,7 +933,7 @@
             }
             .btn {
                 padding: 0.8rem 1.8rem;
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
             input {
                 width: 100%;
@@ -689,6 +942,7 @@
                 width: 100px;
                 height: 100px;
             }
+            body { font-size: 1rem; }
         }
     </style>
 </head>
@@ -708,6 +962,7 @@
             <a onclick="openPage('home')">Home</a>
             <a onclick="openPage('about')">About</a>
             <a onclick="openPage('services')">Services</a>
+            <a onclick="openPage('statistics')">Statistics</a>
             <a onclick="openPage('contact')">Contact</a>
             <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
                 <i class="fas fa-moon"></i>
@@ -752,12 +1007,16 @@
                 <h2>Top performer</h2>
                 <div class="leader-card">
                     <div class="leader-avatar">
-                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="صورة حاتم" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
+                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Hatim" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
                     </div>
                     <div class="leader-name">Hatim</div>
-                    <div class="leader-points"><i class="fa-regular fa-star"></i> 72 points</div>
+                    <div class="leader-points"><i class="fa-regular fa-star"></i> 71 points</div>
                     <p style="margin-top: 0.8rem;">Most consistent learner this month</p>
                 </div>
+
+                <!-- Top 5 Students Section -->
+                <h3 style="margin-top: 3rem;">Top 5 Students</h3>
+                <div class="top5-grid" id="top5Grid"></div>
             </div>
 
             <div class="arrow-section">
@@ -775,7 +1034,7 @@
 
         <!-- LESSON PAGE -->
         <div id="lessonPage" class="hidden">
-            <div class="section lesson-centered">
+            <div class="section lesson-centered" id="lessonCodeSection">
                 <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
                 <input id="codeInput" type="text" placeholder="e.g. 1234" maxlength="4" pattern="\d*" inputmode="numeric" onkeypress="return isNumberKey(event)">
                 <div class="input-hint">The code is sent by the coordinator.</div>
@@ -786,8 +1045,10 @@
                 <div class="section lesson-centered">
                     <h2>Today's session</h2>
                     <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
+                    <div class="marks-info"><i class="fa-regular fa-star"></i> 5 Marks</div>
                     <div class="deadline-info" id="deadlineDisplay"></div>
                     
+                    <!-- Instructions box (re-added) -->
                     <div class="instructions">
                         <p><strong>Instructions</strong></p>
                         <p>• Watch the video carefully. You can use subtitles.</p>
@@ -797,11 +1058,19 @@
                         <p>• Record your speaking task and share it in the WhatsApp group.</p>
                         <p>• All tasks must be submitted before the deadline above.</p>
                     </div>
+
+                    <!-- Progress indicator (without text) -->
+                    <div class="progress-container">
+                        <div class="progress-bar-container">
+                            <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="lesson-tasks">
-                    <!-- Task 1: Video (no number) -->
-                    <div class="task-card">
+                <!-- Tasks (hidden/show one at a time) -->
+                <div class="lesson-tasks" id="lessonTasks">
+                    <!-- Task 1: Video -->
+                    <div class="task-card" id="task1">
                         <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
                         <div class="video-wrapper">
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/D3mNn0btW6s?si=R9OuOyFaq8FiF1ip" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -809,36 +1078,26 @@
                         <p>Listen actively. You may use subtitles the first time.</p>
                     </div>
 
-                    <!-- Task 2: Reflection (no number) -->
-                    <div class="task-card">
+                    <!-- Task 2: Reflection -->
+                    <div class="task-card hidden-task" id="task2">
                         <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
                         <p>• What are two main ways technology has improved daily life according to the video?</p>
                         <p>• Mention one negative effect of technology discussed.</p>
                         <p>• How does technology influence communication and social interaction?</p>
                     </div>
 
-                    <!-- Task 3: Reading (no number) -->
-                    <div class="task-card">
+                    <!-- Task 3: Reading -->
+                    <div class="task-card hidden-task" id="task3">
                         <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                        <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7;">
-                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale.
-
-One of the most significant impacts is in communication. Social media platforms, instant messaging apps, and video calls have revolutionized how we maintain relationships. People can now interact in real-time across continents, creating opportunities for collaboration and cultural exchange. However, these conveniences come with challenges, including over-dependence on devices, reduced face-to-face interactions, and privacy concerns.
-
-In education, technology offers flexible learning opportunities. Students can access online courses, interactive tutorials, and virtual libraries, making self-paced learning a reality. Teachers can utilize digital tools to enhance lessons and assess students more effectively. Yet, the digital divide remains a problem: not all students have equal access to devices or stable internet, which can widen inequalities.
-
-Healthcare has also benefited from technological advances. Telemedicine, electronic medical records, and AI diagnostics enable faster and more accurate patient care. Patients can consult specialists remotely, and doctors can monitor health conditions in real-time. Despite these advantages, ethical questions arise regarding data security, consent, and potential over-reliance on machines.
-
-Finally, technology has changed leisure and entertainment. Streaming platforms, online gaming, and virtual reality experiences provide immersive ways to relax and socialize. While these options enhance lifestyle and creativity, excessive screen time can lead to sedentary habits and mental health concerns.
-
-In conclusion, technology is a double-edged sword. It offers immense benefits but also requires careful, responsible use. Understanding both its potential and its risks allows individuals to maximize its advantages while minimizing negative effects.”
+                        <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
+                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
                         </div>
                     </div>
 
-                    <!-- Task 4: Vocabulary (no number) -->
-                    <div class="task-card">
+                    <!-- Task 4: Vocabulary -->
+                    <div class="task-card hidden-task" id="task4">
                         <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-                        <ul style="margin-left: 1.8rem; color:#1d4f79;">
+                        <ul style="margin-left: 1.8rem; color: inherit;">
                             <li><strong>persistence</strong> – continuing despite difficulty</li>
                             <li><strong>momentum</strong> – force that keeps something moving</li>
                             <li><strong>consistency</strong> – doing the same thing regularly</li>
@@ -847,13 +1106,29 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
                         </ul>
                     </div>
 
-                    <!-- Task 5: Speaking (no number) -->
-                    <div class="task-card">
+                    <!-- Task 5: Speaking -->
+                    <div class="task-card hidden-task" id="task5">
                         <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
                         <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
                         <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
                     </div>
                 </div>
+
+                <!-- Navigation buttons -->
+                <div class="task-nav-buttons" id="taskNav">
+                    <button class="btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextTask()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup for completion message (hidden initially) -->
+        <div id="completionPopup" class="hidden">
+            <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
+            <div class="custom-popup">
+                <div class="popup-title">You Did It!</div>
+                <div class="popup-message">You have successfully completed all tasks. Your dedication is truly inspiring. Keep up the great work!</div>
+                <button class="popup-btn" onclick="closePopupAndGoHome()">Continue</button>
             </div>
         </div>
 
@@ -867,7 +1142,7 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
             </div>
         </div>
 
-        <!-- SERVICES PAGE (with dashes) -->
+        <!-- SERVICES PAGE -->
         <div id="services" class="hidden">
             <div class="section">
                 <h2>What we offer</h2>
@@ -876,6 +1151,37 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
                 <p>– Weekly speaking task with peer feedback</p>
                 <p>– Personal progress report (streak, points, areas to improve)</p>
                 <p>– Access to WhatsApp community for questions & practice</p>
+            </div>
+        </div>
+
+        <!-- STATISTICS PAGE -->
+        <div id="statistics" class="hidden">
+            <div class="section">
+                <h2>Student Statistics</h2>
+                <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
+
+                <!-- Stats Cards (without Average) -->
+                <div class="stats-grid" id="statsCards"></div>
+
+                <!-- Top 5 Students Table -->
+                <h3>Top 5 Students by Total Points</h3>
+                <table class="student-table" id="top5Table"></table>
+
+                <!-- Category Performance Chart -->
+                <h3 style="margin-top: 3rem;">Category Performance</h3>
+                <div class="chart-container category-chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+
+                <!-- Grade Distribution Chart -->
+                <h3 style="margin-top: 2rem;">Grade Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+
+                <!-- Full Student Table -->
+                <h3 style="margin-top: 3rem;">All Students - Detailed Scores</h3>
+                <table class="student-table" id="fullStudentTable"></table>
             </div>
         </div>
 
@@ -914,6 +1220,7 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
                 <a href="#" onclick="openPage('home'); return false;">Home</a>
                 <a href="#" onclick="openPage('about'); return false;">About</a>
                 <a href="#" onclick="openPage('services'); return false;">Services</a>
+                <a href="#" onclick="openPage('statistics'); return false;">Statistics</a>
                 <a href="#" onclick="openPage('contact'); return false;">Contact</a>
                 <a href="#" onclick="startLesson(); return false;">Lesson</a>
             </div>
@@ -921,7 +1228,7 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
                 <a href="https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
                 <a onclick="showTempMessage()"><i class="fa-brands fa-twitter"></i></a>
                 <a onclick="showTempMessage()"><i class="fa-brands fa-instagram"></i></a>
-                <a onclick="showTempMessage()"><i class="fa-regular fa-envelope"></i></a>
+                <a href="mailto:mnb145367@gmail.com"><i class="fa-regular fa-envelope"></i></a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -930,18 +1237,252 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
     </footer>
 
     <script>
-        // === Existing functions ===
+        // ==================== DATA FROM EXCEL ====================
+        const studentsData = [
+            { name: "Bassem", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Muath", quiz1:0, hw1:5, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Numan", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Amer", quiz1:20, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:0, hw9:5, pres1:10 },
+            { name: "Zubair", quiz1:20, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:5, hw9:5, pres1:0 },
+            { name: "Yazid", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Jaafar", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Hatem", quiz1:19, hw1:5, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:0, hw9:0, pres1:10 },
+            { name: "Omar", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Ahmed Mo", quiz1:18, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:0, hw8:5, hw9:0, pres1:10 },
+            { name: "Ahmed Ab", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Saad", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Baker", quiz1:0, hw1:5, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Zyad", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Ayman", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Abdulrhman", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
+            { name: "Saleh", quiz1:20, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:5, hw8:0, hw9:5, pres1:10 },
+            { name: "Hasan", quiz1:20, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 }
+        ];
+
+        // Calculate total for each student
+        studentsData.forEach(s => {
+            s.total = s.quiz1 + s.hw1 + s.quiz2 + s.hw2 + s.w1 + s.w2 + s.w3 + s.w4 + s.quiz3 + s.hw3 + s.hw4 + s.hw5 + s.hw6 + s.hw7 + s.hw8 + s.hw9 + s.pres1;
+        });
+
+        // Update Hatim's total to 71 (matching new points)
+        const hatim = studentsData.find(s => s.name === "Hatem");
+        if (hatim) hatim.total = 71;
+
+        // Sort by total descending
+        const sortedStudents = [...studentsData].sort((a,b) => b.total - a.total);
+        const top5 = sortedStudents.slice(0,5);
+
+        // Calculate category averages for charts
+        const categories = {
+            quiz: (studentsData.reduce((acc, s) => acc + s.quiz1 + s.quiz2 + s.quiz3, 0) / (studentsData.length * 3)).toFixed(1),
+            homework: (studentsData.reduce((acc, s) => acc + s.hw1 + s.hw2 + s.hw3 + s.hw4 + s.hw5 + s.hw6 + s.hw7 + s.hw8 + s.hw9, 0) / (studentsData.length * 9)).toFixed(1),
+            weekly: (studentsData.reduce((acc, s) => acc + s.w1 + s.w2 + s.w3 + s.w4, 0) / (studentsData.length * 4)).toFixed(1),
+            presentation: (studentsData.reduce((acc, s) => acc + s.pres1, 0) / studentsData.length).toFixed(1)
+        };
+
+        // Grade distribution
+        const distribution = {
+            excellent: studentsData.filter(s => s.total >= 70).length,
+            good: studentsData.filter(s => s.total >= 50 && s.total < 70).length,
+            needsWork: studentsData.filter(s => s.total < 50).length
+        };
+
+        // ==================== RENDER FUNCTIONS ====================
+        function renderTop5Home() {
+            const grid = document.getElementById('top5Grid');
+            if (!grid) return;
+            grid.innerHTML = top5.map(s => `
+                <div class="top-student-card">
+                    <div class="top-student-name">${s.name}</div>
+                    <div class="top-student-score">${s.total} pts</div>
+                </div>
+            `).join('');
+        }
+
+        function renderStatsCards() {
+            const container = document.getElementById('statsCards');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="stats-card">
+                    <div class="stats-number">${studentsData.length}</div>
+                    <div class="stats-label">Total Students</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number">${studentsData.reduce((acc,s) => acc + s.total, 0)}</div>
+                    <div class="stats-label">Total Points</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number">${studentsData.filter(s => s.total > 0).length}</div>
+                    <div class="stats-label">Active Students</div>
+                </div>
+            `;
+        }
+
+        function renderTop5Table() {
+            const table = document.getElementById('top5Table');
+            if (!table) return;
+            table.innerHTML = `
+                <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
+                ${top5.map(s => `
+                    <tr>
+                        <td>${s.name}</td>
+                        <td><strong>${s.total}</strong></td>
+                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total)}%"></div></div></td>
+                    </tr>
+                `).join('')}
+            `;
+        }
+
+        function renderFullStudentTable() {
+            const table = document.getElementById('fullStudentTable');
+            if (!table) return;
+            table.innerHTML = `
+                <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
+                ${sortedStudents.map(s => `
+                    <tr>
+                        <td>${s.name}</td>
+                        <td><strong>${s.total}</strong></td>
+                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total)}%"></div></div></td>
+                    </tr>
+                `).join('')}
+            `;
+        }
+
+        function createCategoryChart() {
+            const ctx = document.getElementById('categoryChart')?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Quizzes', 'Homework', 'Weekly', 'Presentation'],
+                    datasets: [{
+                        label: 'Average Score',
+                        data: [categories.quiz, categories.homework, categories.weekly, categories.presentation],
+                        backgroundColor: ['#1e5a88', '#367bb5', '#5e9fcf', '#84b3d9'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#103a5e' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 20, grid: { color: 'rgba(75,130,190,0.1)' } }
+                    }
+                }
+            });
+        }
+
+        function createDistributionChart() {
+            const ctx = document.getElementById('distributionChart')?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Excellent (70+)', 'Good (50-69)', 'Needs Work (<50)'],
+                    datasets: [{
+                        data: [distribution.excellent, distribution.good, distribution.needsWork],
+                        backgroundColor: ['#1e5a88', '#5e9fcf', '#b5d0e8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // ==================== LESSON TASK NAVIGATION ====================
+        let currentTask = 1;
+        const totalTasks = 5;
+
+        function showTask(taskNum) {
+            for (let i = 1; i <= totalTasks; i++) {
+                const taskEl = document.getElementById(`task${i}`);
+                if (taskEl) {
+                    if (i === taskNum) {
+                        taskEl.classList.remove('hidden-task');
+                    } else {
+                        taskEl.classList.add('hidden-task');
+                    }
+                }
+            }
+            // Update progress (only bar)
+            const progressPercent = (taskNum / totalTasks) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+
+            // Update buttons
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            if (taskNum === 1) {
+                nextBtn.innerText = 'Next';
+                prevBtn.style.visibility = 'hidden';
+            } else if (taskNum === totalTasks) {
+                nextBtn.innerText = 'Finish';
+                prevBtn.style.visibility = 'visible';
+            } else {
+                nextBtn.innerText = 'Next';
+                prevBtn.style.visibility = 'visible';
+            }
+        }
+
+        function nextTask() {
+            if (currentTask === totalTasks) {
+                // Show custom popup instead of alert
+                document.getElementById('completionPopup').classList.remove('hidden');
+            } else {
+                currentTask++;
+                showTask(currentTask);
+            }
+        }
+
+        function prevTask() {
+            if (currentTask > 1) {
+                currentTask--;
+                showTask(currentTask);
+            }
+        }
+
+        function closePopupAndGoHome() {
+            document.getElementById('completionPopup').classList.add('hidden');
+            openPage('home'); // Return to home page
+        }
+
+        // ==================== EXISTING FUNCTIONS ====================
         function reload() { location.reload(); }
 
         function openPage(page) {
-            const pages = ['home','lessonPage','about','services','contact'];
+            const pages = ['home','lessonPage','about','services','statistics','contact'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
             document.getElementById(page).classList.remove('hidden');
+
+            // If statistics page, render charts and tables
+            if (page === 'statistics') {
+                setTimeout(() => {
+                    renderStatsCards();
+                    renderTop5Table();
+                    renderFullStudentTable();
+                    createCategoryChart();
+                    createDistributionChart();
+                }, 50);
+            }
         }
 
         function startLesson() {
             openPage('lessonPage');
             document.getElementById('lessonContent').classList.add('hidden');
+            // Reset task to first when new lesson started
+            currentTask = 1;
+            // Make sure code section is visible when entering lesson page
+            document.getElementById('lessonCodeSection').style.display = 'block';
         }
 
         const lessonCode = "1234";
@@ -950,8 +1491,12 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
             const input = document.getElementById('codeInput');
             if (input.value === lessonCode) {
                 document.getElementById('lessonContent').classList.remove('hidden');
+                // Hide the code entry section
+                document.getElementById('lessonCodeSection').style.display = 'none';
                 displayDeadline();
                 input.value = '';
+                // Initialize task display
+                showTask(1);
             } else {
                 alert('Incorrect code. Please try again.');
                 input.style.borderColor = '#cc7b7b';
@@ -974,7 +1519,6 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
             alert("Social media links will be added soon. Stay tuned!");
         }
 
-        // Allow only numbers in code input
         function isNumberKey(evt) {
             const charCode = evt.which ? evt.which : evt.keyCode;
             if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
@@ -985,7 +1529,6 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
             if (e.key === 'Enter') checkCode();
         });
 
-        // === Dark Mode ===
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.querySelector('.dark-mode-toggle i');
@@ -1000,14 +1543,14 @@ In conclusion, technology is a double-edged sword. It offers immense benefits bu
             }
         }
 
-        // Load dark mode preference
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
             document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
             document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
         }
+
+        // Initialize home page top5
+        renderTop5Home();
     </script>
 </body>
 </html>
-
-
