@@ -261,6 +261,16 @@
             height: 100%;
             object-fit: cover;
         }
+        
+        .test-button {
+            background: #ffc107;
+            color: #1e4f7a;
+            border: none;
+        }
+        
+        .test-button:hover {
+            background: #e0a800;
+        }
     </style>
 </head>
 <body>
@@ -388,6 +398,16 @@ discipline – controlled behaviour to achieve a goal</textarea>
             <button class="btn btn-primary" onclick="saveVocabulary()"><i class="fa-regular fa-save"></i> Save Vocabulary</button>
         </div>
         
+        <!-- Test Connection Section -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-wifi"></i> Test Connection</h3>
+            <p class="help-text">Test if the lesson code is being saved correctly</p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn test-button" onclick="testLessonCode()"><i class="fa-regular fa-flask"></i> Test Lesson Code</button>
+                <button class="btn test-button" onclick="viewSavedData()"><i class="fa-regular fa-eye"></i> View Saved Data</button>
+            </div>
+        </div>
+        
         <!-- Action Buttons -->
         <div class="button-group">
             <button class="btn btn-success" onclick="saveAllChanges()" style="flex: 2;"><i class="fa-regular fa-floppy-disk"></i> Save All Changes</button>
@@ -503,9 +523,12 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // ============================================
         async function loadLessonFromCloud() {
             try {
+                console.log('Loading lesson from cloud...');
                 const response = await fetch(LESSON_API_URL);
                 const result = await response.json();
-                if (result.success && result.data) {
+                console.log('Lesson API response:', result);
+                
+                if (result && result.data) {
                     document.getElementById('lessonCode').value = result.data.lessonCode || '1234';
                     document.getElementById('marks').value = result.data.marks || '5';
                     document.getElementById('deadline').value = result.data.deadline || getDefaultDeadline();
@@ -515,6 +538,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     document.getElementById('vocabulary').value = result.data.vocabulary || '';
                     showNotification('📂 Lesson data loaded from cloud');
                 } else {
+                    console.log('No cloud data, using defaults');
                     setDefaultDates();
                 }
             } catch (error) {
@@ -569,15 +593,23 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 lastUpdated: new Date().toISOString()
             };
             
+            // Save lesson code to localStorage separately for immediate use
+            localStorage.setItem('fluencyLessonCode', data.lessonCode);
+            
             try {
+                // Using no-cors mode for Google Apps Script
                 await fetch(LESSON_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                showNotification('✅ Lesson data saved to cloud');
-                localStorage.setItem('fluencyLessonData', JSON.stringify(data)); // backup
+                
+                // Also save locally as backup
+                localStorage.setItem('fluencyLessonData', JSON.stringify(data));
+                
+                showNotification('✅ Lesson data saved! Code: ' + data.lessonCode);
+                updateTimestamp();
             } catch (error) {
                 console.error('Error saving to cloud, saved locally only.', error);
                 localStorage.setItem('fluencyLessonData', JSON.stringify(data));
@@ -604,6 +636,49 @@ discipline – controlled behaviour to achieve a goal</textarea>
         async function saveAllChanges() {
             await saveLessonToCloud();
             saveTopPerformer();
+        }
+
+        // ============================================
+        // TEST FUNCTIONS
+        // ============================================
+        function testLessonCode() {
+            const code = document.getElementById('lessonCode').value;
+            console.log('Current lesson code:', code);
+            
+            // Save to localStorage
+            localStorage.setItem('fluencyLessonCode', code);
+            
+            // Show test result
+            const savedCode = localStorage.getItem('fluencyLessonCode');
+            alert(`Test Results:
+Current code in field: ${code}
+Code saved to localStorage: ${savedCode}
+${code === savedCode ? '✅ Code saved successfully!' : '❌ Code save failed!'}`);
+        }
+        
+        function viewSavedData() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            const savedCode = localStorage.getItem('fluencyLessonCode');
+            
+            let message = '=== SAVED DATA ===\n';
+            message += `Lesson Code (localStorage): ${savedCode || 'Not set'}\n\n`;
+            
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    message += 'Full lesson data:\n';
+                    message += `Code: ${data.lessonCode}\n`;
+                    message += `Marks: ${data.marks}\n`;
+                    message += `Deadline: ${data.deadline}\n`;
+                    message += `Video: ${data.videoUrl ? 'Set' : 'Not set'}\n`;
+                } catch (e) {
+                    message += 'Error parsing saved data';
+                }
+            } else {
+                message += 'No saved lesson data found';
+            }
+            
+            alert(message);
         }
 
         // ============================================
@@ -636,6 +711,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
         function resetToDefaults() {
             if (confirm('Reset ALL data to default values? This cannot be undone.')) {
                 localStorage.removeItem('fluencyLessonData');
+                localStorage.removeItem('fluencyLessonCode');
                 localStorage.removeItem('fluencyTopPerformer');
                 loadCurrentData();
                 loadTopPerformer();
