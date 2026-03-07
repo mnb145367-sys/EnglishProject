@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
             font-family: 'Calibri', sans-serif;
             background: linear-gradient(145deg, #e2f0ff 0%, #fafcff 100%);
@@ -20,10 +21,12 @@
             justify-content: center;
             padding: 2rem;
         }
+        
         .login-container {
             width: 100%;
             max-width: 400px;
         }
+        
         .login-box {
             background: white;
             border-radius: 2.5rem;
@@ -31,11 +34,13 @@
             box-shadow: 0 25px 45px -12px rgba(0,40,80,0.3);
             text-align: center;
         }
+        
         .login-box h2 {
             color: #1e5a88;
             margin-bottom: 2rem;
             font-size: 2rem;
         }
+        
         .login-box input {
             width: 100%;
             padding: 1rem 1.5rem;
@@ -46,10 +51,12 @@
             outline: none;
             transition: 0.2s;
         }
+        
         .login-box input:focus {
             border-color: #1e5a88;
             box-shadow: 0 0 0 3px rgba(30,90,136,0.1);
         }
+        
         .login-box button {
             width: 100%;
             padding: 1rem;
@@ -63,15 +70,19 @@
             margin: 1rem 0;
             transition: 0.2s;
         }
+        
         .login-box button:hover {
             transform: scale(1.02);
             box-shadow: 0 10px 20px rgba(30,90,136,0.2);
         }
+        
         .error-msg {
             color: #cc3366;
             margin-top: 1rem;
             font-size: 0.9rem;
         }
+        
+        /* Admin Panel */
         .admin-panel {
             width: 100%;
             max-width: 900px;
@@ -80,6 +91,7 @@
             padding: 2rem;
             box-shadow: 0 25px 45px -12px rgba(0,40,80,0.3);
         }
+        
         .admin-panel h2 {
             color: #1e5a88;
             margin-bottom: 2rem;
@@ -87,15 +99,18 @@
             align-items: center;
             gap: 1rem;
         }
+        
         .admin-panel h2 i {
             font-size: 2rem;
         }
+        
         .admin-section {
             background: rgba(220, 240, 255, 0.3);
             border-radius: 1.5rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
+        
         .admin-section h3 {
             color: #175277;
             margin-bottom: 1rem;
@@ -103,12 +118,14 @@
             align-items: center;
             gap: 0.5rem;
         }
+        
         .form-group {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 1rem;
         }
+        
         .form-group input,
         .form-group textarea {
             flex: 1;
@@ -119,16 +136,19 @@
             outline: none;
             transition: 0.2s;
         }
+        
         .form-group textarea {
             border-radius: 1rem;
             min-height: 100px;
             font-family: 'Calibri', sans-serif;
         }
+        
         .form-group input:focus,
         .form-group textarea:focus {
             border-color: #1e5a88;
             box-shadow: 0 0 0 2px rgba(30,90,136,0.1);
         }
+        
         .btn {
             background: white;
             border: none;
@@ -142,37 +162,45 @@
             box-shadow: 0 4px 10px rgba(45, 100, 150, 0.1);
             border: 1px solid #c7ddef;
         }
+        
         .btn-primary {
             background: linear-gradient(115deg, #1e5a88, #367bb5);
             color: white;
             border: none;
         }
+        
         .btn-primary:hover {
             transform: scale(1.02);
             box-shadow: 0 8px 16px rgba(30,90,136,0.2);
         }
+        
         .btn-danger {
             background: #cc3366;
             color: white;
             border: none;
         }
+        
         .btn-danger:hover {
             background: #b22d5a;
         }
+        
         .btn-success {
             background: #28a745;
             color: white;
             border: none;
         }
+        
         .btn-success:hover {
             background: #218838;
         }
+        
         .button-group {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             margin-top: 2rem;
         }
+        
         .notification {
             position: fixed;
             top: 20px;
@@ -185,10 +213,12 @@
             z-index: 9999;
             animation: slideIn 0.3s ease;
         }
+        
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
         .preview-box {
             background: #f0f7ff;
             border-radius: 1rem;
@@ -197,10 +227,12 @@
             font-size: 0.9rem;
             border: 1px solid #c7ddef;
         }
+        
         .preview-box h4 {
             color: #175277;
             margin-bottom: 0.5rem;
         }
+        
         .timestamp {
             color: #5f7d9c;
             font-size: 0.85rem;
@@ -209,11 +241,13 @@
             padding-top: 1rem;
             border-top: 1px solid #c7ddef;
         }
+        
         .help-text {
             color: #5f7d9c;
             font-size: 0.85rem;
             margin-top: 0.3rem;
         }
+        
         .icon-preview {
             width: 50px;
             height: 50px;
@@ -221,6 +255,7 @@
             overflow: hidden;
             background: #c1dcf5;
         }
+        
         .icon-preview img {
             width: 100%;
             height: 100%;
@@ -229,6 +264,7 @@
     </style>
 </head>
 <body>
+    <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-box">
             <h2><i class="fa-regular fa-lock"></i> Admin Login</h2>
@@ -241,6 +277,7 @@
         </div>
     </div>
     
+    <!-- Admin Panel (Hidden initially) -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
         <h2>
             <i class="fa-regular fa-gear"></i>
@@ -250,47 +287,64 @@
             </span>
         </h2>
         
+        <!-- Independent Top Performer Settings -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-crown"></i> Top Performer (Manual Control)</h3>
-            <p class="help-text"><i class="fa-regular fa-circle-info"></i> This section is independent from the student data table.</p>
+            <p class="help-text">
+                <i class="fa-regular fa-circle-info"></i> This section is independent from the student data table.
+            </p>
+            
             <div class="form-group">
                 <input type="text" id="topPerformerName" placeholder="Student Name" value="Hatim" style="flex: 2;">
                 <input type="number" id="topPerformerPoints" placeholder="Points" value="71" min="0" max="1000" style="flex: 1;">
             </div>
+            
             <div class="form-group">
-                <input type="text" id="topPerformerBadge" placeholder="Badge text" value="Most consistent learner this month" style="flex: 3;">
+                <input type="text" id="topPerformerBadge" placeholder="Badge text (e.g., Most consistent learner)" value="Most consistent learner this month" style="flex: 3;">
             </div>
+            
             <div class="form-group">
-                <input type="text" id="topPerformerAvatar" placeholder="Avatar URL" value="https://i.ibb.co/4RQ0RChK/hatim.jpg" style="flex: 3;">
+                <input type="text" id="topPerformerAvatar" placeholder="Avatar Image URL (optional)" value="https://i.ibb.co/4RQ0RChK/hatim.jpg" style="flex: 3;">
             </div>
+            
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
                 <button class="btn btn-primary" onclick="saveTopPerformer()"><i class="fa-regular fa-floppy-disk"></i> Save Top Performer</button>
                 <button class="btn" onclick="previewTopPerformer()"><i class="fa-regular fa-eye"></i> Preview</button>
-                <button class="btn" onclick="resetTopPerformer()"><i class="fa-regular fa-arrow-rotate-left"></i> Reset</button>
+                <button class="btn" onclick="resetTopPerformer()"><i class="fa-regular fa-arrow-rotate-left"></i> Reset to Default</button>
             </div>
+            
+            <!-- Live Preview -->
             <div id="topPerformerPreview" class="preview-box" style="margin-top: 1rem; display: none;">
                 <h4>Preview:</h4>
                 <div style="display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem; border-radius: 1rem;">
-                    <div class="icon-preview"><img id="previewAvatar" src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Preview"></div>
-                    <div><strong id="previewName" style="font-size: 1.2rem;">Hatim</strong><span id="previewPoints" style="margin-left: 1rem; color: #1e5a88;">71 pts</span><div id="previewBadge" style="font-size: 0.9rem; color: #5f7d9c;">Most consistent learner this month</div></div>
+                    <div class="icon-preview">
+                        <img id="previewAvatar" src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Preview">
+                    </div>
+                    <div>
+                        <strong id="previewName" style="font-size: 1.2rem;">Hatim</strong>
+                        <span id="previewPoints" style="margin-left: 1rem; color: #1e5a88;">71 pts</span>
+                        <div id="previewBadge" style="font-size: 0.9rem; color: #5f7d9c;">Most consistent learner this month</div>
+                    </div>
                 </div>
             </div>
         </div>
         
+        <!-- Basic Settings -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-key"></i> Basic Settings</h3>
             <div class="form-group">
-                <input type="text" id="lessonCode" placeholder="Lesson Code" value="1234" style="flex: 1;">
-                <input type="number" id="marks" placeholder="Marks" value="5" min="1" max="20" style="flex: 1;">
+                <input type="text" id="lessonCode" placeholder="Lesson Code (e.g., 1234)" value="1234" style="flex: 1;">
+                <input type="number" id="marks" placeholder="Marks (e.g., 5)" value="5" min="1" max="20" style="flex: 1;">
                 <input type="date" id="deadline" value="" style="flex: 1;">
             </div>
             <button class="btn btn-primary" onclick="saveBasicSettings()" style="margin-top: 0.5rem;"><i class="fa-regular fa-floppy-disk"></i> Save Basic Settings</button>
         </div>
         
+        <!-- Video Settings -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-film"></i> Video Lesson</h3>
             <div class="form-group">
-                <input type="text" id="videoUrl" placeholder="YouTube Video URL" value="https://www.youtube.com/embed/D3mNn0btW6s" style="flex: 2;">
+                <input type="text" id="videoUrl" placeholder="YouTube Video URL or Embed Link" value="https://www.youtube.com/embed/D3mNn0btW6s" style="flex: 2;">
             </div>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <button class="btn" onclick="previewVideo()"><i class="fa-regular fa-eye"></i> Preview</button>
@@ -299,6 +353,7 @@
             <div id="videoPreview" class="preview-box" style="display: none;"></div>
         </div>
         
+        <!-- Reflection Questions -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-pen-to-square"></i> Reflection Questions</h3>
             <p class="help-text">Enter one question per line</p>
@@ -310,6 +365,7 @@
             <button class="btn btn-primary" onclick="saveQuestions()"><i class="fa-regular fa-save"></i> Save Questions</button>
         </div>
         
+        <!-- Reading Passage -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-book-open"></i> Reading Passage</h3>
             <div class="form-group">
@@ -318,6 +374,7 @@
             <button class="btn btn-primary" onclick="saveReading()"><i class="fa-regular fa-save"></i> Save Reading</button>
         </div>
         
+        <!-- Vocabulary -->
         <div class="admin-section">
             <h3><i class="fa-regular fa-lightbulb"></i> Vocabulary</h3>
             <p class="help-text">One per line - format: word – definition</p>
@@ -331,21 +388,31 @@ discipline – controlled behaviour to achieve a goal</textarea>
             <button class="btn btn-primary" onclick="saveVocabulary()"><i class="fa-regular fa-save"></i> Save Vocabulary</button>
         </div>
         
+        <!-- Action Buttons -->
         <div class="button-group">
             <button class="btn btn-success" onclick="saveAllChanges()" style="flex: 2;"><i class="fa-regular fa-floppy-disk"></i> Save All Changes</button>
             <button class="btn" onclick="loadCurrentData()"><i class="fa-regular fa-rotate"></i> Refresh</button>
-            <button class="btn" onclick="previewLesson()"><i class="fa-regular fa-eye"></i> Preview</button>
+            <button class="btn" onclick="previewLesson()"><i class="fa-regular fa-eye"></i> Preview Lesson</button>
             <button class="btn btn-danger" onclick="resetToDefaults()"><i class="fa-regular fa-arrow-rotate-left"></i> Reset All</button>
             <button class="btn" onclick="logout()"><i class="fa-regular fa-sign-out"></i> Logout</button>
         </div>
         
-        <div class="timestamp" id="lastUpdated">Last saved: Never</div>
+        <!-- Last Updated Info -->
+        <div class="timestamp" id="lastUpdated">
+            Last saved: Never
+        </div>
     </div>
     
     <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
         const ADMIN_PASSWORD = 'fluency2026'; // ⚠️ غيرها لكلمة سر قوية
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec';
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // API الدروس
 
+        // ============================================
+        // LOGIN FUNCTION
+        // ============================================
         function checkPassword() {
             const pass = document.getElementById('adminPassword').value;
             if (pass === ADMIN_PASSWORD) {
@@ -359,7 +426,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 document.getElementById('loginError').innerText = '❌ Incorrect password';
             }
         }
-
+        
         function logout() {
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
@@ -367,6 +434,9 @@ discipline – controlled behaviour to achieve a goal</textarea>
             document.getElementById('loginError').innerText = '';
         }
 
+        // ============================================
+        // TOP PERFORMER FUNCTIONS (INDEPENDENT - LOCAL)
+        // ============================================
         function loadTopPerformer() {
             const saved = localStorage.getItem('fluencyTopPerformer');
             if (saved) {
@@ -376,23 +446,29 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     document.getElementById('topPerformerPoints').value = data.points || 71;
                     document.getElementById('topPerformerBadge').value = data.badge || 'Most consistent learner this month';
                     document.getElementById('topPerformerAvatar').value = data.avatar || 'https://i.ibb.co/4RQ0RChK/hatim.jpg';
-                } catch (e) {}
+                } catch (e) {
+                    console.error('Error loading top performer:', e);
+                }
             }
         }
-
+        
         function saveTopPerformer() {
-            const data = {
+            const topPerformerData = {
                 name: document.getElementById('topPerformerName').value,
                 points: parseInt(document.getElementById('topPerformerPoints').value) || 71,
                 badge: document.getElementById('topPerformerBadge').value,
                 avatar: document.getElementById('topPerformerAvatar').value,
                 lastUpdated: new Date().toISOString()
             };
-            localStorage.setItem('fluencyTopPerformer', JSON.stringify(data));
+            
+            localStorage.setItem('fluencyTopPerformer', JSON.stringify(topPerformerData));
             showNotification('✅ Top Performer saved!');
-            if (document.getElementById('topPerformerPreview').style.display === 'block') updatePreview();
+            
+            if (document.getElementById('topPerformerPreview').style.display === 'block') {
+                updatePreview();
+            }
         }
-
+        
         function previewTopPerformer() {
             const preview = document.getElementById('topPerformerPreview');
             if (preview.style.display === 'none') {
@@ -402,14 +478,14 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 preview.style.display = 'none';
             }
         }
-
+        
         function updatePreview() {
             document.getElementById('previewName').textContent = document.getElementById('topPerformerName').value;
             document.getElementById('previewPoints').textContent = document.getElementById('topPerformerPoints').value + ' pts';
             document.getElementById('previewBadge').textContent = document.getElementById('topPerformerBadge').value;
             document.getElementById('previewAvatar').src = document.getElementById('topPerformerAvatar').value;
         }
-
+        
         function resetTopPerformer() {
             if (confirm('Reset Top Performer to default values?')) {
                 localStorage.removeItem('fluencyTopPerformer');
@@ -422,9 +498,12 @@ discipline – controlled behaviour to achieve a goal</textarea>
             }
         }
 
-        async function loadFromCloud() {
+        // ============================================
+        // LOAD LESSON DATA FROM CLOUD
+        // ============================================
+        async function loadLessonFromCloud() {
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(LESSON_API_URL);
                 const result = await response.json();
                 if (result.success && result.data) {
                     document.getElementById('lessonCode').value = result.data.lessonCode || '1234';
@@ -434,17 +513,17 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     document.getElementById('questions').value = result.data.questions || '';
                     document.getElementById('reading').value = result.data.reading || '';
                     document.getElementById('vocabulary').value = result.data.vocabulary || '';
-                    showNotification('📂 Data loaded from cloud');
+                    showNotification('📂 Lesson data loaded from cloud');
                 } else {
-                    loadCurrentData();
+                    setDefaultDates();
                 }
             } catch (error) {
-                console.error('Error loading from cloud:', error);
-                loadCurrentData();
+                console.error('Error loading from cloud, using local backup.', error);
+                loadCurrentDataLocal(); // use local backup
             }
         }
 
-        function loadCurrentData() {
+        function loadCurrentDataLocal() {
             const saved = localStorage.getItem('fluencyLessonData');
             if (saved) {
                 try {
@@ -452,13 +531,17 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     document.getElementById('lessonCode').value = data.lessonCode || '1234';
                     document.getElementById('marks').value = data.marks || '5';
                     document.getElementById('deadline').value = data.deadline || getDefaultDeadline();
-                    document.getElementById('videoUrl').value = data.videoUrl || 'https://www.youtube.com/embed/D3mNn0btW6s';
+                    document.getElementById('videoUrl').value = data.videoUrl || '';
                     document.getElementById('questions').value = data.questions || '';
                     document.getElementById('reading').value = data.reading || '';
                     document.getElementById('vocabulary').value = data.vocabulary || '';
-                    showNotification('📂 Data loaded from storage');
-                } catch (e) { setDefaultDates(); }
-            } else { setDefaultDates(); }
+                    showNotification('📂 Loaded from local backup');
+                } catch (e) {
+                    setDefaultDates();
+                }
+            } else {
+                setDefaultDates();
+            }
         }
 
         function setDefaultDates() {
@@ -471,7 +554,10 @@ discipline – controlled behaviour to achieve a goal</textarea>
             return date.toISOString().split('T')[0];
         }
 
-        async function saveToCloud() {
+        // ============================================
+        // SAVE LESSON DATA TO CLOUD
+        // ============================================
+        async function saveLessonToCloud() {
             const data = {
                 lessonCode: document.getElementById('lessonCode').value,
                 marks: document.getElementById('marks').value,
@@ -479,79 +565,74 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 videoUrl: document.getElementById('videoUrl').value,
                 questions: document.getElementById('questions').value,
                 reading: document.getElementById('reading').value,
-                vocabulary: document.getElementById('vocabulary').value
+                vocabulary: document.getElementById('vocabulary').value,
+                lastUpdated: new Date().toISOString()
             };
+            
             try {
-                await fetch(API_URL, {
+                await fetch(LESSON_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                showNotification('✅ Data saved to cloud');
-                localStorage.setItem('fluencyLessonData', JSON.stringify({ ...data, lastUpdated: new Date().toISOString() }));
-                updateTimestamp();
+                showNotification('✅ Lesson data saved to cloud');
+                localStorage.setItem('fluencyLessonData', JSON.stringify(data)); // backup
             } catch (error) {
-                console.error('Error saving to cloud:', error);
+                console.error('Error saving to cloud, saved locally only.', error);
+                localStorage.setItem('fluencyLessonData', JSON.stringify(data));
                 showNotification('⚠️ Saved locally only');
-                localStorage.setItem('fluencyLessonData', JSON.stringify({ ...data, lastUpdated: new Date().toISOString() }));
             }
         }
 
+        // Individual save functions
+        async function saveBasicSettings() {
+            await saveLessonToCloud();
+        }
+        async function saveVideo() {
+            await saveLessonToCloud();
+        }
+        async function saveQuestions() {
+            await saveLessonToCloud();
+        }
+        async function saveReading() {
+            await saveLessonToCloud();
+        }
+        async function saveVocabulary() {
+            await saveLessonToCloud();
+        }
         async function saveAllChanges() {
-            await saveToCloud();
+            await saveLessonToCloud();
             saveTopPerformer();
         }
 
-        function saveBasicSettings() {
-            const data = { lessonCode: document.getElementById('lessonCode').value, marks: document.getElementById('marks').value, deadline: document.getElementById('deadline').value };
-            localStorage.setItem('fluencyLessonData', JSON.stringify({ ...JSON.parse(localStorage.getItem('fluencyLessonData') || '{}'), ...data, lastUpdated: new Date().toISOString() }));
-            saveToCloud();
-            showNotification('✅ Basic settings saved');
-        }
-
-        function saveVideo() {
-            const data = { videoUrl: document.getElementById('videoUrl').value };
-            localStorage.setItem('fluencyLessonData', JSON.stringify({ ...JSON.parse(localStorage.getItem('fluencyLessonData') || '{}'), ...data, lastUpdated: new Date().toISOString() }));
-            saveToCloud();
-            showNotification('✅ Video saved');
-        }
-
-        function saveQuestions() {
-            const data = { questions: document.getElementById('questions').value };
-            localStorage.setItem('fluencyLessonData', JSON.stringify({ ...JSON.parse(localStorage.getItem('fluencyLessonData') || '{}'), ...data, lastUpdated: new Date().toISOString() }));
-            saveToCloud();
-            showNotification('✅ Questions saved');
-        }
-
-        function saveReading() {
-            const data = { reading: document.getElementById('reading').value };
-            localStorage.setItem('fluencyLessonData', JSON.stringify({ ...JSON.parse(localStorage.getItem('fluencyLessonData') || '{}'), ...data, lastUpdated: new Date().toISOString() }));
-            saveToCloud();
-            showNotification('✅ Reading saved');
-        }
-
-        function saveVocabulary() {
-            const data = { vocabulary: document.getElementById('vocabulary').value };
-            localStorage.setItem('fluencyLessonData', JSON.stringify({ ...JSON.parse(localStorage.getItem('fluencyLessonData') || '{}'), ...data, lastUpdated: new Date().toISOString() }));
-            saveToCloud();
-            showNotification('✅ Vocabulary saved');
-        }
-
+        // ============================================
+        // PREVIEW FUNCTIONS
+        // ============================================
         function previewVideo() {
             const url = document.getElementById('videoUrl').value;
             let embedUrl = url;
-            if (url.includes('youtube.com/watch?v=')) embedUrl = `https://www.youtube.com/embed/${url.split('v=')[1].split('&')[0]}`;
-            else if (url.includes('youtu.be/')) embedUrl = `https://www.youtube.com/embed/${url.split('youtu.be/')[1].split('?')[0]}`;
+            
+            if (url.includes('youtube.com/watch?v=')) {
+                const videoId = url.split('v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            } else if (url.includes('youtu.be/')) {
+                const videoId = url.split('youtu.be/')[1].split('?')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            }
+            
             const preview = document.getElementById('videoPreview');
             preview.innerHTML = `<iframe width="100%" height="200" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
             preview.style.display = 'block';
         }
-
+        
         function previewLesson() {
             window.open('index.html', '_blank');
         }
 
+        // ============================================
+        // RESET FUNCTION
+        // ============================================
         function resetToDefaults() {
             if (confirm('Reset ALL data to default values? This cannot be undone.')) {
                 localStorage.removeItem('fluencyLessonData');
@@ -562,6 +643,17 @@ discipline – controlled behaviour to achieve a goal</textarea>
             }
         }
 
+        // ============================================
+        // LOAD CURRENT DATA (main function)
+        // ============================================
+        async function loadCurrentData() {
+            await loadLessonFromCloud(); // try cloud first
+            // Top performer is loaded separately
+        }
+
+        // ============================================
+        // NOTIFICATION & TIMESTAMP
+        // ============================================
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.className = 'notification';
@@ -569,7 +661,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
-
+        
         function updateTimestamp() {
             const saved = localStorage.getItem('fluencyLessonData');
             if (saved) {
@@ -584,10 +676,21 @@ discipline – controlled behaviour to achieve a goal</textarea>
             }
         }
 
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') checkPassword();
+        // ============================================
+        // INITIAL LOAD
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Don't load automatically - wait for login
         });
-
+        
+        // Enter key for login
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
+                checkPassword();
+            }
+        });
+        
+        // Auto-refresh timestamp every minute
         setInterval(updateTimestamp, 60000);
     </script>
 </body>
