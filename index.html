@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Fluency • language mastery</title>
+    <title>Fluency • Language Mastery</title>
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Chart.js -->
@@ -23,7 +23,7 @@
             line-height: 1.6;
             overflow-x: hidden;
             transition: background-color 0.3s, color 0.3s;
-            font-size: 1.15rem; /* increased slightly */
+            font-size: 1.15rem;
         }
 
         /* Dark mode variables - improved */
@@ -789,6 +789,21 @@
             transform: scale(1.05);
         }
 
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(30, 90, 136, 0.3);
+            border-radius: 50%;
+            border-top-color: #1e5a88;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* footer */
         footer {
             background: #103246;
@@ -1005,12 +1020,12 @@
 
             <div class="section" style="text-align: center;">
                 <h2>Top performer</h2>
-                <div class="leader-card">
+                <div class="leader-card" id="topPerformerCard">
                     <div class="leader-avatar">
                         <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Hatim" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
                     </div>
-                    <div class="leader-name">Hatim</div>
-                    <div class="leader-points"><i class="fa-regular fa-star"></i> 71 points</div>
+                    <div class="leader-name" id="topPerformerName">Hatim</div>
+                    <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
                     <p style="margin-top: 0.8rem;">Most consistent learner this month</p>
                 </div>
 
@@ -1048,7 +1063,7 @@
                     <div class="marks-info"><i class="fa-regular fa-star"></i> 5 Marks</div>
                     <div class="deadline-info" id="deadlineDisplay"></div>
                     
-                    <!-- Instructions box (re-added) -->
+                    <!-- Instructions box -->
                     <div class="instructions">
                         <p><strong>Instructions</strong></p>
                         <p>• Watch the video carefully. You can use subtitles.</p>
@@ -1067,13 +1082,13 @@
                     </div>
                 </div>
 
-                <!-- Tasks (hidden/show one at a time) -->
+                <!-- Tasks -->
                 <div class="lesson-tasks" id="lessonTasks">
                     <!-- Task 1: Video -->
                     <div class="task-card" id="task1">
                         <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
                         <div class="video-wrapper">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/D3mNn0btW6s?si=R9OuOyFaq8FiF1ip" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
                         </div>
                         <p>Listen actively. You may use subtitles the first time.</p>
                     </div>
@@ -1081,16 +1096,16 @@
                     <!-- Task 2: Reflection -->
                     <div class="task-card hidden-task" id="task2">
                         <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-                        <p>• What are two main ways technology has improved daily life according to the video?</p>
+                        <p>• What are two main ways technology has improved daily life?</p>
                         <p>• Mention one negative effect of technology discussed.</p>
-                        <p>• How does technology influence communication and social interaction?</p>
+                        <p>• How does technology influence communication?</p>
                     </div>
 
                     <!-- Task 3: Reading -->
                     <div class="task-card hidden-task" id="task3">
                         <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
                         <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
-                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
+                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others...”
                         </div>
                     </div>
 
@@ -1109,7 +1124,7 @@
                     <!-- Task 5: Speaking -->
                     <div class="task-card hidden-task" id="task5">
                         <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
-                        <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
+                        <p>Read the passage from task 3 aloud. Record and share in WhatsApp group.</p>
                         <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
                     </div>
                 </div>
@@ -1122,7 +1137,7 @@
             </div>
         </div>
 
-        <!-- Popup for completion message (hidden initially) -->
+        <!-- Popup for completion message -->
         <div id="completionPopup" class="hidden">
             <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
             <div class="custom-popup">
@@ -1160,28 +1175,34 @@
                 <h2>Student Statistics</h2>
                 <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
 
-                <!-- Stats Cards (without Average) -->
-                <div class="stats-grid" id="statsCards"></div>
+                <!-- Loading indicator -->
+                <div id="statsLoading" style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 1rem;">Loading statistics...</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="statsCards" style="display: none;"></div>
 
                 <!-- Top 5 Students Table -->
-                <h3>Top 5 Students by Total Points</h3>
-                <table class="student-table" id="top5Table"></table>
+                <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
+                <table class="student-table" id="top5Table" style="display: none;"></table>
 
                 <!-- Category Performance Chart -->
-                <h3 style="margin-top: 3rem;">Category Performance</h3>
-                <div class="chart-container category-chart-container">
+                <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
+                <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
                     <canvas id="categoryChart"></canvas>
                 </div>
 
                 <!-- Grade Distribution Chart -->
-                <h3 style="margin-top: 2rem;">Grade Distribution</h3>
-                <div class="chart-container">
+                <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
+                <div class="chart-container" id="distributionChartContainer" style="display: none;">
                     <canvas id="distributionChart"></canvas>
                 </div>
 
                 <!-- Full Student Table -->
-                <h3 style="margin-top: 3rem;">All Students - Detailed Scores</h3>
-                <table class="student-table" id="fullStudentTable"></table>
+                <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
+                <table class="student-table" id="fullStudentTable" style="display: none;"></table>
             </div>
         </div>
 
@@ -1237,127 +1258,203 @@
     </footer>
 
     <script>
-        // ==================== DATA FROM EXCEL ====================
-        const studentsData = [
-            { name: "Bassem", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Muath", quiz1:0, hw1:5, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Numan", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Amer", quiz1:20, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:0, hw9:5, pres1:10 },
-            { name: "Zubair", quiz1:20, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:5, hw9:5, pres1:0 },
-            { name: "Yazid", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Jaafar", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Hatem", quiz1:19, hw1:5, quiz2:0, hw2:0, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:5, hw4:5, hw5:5, hw6:5, hw7:5, hw8:0, hw9:0, pres1:10 },
-            { name: "Omar", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Ahmed Mohammed", quiz1:18, hw1:5, quiz2:0, hw2:5, w1:7, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:0, hw8:5, hw9:0, pres1:10 },
-            { name: "Ahmed Abdulrhman", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Saad", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Baker", quiz1:0, hw1:5, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Zyad", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Ayman", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Abdulrhman", quiz1:0, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 },
-            { name: "Saleh", quiz1:20, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:5, hw5:5, hw6:0, hw7:5, hw8:0, hw9:5, pres1:10 },
-            { name: "Hasan", quiz1:20, hw1:0, quiz2:0, hw2:0, w1:0, w2:0, w3:0, w4:0, quiz3:0, hw3:0, hw4:0, hw5:0, hw6:0, hw7:0, hw8:0, hw9:0, pres1:0 }
-        ];
+        // ============================================
+        // CONFIGURATION - YOUR API ENDPOINT
+        // ============================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec';
+        
+        // Global variable to store student data
+        let studentsData = [];
+        let categories = {};
+        let distribution = {};
+        let chartsInitialized = false;
 
-        // Calculate total for each student
-        studentsData.forEach(s => {
-            s.total = s.quiz1 + s.hw1 + s.quiz2 + s.hw2 + s.w1 + s.w2 + s.w3 + s.w4 + s.quiz3 + s.hw3 + s.hw4 + s.hw5 + s.hw6 + s.hw7 + s.hw8 + s.hw9 + s.pres1;
-        });
-
-        // Update Hatim's total to 71 (matching new points)
-        const hatim = studentsData.find(s => s.name === "Hatem");
-        if (hatim) hatim.total = 71;
-
-        // Sort by total descending
-        const sortedStudents = [...studentsData].sort((a,b) => b.total - a.total);
-        const top5 = sortedStudents.slice(0,5);
-
-        // Calculate category averages for charts
-        const categories = {
-            quiz: (studentsData.reduce((acc, s) => acc + s.quiz1 + s.quiz2 + s.quiz3, 0) / (studentsData.length * 3)).toFixed(1),
-            homework: (studentsData.reduce((acc, s) => acc + s.hw1 + s.hw2 + s.hw3 + s.hw4 + s.hw5 + s.hw6 + s.hw7 + s.hw8 + s.hw9, 0) / (studentsData.length * 9)).toFixed(1),
-            weekly: (studentsData.reduce((acc, s) => acc + s.w1 + s.w2 + s.w3 + s.w4, 0) / (studentsData.length * 4)).toFixed(1),
-            presentation: (studentsData.reduce((acc, s) => acc + s.pres1, 0) / studentsData.length).toFixed(1)
-        };
-
-        // Grade distribution
-        const distribution = {
-            excellent: studentsData.filter(s => s.total >= 70).length,
-            good: studentsData.filter(s => s.total >= 50 && s.total < 70).length,
-            needsWork: studentsData.filter(s => s.total < 50).length
-        };
-
-        // ==================== RENDER FUNCTIONS ====================
-        function renderTop5Home() {
-            const grid = document.getElementById('top5Grid');
-            if (!grid) return;
-            grid.innerHTML = top5.map(s => `
-                <div class="top-student-card">
-                    <div class="top-student-name">${s.name}</div>
-                    <div class="top-student-score">${s.total} pts</div>
-                </div>
-            `).join('');
+        // ============================================
+        // API FUNCTIONS
+        // ============================================
+        async function fetchStudentData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (!data.success) {
+                    console.error('API Error:', data.error);
+                    return [];
+                }
+                
+                console.log('Data loaded:', data);
+                return data.data || [];
+            } catch (error) {
+                console.error('Failed to fetch:', error);
+                return [];
+            }
         }
 
-        function renderStatsCards() {
-            const container = document.getElementById('statsCards');
-            if (!container) return;
-            container.innerHTML = `
+        function calculateStatistics(students) {
+            if (!students.length) return;
+            
+            // Sort by total
+            const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
+            
+            // Update top performer (Hatim)
+            const topStudent = sorted[0];
+            if (topStudent) {
+                document.getElementById('topPerformerName').textContent = topStudent.name || 'Hatim';
+                document.getElementById('topPerformerPoints').innerHTML = `<i class="fa-regular fa-star"></i> ${topStudent.total || 0} points`;
+            }
+            
+            // Update top 5 grid in home page
+            const top5Grid = document.getElementById('top5Grid');
+            const top5 = sorted.slice(0, 5);
+            top5Grid.innerHTML = top5.map(s => `
+                <div class="top-student-card">
+                    <div class="top-student-name">${s.name || 'Unknown'}</div>
+                    <div class="top-student-score">${s.total || 0} pts</div>
+                </div>
+            `).join('');
+            
+            // Calculate category averages
+            const categories = {
+                quiz: 0, homework: 0, weekly: 0, presentation: 0
+            };
+            
+            let quizCount = 0, hwCount = 0, weeklyCount = 0, presCount = 0;
+            
+            students.forEach(s => {
+                if (s.quiz) { categories.quiz += s.quiz; quizCount++; }
+                if (s.hw1) categories.homework += s.hw1;
+                if (s.hw2) categories.homework += s.hw2;
+                if (s.hw3) categories.homework += s.hw3;
+                if (s.hw4) categories.homework += s.hw4;
+                if (s.hw5) categories.homework += s.hw5;
+                if (s.hw6) categories.homework += s.hw6;
+                if (s.hw7) categories.homework += s.hw7;
+                if (s.hw8) categories.homework += s.hw8;
+                if (s.hw9) categories.homework += s.hw9;
+                if (s.w1) { categories.weekly += s.w1; weeklyCount++; }
+                if (s.pres1) { categories.presentation += s.pres1; presCount++; }
+            });
+            
+            // Calculate averages
+            categories.quiz = quizCount ? (categories.quiz / quizCount).toFixed(1) : 0;
+            categories.homework = (categories.homework / (students.length * 9)).toFixed(1);
+            categories.weekly = weeklyCount ? (categories.weekly / weeklyCount).toFixed(1) : 0;
+            categories.presentation = presCount ? (categories.presentation / presCount).toFixed(1) : 0;
+            
+            // Grade distribution
+            distribution = {
+                excellent: students.filter(s => s.total >= 70).length,
+                good: students.filter(s => s.total >= 50 && s.total < 70).length,
+                needsWork: students.filter(s => s.total < 50).length
+            };
+            
+            return { categories, distribution, sorted, top5 };
+        }
+
+        // ============================================
+        // RENDER STATISTICS PAGE
+        // ============================================
+        async function renderStatisticsPage() {
+            // Show loading, hide content
+            document.getElementById('statsLoading').style.display = 'block';
+            document.getElementById('statsCards').style.display = 'none';
+            document.getElementById('top5Heading').style.display = 'none';
+            document.getElementById('top5Table').style.display = 'none';
+            document.getElementById('categoryHeading').style.display = 'none';
+            document.getElementById('categoryChartContainer').style.display = 'none';
+            document.getElementById('distributionHeading').style.display = 'none';
+            document.getElementById('distributionChartContainer').style.display = 'none';
+            document.getElementById('fullTableHeading').style.display = 'none';
+            document.getElementById('fullStudentTable').style.display = 'none';
+            
+            // Fetch fresh data
+            const students = await fetchStudentData();
+            if (!students.length) {
+                document.getElementById('statsLoading').innerHTML = '<p>No data available. Please check back later.</p>';
+                return;
+            }
+            
+            const stats = calculateStatistics(students);
+            if (!stats) return;
+            
+            // Hide loading, show content
+            document.getElementById('statsLoading').style.display = 'none';
+            document.getElementById('statsCards').style.display = 'grid';
+            document.getElementById('top5Heading').style.display = 'block';
+            document.getElementById('top5Table').style.display = 'table';
+            document.getElementById('categoryHeading').style.display = 'block';
+            document.getElementById('categoryChartContainer').style.display = 'block';
+            document.getElementById('distributionHeading').style.display = 'block';
+            document.getElementById('distributionChartContainer').style.display = 'block';
+            document.getElementById('fullTableHeading').style.display = 'block';
+            document.getElementById('fullStudentTable').style.display = 'table';
+            
+            // Stats cards
+            const totalStudents = students.length;
+            const totalPoints = students.reduce((sum, s) => sum + (s.total || 0), 0);
+            const activeStudents = students.filter(s => (s.total || 0) > 0).length;
+            
+            document.getElementById('statsCards').innerHTML = `
                 <div class="stats-card">
-                    <div class="stats-number">${studentsData.length}</div>
+                    <div class="stats-number">${totalStudents}</div>
                     <div class="stats-label">Total Students</div>
                 </div>
                 <div class="stats-card">
-                    <div class="stats-number">${studentsData.reduce((acc,s) => acc + s.total, 0)}</div>
+                    <div class="stats-number">${totalPoints}</div>
                     <div class="stats-label">Total Points</div>
                 </div>
                 <div class="stats-card">
-                    <div class="stats-number">${studentsData.filter(s => s.total > 0).length}</div>
+                    <div class="stats-number">${activeStudents}</div>
                     <div class="stats-label">Active Students</div>
                 </div>
             `;
-        }
-
-        function renderTop5Table() {
-            const table = document.getElementById('top5Table');
-            if (!table) return;
-            table.innerHTML = `
+            
+            // Top 5 table
+            document.getElementById('top5Table').innerHTML = `
                 <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
-                ${top5.map(s => `
+                ${stats.top5.map(s => `
                     <tr>
-                        <td>${s.name}</td>
-                        <td><strong>${s.total}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total)}%"></div></div></td>
+                        <td>${s.name || 'Unknown'}</td>
+                        <td><strong>${s.total || 0}</strong></td>
+                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
                     </tr>
                 `).join('')}
             `;
-        }
-
-        function renderFullStudentTable() {
-            const table = document.getElementById('fullStudentTable');
-            if (!table) return;
-            table.innerHTML = `
+            
+            // Full student table
+            document.getElementById('fullStudentTable').innerHTML = `
                 <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
-                ${sortedStudents.map(s => `
+                ${stats.sorted.map(s => `
                     <tr>
-                        <td>${s.name}</td>
-                        <td><strong>${s.total}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total)}%"></div></div></td>
+                        <td>${s.name || 'Unknown'}</td>
+                        <td><strong>${s.total || 0}</strong></td>
+                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
                     </tr>
                 `).join('')}
             `;
+            
+            // Create/Update charts
+            if (!chartsInitialized) {
+                createCategoryChart(stats.categories);
+                createDistributionChart(distribution);
+                chartsInitialized = true;
+            } else {
+                updateCharts(stats.categories, distribution);
+            }
         }
 
-        function createCategoryChart() {
-            const ctx = document.getElementById('categoryChart')?.getContext('2d');
-            if (!ctx) return;
-            new Chart(ctx, {
+        // Chart functions
+        let categoryChart, distributionChart;
+
+        function createCategoryChart(catData) {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Quizzes', 'Homework', 'Weekly', 'Presentation'],
                     datasets: [{
                         label: 'Average Score',
-                        data: [categories.quiz, categories.homework, categories.weekly, categories.presentation],
+                        data: [catData.quiz, catData.homework, catData.weekly, catData.presentation],
                         backgroundColor: ['#1e5a88', '#367bb5', '#5e9fcf', '#84b3d9'],
                         borderRadius: 8
                     }]
@@ -1376,15 +1473,14 @@
             });
         }
 
-        function createDistributionChart() {
-            const ctx = document.getElementById('distributionChart')?.getContext('2d');
-            if (!ctx) return;
-            new Chart(ctx, {
+        function createDistributionChart(distData) {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            distributionChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Excellent (70+)', 'Good (50-69)', 'Needs Work (<50)'],
                     datasets: [{
-                        data: [distribution.excellent, distribution.good, distribution.needsWork],
+                        data: [distData.excellent, distData.good, distData.needsWork],
                         backgroundColor: ['#1e5a88', '#5e9fcf', '#b5d0e8'],
                         borderWidth: 0
                     }]
@@ -1400,28 +1496,73 @@
             });
         }
 
-        // ==================== LESSON TASK NAVIGATION ====================
+        function updateCharts(catData, distData) {
+            if (categoryChart) {
+                categoryChart.data.datasets[0].data = [catData.quiz, catData.homework, catData.weekly, catData.presentation];
+                categoryChart.update();
+            }
+            if (distributionChart) {
+                distributionChart.data.datasets[0].data = [distData.excellent, distData.good, distData.needsWork];
+                distributionChart.update();
+            }
+        }
+
+        // ============================================
+        // PAGE NAVIGATION
+        // ============================================
+        function reload() { location.reload(); }
+
+        function openPage(page) {
+            const pages = ['home','lessonPage','about','services','statistics','contact'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            document.getElementById(page).classList.remove('hidden');
+
+            if (page === 'statistics') {
+                renderStatisticsPage();
+            }
+        }
+
+        function startLesson() {
+            openPage('lessonPage');
+            document.getElementById('lessonContent').classList.add('hidden');
+            document.getElementById('lessonCodeSection').style.display = 'block';
+        }
+
+        // ============================================
+        // LESSON CODE & NAVIGATION
+        // ============================================
+        const lessonCode = "1234";
         let currentTask = 1;
         const totalTasks = 5;
+
+        function checkCode() {
+            const input = document.getElementById('codeInput');
+            if (input.value === lessonCode) {
+                document.getElementById('lessonContent').classList.remove('hidden');
+                document.getElementById('lessonCodeSection').style.display = 'none';
+                displayDeadline();
+                showTask(1);
+                input.value = '';
+            } else {
+                alert('Incorrect code. Please try again.');
+                input.style.borderColor = '#cc7b7b';
+                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
+            }
+        }
 
         function showTask(taskNum) {
             for (let i = 1; i <= totalTasks; i++) {
                 const taskEl = document.getElementById(`task${i}`);
                 if (taskEl) {
-                    if (i === taskNum) {
-                        taskEl.classList.remove('hidden-task');
-                    } else {
-                        taskEl.classList.add('hidden-task');
-                    }
+                    taskEl.classList.toggle('hidden-task', i !== taskNum);
                 }
             }
-            // Update progress (only bar)
             const progressPercent = (taskNum / totalTasks) * 100;
             document.getElementById('progressFill').style.width = `${progressPercent}%`;
 
-            // Update buttons
             const nextBtn = document.getElementById('nextBtn');
             const prevBtn = document.getElementById('prevBtn');
+            
             if (taskNum === 1) {
                 nextBtn.innerText = 'Next';
                 prevBtn.style.visibility = 'hidden';
@@ -1436,7 +1577,6 @@
 
         function nextTask() {
             if (currentTask === totalTasks) {
-                // Show custom popup instead of alert
                 document.getElementById('completionPopup').classList.remove('hidden');
             } else {
                 currentTask++;
@@ -1453,55 +1593,7 @@
 
         function closePopupAndGoHome() {
             document.getElementById('completionPopup').classList.add('hidden');
-            openPage('home'); // Return to home page
-        }
-
-        // ==================== EXISTING FUNCTIONS ====================
-        function reload() { location.reload(); }
-
-        function openPage(page) {
-            const pages = ['home','lessonPage','about','services','statistics','contact'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-            document.getElementById(page).classList.remove('hidden');
-
-            // If statistics page, render charts and tables
-            if (page === 'statistics') {
-                setTimeout(() => {
-                    renderStatsCards();
-                    renderTop5Table();
-                    renderFullStudentTable();
-                    createCategoryChart();
-                    createDistributionChart();
-                }, 50);
-            }
-        }
-
-        function startLesson() {
-            openPage('lessonPage');
-            document.getElementById('lessonContent').classList.add('hidden');
-            // Reset task to first when new lesson started
-            currentTask = 1;
-            // Make sure code section is visible when entering lesson page
-            document.getElementById('lessonCodeSection').style.display = 'block';
-        }
-
-        const lessonCode = "1234";
-
-        function checkCode() {
-            const input = document.getElementById('codeInput');
-            if (input.value === lessonCode) {
-                document.getElementById('lessonContent').classList.remove('hidden');
-                // Hide the code entry section
-                document.getElementById('lessonCodeSection').style.display = 'none';
-                displayDeadline();
-                input.value = '';
-                // Initialize task display
-                showTask(1);
-            } else {
-                alert('Incorrect code. Please try again.');
-                input.style.borderColor = '#cc7b7b';
-                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
-            }
+            openPage('home');
         }
 
         function displayDeadline() {
@@ -1511,24 +1603,28 @@
             const year = deadline.getFullYear();
             const month = String(deadline.getMonth() + 1).padStart(2, '0');
             const day = String(deadline.getDate()).padStart(2, '0');
-            const dateString = `${year}-${month}-${day}`;
-            document.getElementById('deadlineDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${dateString} (23:59 your local time)`;
+            document.getElementById('deadlineDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${year}-${month}-${day} (23:59 your local time)`;
         }
 
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
         function showTempMessage() {
             alert("Social media links will be added soon. Stay tuned!");
         }
 
         function isNumberKey(evt) {
             const charCode = evt.which ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
-            return true;
+            return !(charCode > 31 && (charCode < 48 || charCode > 57));
         }
 
         document.getElementById('codeInput')?.addEventListener('keypress', e => {
             if (e.key === 'Enter') checkCode();
         });
 
+        // ============================================
+        // DARK MODE
+        // ============================================
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.querySelector('.dark-mode-toggle i');
@@ -1549,9 +1645,16 @@
             document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
         }
 
-        // Initialize home page top5
-        renderTop5Home();
+        // ============================================
+        // INITIAL LOAD
+        // ============================================
+        async function initializeHomePage() {
+            const students = await fetchStudentData();
+            calculateStatistics(students);
+        }
+        
+        // Load data for home page
+        initializeHomePage();
     </script>
 </body>
 </html>
-
