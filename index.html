@@ -2,114 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Fluency • Language Mastery</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluency • Master English</title>
+    
+    <!-- Fast CDNs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Calibri', 'Inter', sans-serif;
-            background-color: #f4f9ff;
-            color: #1e2f4d;
-            line-height: 1.6;
-            overflow-x: hidden;
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 1.15rem;
+        :root {
+            --primary: #1e5a88;
+            --primary-light: #367bb5;
+            --primary-dark: #154b73;
+            --secondary: #f0f7ff;
+            --text: #1e2f4d;
+            --text-light: #5f7d9c;
+            --bg: #f4f9ff;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,40,80,0.08);
+            --transition: all 0.25s ease;
         }
 
-        /* ===== DARK MODE ===== */
         body.dark-mode {
-            background-color: #121a24;
-            color: #e0e9f5;
+            --primary: #2b5780;
+            --primary-light: #3f6b99;
+            --primary-dark: #1e3f5c;
+            --secondary: #1a2c3f;
+            --text: #e0e9f5;
+            --text-light: #a0b8d0;
+            --bg: #121a24;
+            --white: #1e2f4d;
+            --shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        body.dark-mode .section,
-        body.dark-mode .task-card,
-        body.dark-mode .stats-card,
-        body.dark-mode .contact-card,
-        body.dark-mode .leader-card,
-        body.dark-mode .top-student-card,
-        body.dark-mode .instructions,
-        body.dark-mode .deadline-info,
-        body.dark-mode .marks-info,
-        body.dark-mode .input-hint,
-        body.dark-mode .student-table,
-        body.dark-mode .student-table th,
-        body.dark-mode .student-table td,
-        body.dark-mode .custom-popup,
-        body.dark-mode .auth-card,
-        body.dark-mode .profile-dropdown,
-        body.dark-mode .user-menu {
-            background: rgba(20, 35, 50, 0.9) !important;
-            color: #e0e9f5 !important;
-            border-color: rgba(255,255,255,0.1) !important;
-        }
-
-        body.dark-mode .quote {
-            background: rgba(40, 60, 80, 0.8);
-            color: #d0e2f5;
-        }
-
-        body.dark-mode .btn {
-            background: #2d4055;
-            color: #cfdef5;
-            border-color: #4a6380;
-        }
-
-        body.dark-mode .btn-primary {
-            background: linear-gradient(115deg, #2b5780, #3f6b99);
-            color: white;
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: var(--transition);
         }
 
         /* ===== ANIMATED BACKGROUND ===== */
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: linear-gradient(145deg, #e2f0ff 0%, #fafcff 100%);
-            overflow: hidden;
-            transition: background 0.3s;
-        }
-
-        body.dark-mode .bg-animation {
-            background: linear-gradient(145deg, #0b1a2a, #1a2c3f);
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(145deg, var(--secondary) 0%, var(--bg) 100%);
+            opacity: 0.7;
         }
 
         .floating-words {
             position: absolute;
             width: 100%;
             height: 100%;
-            font-size: 0;
         }
 
         .floating-words span {
             position: absolute;
             font-size: 1.2rem;
-            font-weight: 500;
-            color: rgba(75, 130, 190, 0.1);
+            font-weight: 600;
+            color: rgba(var(--primary), 0.05);
             white-space: nowrap;
-            user-select: none;
-            animation: floatWord 20s linear infinite;
+            animation: float 25s linear infinite;
             text-transform: uppercase;
             letter-spacing: 4px;
         }
 
-        @keyframes floatWord {
-            0% { transform: translateX(100vw) translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.4; }
-            90% { opacity: 0.4; }
-            100% { transform: translateX(-200px) translateY(-50px) rotate(15deg); opacity: 0; }
+        @keyframes float {
+            0% { transform: translateX(100vw) translateY(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateX(-200px) translateY(-50px); opacity: 0; }
         }
 
         /* ===== HEADER ===== */
@@ -117,29 +88,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 6%;
-            background: rgba(255, 255, 255, 0.6);
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 8px 20px rgba(0, 30, 60, 0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.5);
-        }
-
-        body.dark-mode header {
-            background: rgba(20, 35, 50, 0.8);
         }
 
         .logo {
             font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(130deg, #1f4e8c, #4a8abf);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
             cursor: pointer;
         }
 
@@ -147,21 +112,15 @@
             display: flex;
             gap: 2rem;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         nav a {
             text-decoration: none;
-            color: #1e3a5f;
+            color: var(--text);
             font-weight: 500;
-            font-size: 1.1rem;
             cursor: pointer;
             position: relative;
             padding: 0.25rem 0;
-        }
-
-        body.dark-mode nav a {
-            color: #c7def5;
         }
 
         nav a::after {
@@ -171,31 +130,35 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, #2b6f9e, #7fb4d9);
-            transition: width 0.25s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transition: var(--transition);
         }
 
         nav a:hover::after {
             width: 100%;
         }
 
-        .dark-mode-toggle {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #1e3a5f;
-            padding: 0 0.5rem;
+        /* ===== AUTH BUTTON IN HEADER ===== */
+        .auth-header-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white !important;
+            padding: 0.6rem 1.5rem !important;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(30,90,136,0.2);
         }
 
-        body.dark-mode .dark-mode-toggle {
-            color: #ffdb9f;
+        .auth-header-btn::after {
+            display: none !important;
         }
 
-        /* ===== USER MENU ===== */
+        .auth-header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30,90,136,0.3);
+        }
+
         .user-menu {
             position: relative;
-            display: inline-block;
             cursor: pointer;
         }
 
@@ -203,19 +166,14 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #c1dcf5, #a6c9ec);
+            background: linear-gradient(145deg, var(--primary-light), var(--primary));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1f4970;
-            font-size: 1.5rem;
+            color: white;
+            font-size: 1.3rem;
             border: 2px solid white;
-            transition: 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
         }
 
         .profile-dropdown {
@@ -223,12 +181,11 @@
             top: 55px;
             right: 0;
             background: white;
-            border-radius: 1.5rem;
-            padding: 1.2rem;
-            min-width: 250px;
-            box-shadow: 0 15px 30px rgba(0,40,80,0.15);
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1rem;
+            min-width: 220px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
             display: none;
             z-index: 1000;
         }
@@ -237,377 +194,303 @@
             display: block;
         }
 
-        .profile-dropdown .user-info {
-            padding: 0.5rem 0 1rem;
-            border-bottom: 1px solid rgba(75,130,190,0.2);
-            margin-bottom: 0.8rem;
-        }
-
-        .profile-dropdown .user-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #175277;
-        }
-
-        .profile-dropdown .user-email {
-            font-size: 0.9rem;
-            color: #5f7d9c;
-        }
-
-        .profile-dropdown .streak-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 0;
-            color: #1e5a88;
-            font-weight: 500;
-        }
-
-        .profile-dropdown .streak-info i {
-            color: #ffaa33;
-        }
-
         .profile-dropdown .menu-item {
-            padding: 0.7rem 1rem;
-            border-radius: 2rem;
-            transition: 0.2s;
-            cursor: pointer;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 0.8rem;
-            color: #1e3a5f;
+            color: var(--text);
+            transition: var(--transition);
         }
 
         .profile-dropdown .menu-item:hover {
-            background: rgba(75,130,190,0.1);
-        }
-
-        .profile-dropdown .menu-item i {
-            width: 20px;
-            color: #327ab3;
+            background: var(--secondary);
         }
 
         .profile-dropdown .logout-item {
-            color: #cc3366;
-            border-top: 1px solid rgba(75,130,190,0.2);
+            color: #dc3545;
+            border-top: 1px solid rgba(0,0,0,0.05);
             margin-top: 0.5rem;
             padding-top: 1rem;
         }
 
-        .profile-dropdown .logout-item i {
-            color: #cc3366;
+        /* ===== MODAL AUTH ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* ===== AUTH CARD ===== */
-        .auth-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 2.5rem;
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
             padding: 2.5rem;
-            margin: 2.5rem auto;
-            max-width: 500px;
-            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.15);
-            border: 1px solid rgba(255,255,255,0.6);
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            animation: modalSlide 0.3s ease;
         }
 
-        .auth-tabs {
+        @keyframes modalSlide {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-tabs {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
-            background: rgba(220, 240, 255, 0.3);
+            background: var(--secondary);
             padding: 0.5rem;
-            border-radius: 3rem;
+            border-radius: 50px;
         }
 
-        .auth-tab {
+        .modal-tab {
             flex: 1;
-            padding: 0.8rem 1rem;
+            padding: 0.8rem;
             border: none;
             background: transparent;
-            border-radius: 2rem;
+            border-radius: 30px;
             font-weight: 600;
-            font-size: 1.1rem;
-            color: #1e4f7a;
+            color: var(--text);
             cursor: pointer;
-            transition: 0.2s;
+            transition: var(--transition);
         }
 
-        .auth-tab.active {
+        .modal-tab.active {
             background: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        body.dark-mode .auth-tab.active {
-            background: #2d4055;
-            color: #e0e9f5;
-        }
-
-        .auth-form {
+        .modal-form {
             display: none;
         }
 
-        .auth-form.active {
+        .modal-form.active {
             display: block;
         }
 
-        .auth-form h3 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .auth-input {
+        .modal-input {
             width: 100%;
-            padding: 1rem 1.5rem;
-            border-radius: 3rem;
-            border: 1px solid #c7ddef;
-            background: white;
+            padding: 1rem 1.2rem;
+            border-radius: 30px;
+            border: 2px solid #e0e9f5;
             font-size: 1rem;
             margin: 0.8rem 0;
             outline: none;
+            transition: var(--transition);
         }
 
-        .auth-input:focus {
-            border-color: #1e5a88;
-            box-shadow: 0 0 0 3px rgba(30,90,136,0.1);
+        .modal-input:focus {
+            border-color: var(--primary);
         }
 
-        body.dark-mode .auth-input {
-            background: #2d4055;
-            border-color: #4a6380;
-            color: white;
-        }
-
-        .auth-button {
+        .modal-button {
             width: 100%;
             padding: 1rem;
-            border-radius: 3rem;
+            border-radius: 30px;
             border: none;
-            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             margin: 1rem 0;
+            transition: var(--transition);
         }
 
-        .auth-message {
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30,90,136,0.2);
+        }
+
+        .modal-message {
             text-align: center;
-            font-size: 0.95rem;
-            margin: 1rem 0;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
         }
 
-        .auth-error {
-            color: #cc3366;
+        .modal-message.error {
+            color: #dc3545;
         }
 
-        .auth-success {
+        .modal-message.success {
             color: #28a745;
         }
 
-        .auth-switch {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #5f7d9c;
-        }
-
-        .auth-switch span {
-            color: #1e5a88;
-            font-weight: 600;
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* ===== STREAK BADGE ===== */
-        .streak-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #d4e9fc;
-            padding: 0.5rem 1.5rem;
-            border-radius: 3rem;
-            color: #1e5a88;
-            font-weight: 600;
-            margin: 1rem 0;
-        }
-
-        .streak-badge i {
-            color: #ffaa33;
+            color: var(--text-light);
         }
 
         /* ===== MAIN CONTAINER ===== */
         .container {
             max-width: 1200px;
-            margin: 2rem auto 4rem;
+            margin: 2rem auto;
             padding: 0 5%;
-            position: relative;
-            z-index: 5;
         }
 
-        .section {
-            background: rgba(255, 255, 255, 0.7);
+        /* ===== HERO SECTION ===== */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255,255,255,0.5);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 2.5rem;
-            padding: 2.5rem;
-            margin: 2.5rem 0;
-            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.15);
-            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 40px;
+            margin: 2rem 0;
         }
 
-        h1, h2, h3 {
-            font-weight: 600;
-            color: #103a5e;
-            margin-bottom: 1.2rem;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
         }
 
-        body.dark-mode h1,
-        body.dark-mode h2,
-        body.dark-mode h3 {
-            color: #b3d6f0;
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .quote {
-            background: rgba(220, 240, 255, 0.7);
-            backdrop-filter: blur(4px);
+        /* ===== FEATURES ===== */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
             padding: 2rem;
-            border-radius: 2rem;
-            margin: 2rem 0 1rem;
-            font-style: italic;
-            border-left: 6px solid #4e8fc9;
+            border-radius: 30px;
+            text-align: center;
+            transition: var(--transition);
         }
 
-        /* ===== TOP PERFORMER CARD ===== */
-        .leader-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
-            border-radius: 2.5rem;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 350px;
-            margin: 1.5rem auto;
-            box-shadow: 0 20px 35px -8px rgba(40,100,150,0.2);
-            border: 1px solid rgba(255,255,255,0.9);
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
         }
 
-        .leader-avatar {
-            width: 130px;
-            height: 130px;
-            background: linear-gradient(145deg, #c1dcf5, #a6c9ec);
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.2rem;
-            border: 3px solid white;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* ===== LESSON SECTION ===== */
+        .lesson-section {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .code-input {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .code-input input {
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            border: 2px solid var(--primary-light);
+            width: 120px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .lesson-progress {
+            background: rgba(255,255,255,0.5);
+            padding: 0.8rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #d9ecfd;
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .leader-avatar img {
-            width: 100%;
+        .progress-fill {
             height: 100%;
-            object-fit: cover;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transition: width 0.3s;
         }
 
-        .leader-name {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #175277;
-        }
-
-        .leader-points {
-            background: #d4e9fc;
-            padding: 0.4rem 1.8rem;
-            border-radius: 40px;
-            font-weight: 500;
-            color: #0f3d60;
-            margin: 0.8rem 0;
-        }
-
-        /* ===== TOP 5 GRID ===== */
-        .top5-grid {
+        /* ===== TASKS ===== */
+        .tasks-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .top-student-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
-            border-radius: 1.5rem;
-            padding: 1.2rem;
-            text-align: center;
-            box-shadow: 0 10px 20px -5px rgba(40,100,150,0.15);
-        }
-
-        .top-student-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #175277;
-        }
-
-        .top-student-score {
-            font-size: 1.1rem;
-            color: #2b6f9e;
-            font-weight: 500;
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            background: white;
-            border: none;
-            padding: 1rem 2.8rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #1e4f7a;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-
-        .btn-primary {
-            background: linear-gradient(115deg, #1e5a88, #367bb5);
-            color: white;
-        }
-
-        /* ===== LESSON TASKS ===== */
-        .lesson-tasks {
-            display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
-            margin-top: 2rem;
+            margin: 2rem 0;
         }
 
         .task-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(6px);
-            border-radius: 2rem;
+            background: white;
+            border-radius: 25px;
             padding: 2rem;
-            border: 1px solid rgba(255,255,255,0.8);
+            display: none;
         }
 
-        .task-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #18537b;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
+        .task-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
-            border-radius: 1.5rem;
+            border-radius: 20px;
             overflow: hidden;
             margin: 1.5rem 0;
         }
@@ -618,84 +501,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
         }
 
-        .deadline-info, .marks-info {
-            background: #d9ecfd;
-            border-radius: 60px;
-            padding: 0.7rem 2rem;
-            display: inline-block;
-            font-weight: 500;
-            color: #145580;
-            margin: 0.5rem 0;
-        }
-
-        .instructions {
-            background: #f0f7ff;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-left: 4px solid #4e8fc9;
-        }
-
-        .progress-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1.5rem 0;
-        }
-
-        .progress-bar-container {
-            width: 200px;
-            height: 8px;
-            background: #d9ecfd;
-            border-radius: 4px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #1e5a88;
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .task-nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .hidden-task {
-            display: none !important;
-        }
-
-        /* ===== CONTACT CARDS ===== */
-        .contact-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-
-        .contact-card {
-            background: white;
-            border-radius: 2rem;
-            padding: 1.8rem 2.2rem;
+        /* ===== TOP PERFORMER ===== */
+        .performer-card {
+            background: linear-gradient(135deg, #ffffff, #f8fbff);
+            border-radius: 30px;
+            padding: 2rem;
             text-align: center;
-            flex: 1 1 200px;
-            box-shadow: 0 15px 25px -8px rgba(0,50,80,0.1);
+            max-width: 350px;
+            margin: 2rem auto;
+            box-shadow: var(--shadow);
         }
 
-        .contact-card i {
-            font-size: 2.5rem;
-            color: #327ab3;
-            margin-bottom: 1rem;
+        .performer-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #c1dcf5, #a6c9ec);
+            margin: 0 auto 1rem;
+            border: 4px solid white;
+            overflow: hidden;
         }
 
-        /* ===== STATISTICS PAGE ===== */
+        .performer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== STATISTICS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -703,1009 +538,581 @@
             margin: 2rem 0;
         }
 
-        .stats-card {
+        .stat-card {
             background: white;
-            border-radius: 1.5rem;
+            border-radius: 20px;
             padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0,30,50,0.05);
         }
 
-        .stats-number {
-            font-size: 2.8rem;
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #1e5a88;
-        }
-
-        .stats-label {
-            font-size: 1.2rem;
-            color: #2b6f9e;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 2rem 0;
-        }
-
-        .student-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-            background: rgba(255,255,255,0.5);
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .student-table th {
-            text-align: left;
-            padding: 0.8rem;
-            background: rgba(75, 130, 190, 0.2);
-            color: #103a5e;
-        }
-
-        .student-table td {
-            padding: 0.8rem;
-            border-bottom: 1px solid rgba(75, 130, 190, 0.1);
-        }
-
-        .student-table .progress-bar {
-            width: 100px;
-            height: 8px;
-            background: #d9ecfd;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .student-table .progress-fill {
-            height: 100%;
-            background: #1e5a88;
-            border-radius: 4px;
-        }
-
-        /* ===== CUSTOM POPUP ===== */
-        .custom-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 2rem;
-            padding: 2.5rem;
-            box-shadow: 0 30px 60px rgba(0,40,80,0.3);
-            z-index: 1000;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            border: 2px solid #4e8fc9;
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-
-        .popup-btn {
-            background: linear-gradient(115deg, #1e5a88, #367bb5);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* ===== LOADING SPINNER ===== */
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(30, 90, 136, 0.3);
-            border-radius: 50%;
-            border-top-color: #1e5a88;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #1e5a88;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            z-index: 9999;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            color: var(--primary);
         }
 
         /* ===== FOOTER ===== */
         footer {
-            background: #103246;
-            color: #e5f0fc;
-            padding: 3rem 6% 2rem;
-            border-radius: 3rem 3rem 0 0;
-            margin-top: 5rem;
-        }
-
-        body.dark-mode footer {
-            background: #0a1a2a;
+            background: var(--primary-dark);
+            color: white;
+            padding: 3rem 5% 2rem;
+            border-radius: 40px 40px 0 0;
+            margin-top: 4rem;
         }
 
         .footer-content {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            align-items: center;
             gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .footer-logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(145deg, #aad0f5, #ffffff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #c7e2fc;
-            text-decoration: none;
-            font-weight: 400;
-        }
-
         .social-icons {
             display: flex;
-            gap: 1.2rem;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .social-icons a {
-            color: #c7e2fc;
-            background: rgba(255,255,255,0.06);
+            color: white;
+            background: rgba(255,255,255,0.1);
             width: 40px;
             height: 40px;
-            border-radius: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-decoration: none;
+            transition: var(--transition);
         }
 
-        .footer-bottom {
-            text-align: center;
-            margin-top: 2.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .social-icons a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
         }
 
+        /* ===== UTILITY ===== */
         .hidden {
-            display: none;
+            display: none !important;
         }
 
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text);
+            padding: 0 0.5rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
-                gap: 0.8rem;
-            }
-            nav {
                 gap: 1rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
                 justify-content: center;
+            }
+            
+            .lesson-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .code-input {
+                flex-direction: column;
+            }
+            
+            .code-input input {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated background -->
+    <!-- Background Animation -->
     <div class="bg-animation">
         <div class="floating-words">
             <span>LEARN</span> <span>SPEAK</span> <span>READ</span> <span>WRITE</span>
             <span>FLUENCY</span> <span>PRACTICE</span> <span>LISTEN</span> <span>GROW</span>
         </div>
     </div>
-    <div class="bg-overlay"></div>
 
+    <!-- Header -->
     <header>
-        <div class="logo" onclick="reload()">Fluency</div>
+        <div class="logo" onclick="location.reload()">Fluency</div>
         <nav>
-            <a onclick="openPage('home')">Home</a>
-            <a onclick="openPage('about')">About</a>
-            <a onclick="openPage('services')">Services</a>
-            <a onclick="openPage('statistics')">Statistics</a>
-            <a onclick="openPage('contact')">Contact</a>
-            <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
-                <i class="fas fa-moon"></i>
-            </button>
+            <a onclick="navigate('home')">Home</a>
+            <a onclick="navigate('about')">About</a>
+            <a onclick="navigate('services')">Services</a>
+            <a onclick="navigate('stats')">Statistics</a>
+            <a onclick="navigate('contact')">Contact</a>
             
-            <!-- User Menu (shown after login) -->
-            <div id="userMenu" class="user-menu" style="display: none;">
-                <div class="user-avatar" id="userAvatar">
-                    <i class="fa-regular fa-user"></i>
-                </div>
-                <div class="profile-dropdown">
-                    <div class="user-info">
-                        <div class="user-name" id="dropdownUserName">Fluency User</div>
-                        <div class="user-email" id="dropdownUserEmail"></div>
+            <!-- Auth Button / User Menu -->
+            <div id="authHeader">
+                <button id="loginBtn" class="auth-header-btn" onclick="openAuthModal()">
+                    <i class="fa-regular fa-user"></i> Login
+                </button>
+                
+                <div id="userMenu" class="user-menu" style="display: none;">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fa-regular fa-user"></i>
                     </div>
-                    <div class="streak-info">
-                        <i class="fa-regular fa-fire-flame"></i>
-                        <span>Current streak: <span id="userStreak">0</span> days</span>
-                    </div>
-                    <div class="menu-item" onclick="showMyProgress()">
-                        <i class="fa-regular fa-chart-line"></i>
-                        <span>My Progress</span>
-                    </div>
-                    <div class="menu-item" onclick="showSettings()">
-                        <i class="fa-regular fa-gear"></i>
-                        <span>Settings</span>
-                    </div>
-                    <div class="menu-item logout-item" onclick="logout()">
-                        <i class="fa-regular fa-sign-out"></i>
-                        <span>Logout</span>
+                    <div class="profile-dropdown">
+                        <div class="menu-item" onclick="showMyProgress()">
+                            <i class="fa-regular fa-chart-line"></i> My Progress
+                        </div>
+                        <div class="menu-item" onclick="showSettings()">
+                            <i class="fa-regular fa-gear"></i> Settings
+                        </div>
+                        <div class="menu-item logout-item" onclick="logout()">
+                            <i class="fa-regular fa-sign-out"></i> Logout
+                        </div>
                     </div>
                 </div>
             </div>
+            
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+                <i class="fas fa-moon"></i>
+            </button>
         </nav>
     </header>
 
-    <div class="container">
-        <!-- AUTH SECTION (shown when no user) -->
-        <div id="authSection" class="auth-card">
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
-                <button class="auth-tab" onclick="switchAuthTab('register')">Sign Up</button>
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeAuthModal()">&times;</span>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="modal-tab" onclick="switchAuthTab('register')">Sign Up</button>
             </div>
 
             <!-- Login Form -->
-            <div id="loginForm" class="auth-form active">
-                <h3>Welcome Back</h3>
-                <input type="email" id="loginEmail" class="auth-input" placeholder="Email" required>
-                <input type="password" id="loginPassword" class="auth-input" placeholder="Password" required>
-                <div id="loginMessage" class="auth-message auth-error"></div>
-                <button class="auth-button" onclick="handleLogin()">Login</button>
-                <div class="auth-switch">
-                    Don't have an account? <span onclick="switchAuthTab('register')">Sign up</span>
-                </div>
+            <div id="loginForm" class="modal-form active">
+                <input type="email" id="loginEmail" class="modal-input" placeholder="Email" required>
+                <input type="password" id="loginPassword" class="modal-input" placeholder="Password" required>
+                <div id="loginMessage" class="modal-message"></div>
+                <button class="modal-button" onclick="handleLogin()">Login</button>
             </div>
 
             <!-- Register Form -->
-            <div id="registerForm" class="auth-form">
-                <h3>Create Account</h3>
-                <input type="text" id="registerName" class="auth-input" placeholder="Full Name (optional)">
-                <input type="email" id="registerEmail" class="auth-input" placeholder="Email" required>
-                <input type="password" id="registerPassword" class="auth-input" placeholder="Password" required>
-                <input type="password" id="registerConfirm" class="auth-input" placeholder="Confirm Password" required>
-                <div id="registerMessage" class="auth-message"></div>
-                <button class="auth-button" onclick="handleRegister()">Sign Up</button>
-                <div class="auth-switch">
-                    Already have an account? <span onclick="switchAuthTab('login')">Login</span>
+            <div id="registerForm" class="modal-form">
+                <input type="text" id="registerName" class="modal-input" placeholder="Full Name (optional)">
+                <input type="email" id="registerEmail" class="modal-input" placeholder="Email" required>
+                <input type="password" id="registerPassword" class="modal-input" placeholder="Password (min 6 chars)" required>
+                <input type="password" id="registerConfirm" class="modal-input" placeholder="Confirm Password" required>
+                <div id="registerMessage" class="modal-message"></div>
+                <button class="modal-button" onclick="handleRegister()">Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Master English Fluency</h1>
+                <p>Daily lessons • Real progress • Community support</p>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-clock"></i></div>
+                    <h3>Daily Lessons</h3>
+                    <p>20-minute lessons every day. Consistent practice = real results.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-comments"></i></div>
+                    <h3>Speaking Practice</h3>
+                    <p>Record yourself and get feedback from the community.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-chart-line"></i></div>
+                    <h3>Track Progress</h3>
+                    <p>Watch your streak grow and skills improve every day.</p>
+                </div>
+            </div>
+
+            <!-- Top Performer -->
+            <div class="performer-card">
+                <h3>🌟 Top Performer</h3>
+                <div class="performer-avatar" id="topPerformerAvatar">
+                    <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Top Student">
+                </div>
+                <h2 id="topPerformerName">Hatim</h2>
+                <div class="leader-points" id="topPerformerPoints">
+                    <i class="fa-regular fa-star"></i> 71 points
+                </div>
+                <p id="topPerformerBadge">Most consistent learner</p>
             </div>
         </div>
 
-        <!-- MAIN CONTENT (shown after login) -->
-        <div id="mainContent" style="display: none;">
-            <!-- Streak Badge -->
-            <div class="streak-badge" id="streakBadge">
-                <i class="fa-regular fa-fire-flame"></i>
-                <span>Current streak: <span id="streakCount">0</span> days</span>
-            </div>
-
-            <!-- HOME PAGE -->
-            <div id="home">
-                <div class="section">
-                    <h1>Master English through daily practice</h1>
-                    <p>Fluency is a structured, no‑fluff program: every day a new lesson with video, reading, vocabulary and speaking. Clear progress, real results.</p>
-                    <div class="quote">
-                        “Language is the road map of a culture. It tells you where its people come from and where they are going.” – Rita Mae Brown
+        <!-- Lesson Page -->
+        <div id="lesson" class="page hidden">
+            <div class="lesson-section">
+                <div class="lesson-header">
+                    <h2>Today's Lesson</h2>
+                    <div class="code-input" id="codeSection">
+                        <input type="text" id="lessonCode" maxlength="4" placeholder="Code">
+                        <button class="auth-header-btn" onclick="verifyLessonCode()">Access</button>
                     </div>
-                </div>
-
-                <div class="arrow-section">
-                    <span class="line"></span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                    <span class="line"></span>
-                </div>
-
-                <div class="section">
-                    <h2>How the program works</h2>
-                    <p>– One 20‑minute lesson delivered daily<br>
-                       – Focus on real‑life phrases and pronunciation<br>
-                       – Vocabulary from context, not lists<br>
-                       – Speaking tasks with community feedback<br>
-                       – Progress dashboard to track consistency</p>
-                </div>
-
-                <div class="arrow-section">
-                    <span class="line"></span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                    <span class="line"></span>
-                </div>
-
-                <!-- TOP PERFORMER -->
-                <div class="section" style="text-align: center;">
-                    <h2>Top performer</h2>
-                    <div class="leader-card" id="topPerformerCard">
-                        <div class="leader-avatar" id="topPerformerAvatar">
-                            <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Top Student">
-                        </div>
-                        <div class="leader-name" id="topPerformerName">Hatim</div>
-                        <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
-                        <p style="margin-top: 0.8rem;" id="topPerformerBadge">Most consistent learner this month</p>
-                    </div>
-
-                    <!-- Top 5 Students -->
-                    <h3 style="margin-top: 3rem;">Top 5 Students</h3>
-                    <div class="top5-grid" id="top5Grid"></div>
-                </div>
-
-                <div class="arrow-section">
-                    <span class="line"></span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                    <span class="line"></span>
-                </div>
-
-                <div class="section" style="text-align: center;">
-                    <h2>Start today's lesson</h2>
-                    <p>Use the code provided by your instructor.</p>
-                    <button class="btn btn-primary" onclick="startLesson()"><i class="fa-regular fa-circle-play"></i> Begin lesson</button>
-                </div>
-            </div>
-
-            <!-- LESSON PAGE -->
-            <div id="lessonPage" class="hidden">
-                <div class="section lesson-centered" id="lessonCodeSection">
-                    <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
-                    <input id="codeInput" type="text" placeholder="e.g. 1234" maxlength="4" pattern="\d*" inputmode="numeric" onkeypress="return isNumberKey(event)">
-                    <div class="input-hint">The code is sent by the coordinator.</div>
-                    <button class="btn btn-primary" onclick="checkCode()">Access</button>
-                </div>
-
-                <div id="lessonContent" class="hidden">
-                    <div class="section lesson-centered">
-                        <h2>Today's session</h2>
-                        <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
-                        <div class="marks-info" id="marksDisplay"><i class="fa-regular fa-star"></i> 5 Marks</div>
-                        <div class="deadline-info" id="deadlineDisplay"></div>
-                        
-                        <div class="instructions">
-                            <p><strong>Instructions</strong></p>
-                            <p>• Watch the video carefully. You can use subtitles.</p>
-                            <p>• Answer the reflection questions in your notebook.</p>
-                            <p>• Read the passage aloud at least twice.</p>
-                            <p>• Learn the vocabulary words and try to use them in a sentence.</p>
-                            <p>• Record your speaking task and share it in the WhatsApp group.</p>
-                            <p>• All tasks must be submitted before the deadline above.</p>
-                        </div>
-
-                        <div class="progress-container">
-                            <div class="progress-bar-container">
-                                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
-                            </div>
+                    <div class="lesson-progress" id="progressSection" style="display: none;">
+                        <span>Progress</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Tasks -->
-                    <div class="lesson-tasks" id="lessonTasks">
-                        <div class="task-card" id="task1">
-                            <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
+                <div id="lessonContent" style="display: none;">
+                    <div class="tasks-container" id="tasksContainer">
+                        <!-- Task 1: Video -->
+                        <div class="task-card active" id="task1">
+                            <h3><i class="fa-regular fa-film"></i> Watch Video</h3>
                             <div class="video-wrapper">
                                 <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
                             </div>
-                            <p>Listen actively. You may use subtitles the first time.</p>
                         </div>
 
-                        <div class="task-card hidden-task" id="task2">
-                            <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
+                        <!-- Task 2: Reflect -->
+                        <div class="task-card" id="task2">
+                            <h3><i class="fa-regular fa-pen-to-square"></i> Reflect</h3>
                             <p>• What are two main ways technology has improved daily life?</p>
                             <p>• Mention one negative effect of technology discussed.</p>
                             <p>• How does technology influence communication?</p>
                         </div>
 
-                        <div class="task-card hidden-task" id="task3">
-                            <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                            <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7;">
-                                “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
+                        <!-- Task 3: Reading -->
+                        <div class="task-card" id="task3">
+                            <h3><i class="fa-regular fa-book-open"></i> Read Aloud</h3>
+                            <div style="background: var(--secondary); padding: 1.5rem; border-radius: 20px;">
+                                Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others.
                             </div>
                         </div>
 
-                        <div class="task-card hidden-task" id="task4">
-                            <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-                            <ul style="margin-left: 1.8rem;">
+                        <!-- Task 4: Vocabulary -->
+                        <div class="task-card" id="task4">
+                            <h3><i class="fa-regular fa-lightbulb"></i> Vocabulary</h3>
+                            <ul style="margin-left: 1.5rem;">
                                 <li><strong>persistence</strong> – continuing despite difficulty</li>
                                 <li><strong>momentum</strong> – force that keeps something moving</li>
                                 <li><strong>consistency</strong> – doing the same thing regularly</li>
-                                <li><strong>exposure</strong> – contact with something (e.g. language)</li>
-                                <li><strong>discipline</strong> – controlled behaviour to achieve a goal</li>
                             </ul>
                         </div>
 
-                        <div class="task-card hidden-task" id="task5">
-                            <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
-                            <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
-                            <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
+                        <!-- Task 5: Speaking -->
+                        <div class="task-card" id="task5">
+                            <h3><i class="fa-regular fa-message"></i> Speaking</h3>
+                            <p>Record yourself reading the passage and share in WhatsApp group.</p>
+                            <button class="auth-header-btn" style="margin-top: 1rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC')">
+                                <i class="fa-brands fa-whatsapp"></i> Open WhatsApp
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Navigation buttons -->
-                    <div class="task-nav-buttons" id="taskNav">
-                        <button class="btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
-                        <button class="btn btn-primary" id="nextBtn" onclick="nextTask()">Next</button>
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="auth-header-btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
+                        <button class="auth-header-btn" id="nextBtn" onclick="nextTask()">Next</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Popup for completion message -->
-            <div id="completionPopup" class="hidden">
-                <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
-                <div class="custom-popup">
-                    <div class="popup-title">You Did It!</div>
-                    <div class="popup-message">You have successfully completed all tasks. Your dedication is truly inspiring. Keep up the great work!</div>
-                    <button class="popup-btn" onclick="closePopupAndGoHome()">Continue</button>
-                </div>
+        <!-- About Page -->
+        <div id="about" class="page hidden">
+            <div class="lesson-section">
+                <h2>About Fluency</h2>
+                <p>Fluency was created for adult learners who want practical English skills. Our curriculum focuses on the most useful words and sentence structures, repeated until they become automatic.</p>
+                <p>No gamification gimmicks – just honest, structured practice. The only thing we track is your consistency, because that's what truly matters.</p>
             </div>
+        </div>
 
-            <!-- ABOUT PAGE -->
-            <div id="about" class="hidden">
-                <div class="section">
-                    <h2>About Fluency</h2>
-                    <p>Fluency was created for adult learners who want practical English skills without hype. Our curriculum focuses on the most useful words and sentence structures, repeated until they become automatic.</p>
-                    <p>We combine short video clips, graded reading passages, and daily speaking drills. Every lesson builds on previous ones, reinforcing vocabulary in context.</p>
-                    <p>No gamification gimmicks – just honest, structured practice. The only thing we track is your consistency, because that's what truly matters.</p>
-                </div>
+        <!-- Services Page -->
+        <div id="services" class="page hidden">
+            <div class="lesson-section">
+                <h2>What We Offer</h2>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Daily video lessons with comprehension check</li>
+                    <li>Reading passages + vocabulary focus</li>
+                    <li>Speaking tasks with community feedback</li>
+                    <li>Progress tracking (streak, points)</li>
+                    <li>WhatsApp community for practice</li>
+                </ul>
             </div>
+        </div>
 
-            <!-- SERVICES PAGE -->
-            <div id="services" class="hidden">
-                <div class="section">
-                    <h2>What we offer</h2>
-                    <p>– Daily video lesson with comprehension check</p>
-                    <p>– Reading passage + vocabulary focus</p>
-                    <p>– Weekly speaking task with peer feedback</p>
-                    <p>– Personal progress report (streak, points, areas to improve)</p>
-                    <p>– Access to WhatsApp community for questions & practice</p>
+        <!-- Statistics Page -->
+        <div id="stats" class="page hidden">
+            <div class="lesson-section">
+                <h2>Student Statistics</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalStudents">0</div>
+                        <div>Total Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPoints">0</div>
+                        <div>Total Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeToday">0</div>
+                        <div>Active Today</div>
+                    </div>
                 </div>
+                
+                <h3>Top 5 Students</h3>
+                <div class="top5-grid" id="top5Grid"></div>
             </div>
+        </div>
 
-            <!-- STATISTICS PAGE -->
-            <div id="statistics" class="hidden">
-                <div class="section">
-                    <h2>Student Statistics</h2>
-                    <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
-
-                    <!-- Loading indicator -->
-                    <div id="statsLoading" style="text-align: center; padding: 2rem;">
-                        <div class="loading-spinner"></div>
-                        <p style="margin-top: 1rem;">Loading statistics...</p>
+        <!-- Contact Page -->
+        <div id="contact" class="page hidden">
+            <div class="lesson-section">
+                <h2>Contact Us</h2>
+                <div style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div style="text-align: center;">
+                        <i class="fa-regular fa-user" style="font-size: 2rem; color: var(--primary);"></i>
+                        <h3>Amer Abdulrhman</h3>
+                        <p>Program Director</p>
                     </div>
-
-                    <!-- Stats Cards -->
-                    <div class="stats-grid" id="statsCards" style="display: none;"></div>
-
-                    <!-- Top 5 Students Table -->
-                    <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
-                    <table class="student-table" id="top5Table" style="display: none;"></table>
-
-                    <!-- Category Performance Chart -->
-                    <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
-                    <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
-                        <canvas id="categoryChart"></canvas>
+                    <div style="text-align: center;">
+                        <i class="fa-regular fa-phone" style="font-size: 2rem; color: var(--primary);"></i>
+                        <h3>Phone</h3>
+                        <p>+966 55 259 7139</p>
                     </div>
-
-                    <!-- Grade Distribution Chart -->
-                    <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
-                    <div class="chart-container" id="distributionChartContainer" style="display: none;">
-                        <canvas id="distributionChart"></canvas>
+                    <div style="text-align: center;">
+                        <i class="fa-regular fa-envelope" style="font-size: 2rem; color: var(--primary);"></i>
+                        <h3>Email</h3>
+                        <p>mnb145367@gmail.com</p>
                     </div>
-
-                    <!-- Full Student Table -->
-                    <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
-                    <table class="student-table" id="fullStudentTable" style="display: none;"></table>
-                </div>
-            </div>
-
-            <!-- CONTACT PAGE -->
-            <div id="contact" class="hidden">
-                <div class="section">
-                    <h2>Contact & community</h2>
-                    <p>Reach out directly or join our learning group.</p>
-                    <div class="contact-grid">
-                        <div class="contact-card">
-                            <i class="fa-regular fa-user"></i>
-                            <h3>Amer Abdulrhman</h3>
-                            <p>Program Director</p>
-                        </div>
-                        <div class="contact-card">
-                            <i class="fa-regular fa-phone"></i>
-                            <h3>Phone</h3>
-                            <p>+966 55 259 7139</p>
-                        </div>
-                        <div class="contact-card">
-                            <i class="fa-regular fa-envelope"></i>
-                            <h3>Email</h3>
-                            <p>mnb145367@gmail.com</p>
-                        </div>
-                    </div>
-                    <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">Fluency</div>
             <div class="footer-links">
-                <a href="#" onclick="openPage('home'); return false;">Home</a>
-                <a href="#" onclick="openPage('about'); return false;">About</a>
-                <a href="#" onclick="openPage('services'); return false;">Services</a>
-                <a href="#" onclick="openPage('statistics'); return false;">Statistics</a>
-                <a href="#" onclick="openPage('contact'); return false;">Contact</a>
-                <a href="#" onclick="startLesson(); return false;">Lesson</a>
+                <a onclick="navigate('home')">Home</a>
+                <a onclick="navigate('about')">About</a>
+                <a onclick="navigate('services')">Services</a>
+                <a onclick="navigate('contact')">Contact</a>
             </div>
             <div class="social-icons">
-                <a href="https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-                <a onclick="showTempMessage()"><i class="fa-brands fa-twitter"></i></a>
-                <a onclick="showTempMessage()"><i class="fa-brands fa-instagram"></i></a>
-                <a href="mailto:mnb145367@gmail.com"><i class="fa-regular fa-envelope"></i></a>
+                <a href="https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 Fluency Language Program — real progress, no exaggeration. | Director: Amer Abdulrhman</p>
+        <div style="text-align: center; margin-top: 2rem; opacity: 0.8;">
+            © 2026 Fluency Language Program
         </div>
     </footer>
 
     <script>
         // ============================================
-        // SUPABASE CONFIGURATION
+        // SUPABASE CONFIG
         // ============================================
-        const SUPABASE_URL = 'https://gxwqopilkzgvevhaviyz.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4d3FvcGlsa3pndmV2aGF2aXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDM4NDMsImV4cCI6MjA4ODQ3OTg0M30.ghpphewyov2iDG9mJF5o_6KPU68_HVm9ChMAaT5fPRw';
-
-        // Initialize Supabase client
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = Supabase.createClient(
+            'https://gxwqopilkzgvevhaviyz.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4d3FvcGlsa3pndmV2aGF2aXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDM4NDMsImV4cCI6MjA4ODQ3OTg0M30.ghpphewyov2iDG9mJF5o_6KPU68_HVm9ChMAaT5fPRw'
+        );
 
         // ============================================
         // GLOBAL VARIABLES
         // ============================================
-        const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec';
-        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec';
-
-        let studentsData = [];
-        let chartsInitialized = false;
-        let categoryChart, distributionChart;
-        let lessonCode = "1234";
+        let currentUser = null;
+        let lessonCode = '1234';
         let currentTask = 1;
         const totalTasks = 5;
-        let currentUser = null;
         let userProgress = [];
 
         // ============================================
-        // AUTHENTICATION FUNCTIONS
+        // NAVIGATION
         // ============================================
-
-        // Check current auth session
-        async function checkAuth() {
-            const { data: { user } } = await supabase.auth.getUser();
-            
-            if (user) {
-                currentUser = user;
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                document.getElementById('userMenu').style.display = 'inline-block';
-                
-                // Update user info in dropdown
-                document.getElementById('dropdownUserEmail').textContent = user.email;
-                const userName = user.user_metadata?.name || 'Fluency User';
-                document.getElementById('dropdownUserName').textContent = userName;
-                
-                // Load user progress
-                await loadUserProgress(user.id);
-            } else {
-                currentUser = null;
-                document.getElementById('authSection').style.display = 'block';
-                document.getElementById('mainContent').style.display = 'none';
-                document.getElementById('userMenu').style.display = 'none';
-            }
+        function navigate(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
         }
 
-        // Switch between login and register tabs
+        // ============================================
+        // AUTH MODAL
+        // ============================================
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('loginMessage').textContent = '';
+            document.getElementById('registerMessage').textContent = '';
+        }
+
         function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.modal-form').forEach(f => f.classList.remove('active'));
             
             if (tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.querySelectorAll('.modal-tab')[0].classList.add('active');
                 document.getElementById('loginForm').classList.add('active');
             } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.querySelectorAll('.modal-tab')[1].classList.add('active');
                 document.getElementById('registerForm').classList.add('active');
             }
         }
 
-        // Handle login
+        // ============================================
+        // AUTH FUNCTIONS
+        // ============================================
+        async function checkUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'inline-block';
+                await loadUserProgress();
+            } else {
+                currentUser = null;
+                document.getElementById('loginBtn').style.display = 'inline-block';
+                document.getElementById('userMenu').style.display = 'none';
+            }
+        }
+
         async function handleLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
-            if (!email || !password) {
-                document.getElementById('loginMessage').textContent = 'Please enter email and password';
-                return;
-            }
-            
             const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
+                email, password
             });
             
             if (error) {
                 document.getElementById('loginMessage').textContent = error.message;
+                document.getElementById('loginMessage').className = 'modal-message error';
             } else {
-                document.getElementById('loginMessage').textContent = '';
-                await checkAuth();
-                showNotification('Successfully logged in!');
+                closeAuthModal();
+                showNotification('Welcome back!');
+                await checkUser();
             }
         }
 
-        // Handle registration
         async function handleRegister() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
             const confirm = document.getElementById('registerConfirm').value;
             
-            const messageDiv = document.getElementById('registerMessage');
-            messageDiv.className = 'auth-message';
-            
-            if (!email || !password) {
-                messageDiv.textContent = 'Email and password are required';
-                messageDiv.classList.add('auth-error');
-                return;
-            }
-            
             if (password !== confirm) {
-                messageDiv.textContent = 'Passwords do not match';
-                messageDiv.classList.add('auth-error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                messageDiv.textContent = 'Password must be at least 6 characters';
-                messageDiv.classList.add('auth-error');
+                document.getElementById('registerMessage').textContent = 'Passwords do not match';
+                document.getElementById('registerMessage').className = 'modal-message error';
                 return;
             }
             
             const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        name: name || 'Fluency User'
-                    }
-                }
+                email,
+                password,
+                options: { data: { name: name || 'Fluency User' } }
             });
             
             if (error) {
-                messageDiv.textContent = error.message;
-                messageDiv.classList.add('auth-error');
+                document.getElementById('registerMessage').textContent = error.message;
+                document.getElementById('registerMessage').className = 'modal-message error';
             } else {
-                messageDiv.textContent = 'Registration successful! Please check your email for verification.';
-                messageDiv.classList.add('auth-success');
-                
-                // Clear form
-                document.getElementById('registerName').value = '';
-                document.getElementById('registerEmail').value = '';
-                document.getElementById('registerPassword').value = '';
-                document.getElementById('registerConfirm').value = '';
-                
-                // Switch to login tab after 3 seconds
-                setTimeout(() => switchAuthTab('login'), 3000);
+                document.getElementById('registerMessage').textContent = 'Account created! Check your email.';
+                document.getElementById('registerMessage').className = 'modal-message success';
+                setTimeout(() => switchAuthTab('login'), 2000);
             }
         }
 
-        // Handle logout
         async function logout() {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                showNotification('Error logging out: ' + error.message, 'error');
-            } else {
-                currentUser = null;
-                await checkAuth();
-                showNotification('Logged out successfully');
-            }
+            await supabase.auth.signOut();
+            await checkUser();
+            showNotification('Logged out');
         }
 
         // ============================================
-        // USER PROGRESS FUNCTIONS
+        // USER PROGRESS
         // ============================================
-
-        // Load user progress from Supabase
-        async function loadUserProgress(userId) {
-            try {
-                // Get today's date
-                const today = new Date().toISOString().split('T')[0];
-                
-                // Get all progress for this user
-                const { data, error } = await supabase
-                    .from('user_progress')
-                    .select('*')
-                    .eq('user_id', userId)
-                    .order('completed_date', { ascending: false });
-                
-                if (error) {
-                    console.error('Error loading progress:', error);
-                    return;
-                }
-                
-                userProgress = data || [];
-                
-                // Calculate streak
-                const streak = calculateStreak(userProgress);
-                document.getElementById('streakCount').textContent = streak;
-                document.getElementById('userStreak').textContent = streak;
-                
-            } catch (error) {
-                console.error('Error in loadUserProgress:', error);
-            }
+        async function loadUserProgress() {
+            if (!currentUser) return;
+            
+            const { data, error } = await supabase
+                .from('user_progress')
+                .select('*')
+                .eq('user_id', currentUser.id);
+            
+            if (!error) userProgress = data || [];
         }
 
-        // Calculate current streak
-        function calculateStreak(progress) {
-            if (!progress || progress.length === 0) return 0;
-            
-            let streak = 0;
-            let currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0);
-            
-            // Group by date
-            const completedDates = [...new Set(progress.map(p => p.completed_date))];
-            
-            for (let i = 0; i < completedDates.length; i++) {
-                const progressDate = new Date(completedDates[i]);
-                progressDate.setHours(0, 0, 0, 0);
-                
-                const diffDays = Math.floor((currentDate - progressDate) / (1000 * 60 * 60 * 24));
-                
-                if (diffDays === streak) {
-                    streak++;
-                    currentDate = progressDate;
-                } else if (diffDays > streak) {
-                    break;
-                }
-            }
-            
-            return streak;
-        }
-
-        // Complete a lesson
         async function completeLesson(lessonId) {
             if (!currentUser) {
-                showNotification('Please login first');
+                openAuthModal();
                 return;
             }
             
             const today = new Date().toISOString().split('T')[0];
             
-            // Check if already completed today
-            const alreadyCompleted = userProgress.some(p => 
-                p.lesson_id === lessonId && p.completed_date === today
-            );
-            
-            if (alreadyCompleted) {
-                showNotification('You have already completed this lesson today!');
-                return;
-            }
-            
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('user_progress')
-                .insert([
-                    {
-                        user_id: currentUser.id,
-                        lesson_id: lessonId,
-                        completed_date: today
-                    }
-                ]);
+                .insert([{
+                    user_id: currentUser.id,
+                    lesson_id: lessonId,
+                    completed_date: today
+                }]);
             
-            if (error) {
-                if (error.code === '23505') {
-                    showNotification('Lesson already completed today');
-                } else {
-                    showNotification('Error saving progress: ' + error.message);
+            if (!error) {
+                showNotification('Lesson completed! 🎉');
+                await loadUserProgress();
+            }
+        }
+
+        // ============================================
+        // LESSON FUNCTIONS
+        // ============================================
+        function verifyLessonCode() {
+            const code = document.getElementById('lessonCode').value;
+            
+            if (code === lessonCode) {
+                if (!currentUser) {
+                    openAuthModal();
+                    showNotification('Please login first');
+                    return;
                 }
-            } else {
-                showNotification('Lesson completed! Great job! 🎉');
-                await loadUserProgress(currentUser.id);
-            }
-        }
-
-        // Show my progress page
-        function showMyProgress() {
-            openPage('statistics');
-            
-            // Add user-specific stats here
-            const completedCount = userProgress.length;
-            const streak = calculateStreak(userProgress);
-            
-            showNotification(`You've completed ${completedCount} lessons with a ${streak}-day streak!`);
-        }
-
-        // Show settings
-        function showSettings() {
-            alert('Settings page coming soon!');
-        }
-
-        // ============================================
-        // PAGE NAVIGATION
-        // ============================================
-        function reload() { 
-            location.reload(); 
-        }
-
-        function openPage(page) {
-            const pages = ['home', 'lessonPage', 'about', 'services', 'statistics', 'contact'];
-            pages.forEach(p => {
-                const element = document.getElementById(p);
-                if (element) element.classList.add('hidden');
-            });
-            
-            const targetElement = document.getElementById(page);
-            if (targetElement) {
-                targetElement.classList.remove('hidden');
-            }
-
-            if (page === 'statistics') {
-                renderStatisticsPage();
-            }
-        }
-
-        function startLesson() {
-            openPage('lessonPage');
-            document.getElementById('lessonContent').classList.add('hidden');
-            document.getElementById('lessonCodeSection').style.display = 'block';
-        }
-
-        // ============================================
-        // LESSON CODE FUNCTIONS
-        // ============================================
-        async function loadLessonFromCloud() {
-            try {
-                const response = await fetch(LESSON_API_URL);
-                const result = await response.json();
                 
-                if (result && result.data) {
-                    if (result.data.lessonCode) {
-                        lessonCode = String(result.data.lessonCode);
-                        localStorage.setItem('fluencyLessonCode', lessonCode);
-                    }
-                    applyLessonData(result.data);
-                } else {
-                    loadSavedLessonData();
-                }
-            } catch (error) {
-                loadSavedLessonData();
-            }
-        }
-
-        function applyLessonData(data) {
-            if (data.lessonCode) {
-                lessonCode = String(data.lessonCode);
-            }
-            
-            const marksElement = document.querySelector('.marks-info');
-            if (marksElement && data.marks) {
-                marksElement.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
-            }
-            
-            if (data.deadline) {
-                const deadlineElement = document.getElementById('deadlineDisplay');
-                if (deadlineElement) {
-                    deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
-                }
-            }
-            
-            if (data.videoUrl) {
-                const videoFrame = document.querySelector('#task1 iframe');
-                if (videoFrame) videoFrame.src = data.videoUrl;
-            }
-        }
-
-        function loadSavedLessonData() {
-            const saved = localStorage.getItem('fluencyLessonData');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    applyLessonData(data);
-                    
-                    const savedCode = localStorage.getItem('fluencyLessonCode');
-                    if (savedCode) {
-                        lessonCode = savedCode;
-                    }
-                } catch (e) {}
-            }
-        }
-
-        function checkCode() {
-            const input = document.getElementById('codeInput');
-            const enteredCode = input.value.trim();
-            
-            if (enteredCode === String(lessonCode)) {
-                document.getElementById('lessonContent').classList.remove('hidden');
-                document.getElementById('lessonCodeSection').style.display = 'none';
+                document.getElementById('codeSection').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'flex';
+                document.getElementById('lessonContent').style.display = 'block';
+                currentTask = 1;
                 showTask(1);
-                input.value = '';
-                
-                // Track lesson access in progress
-                if (currentUser) {
-                    console.log('User accessed lesson');
-                }
             } else {
-                alert('Incorrect code. Please try again.');
-                input.style.borderColor = '#cc7b7b';
-                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
+                showNotification('Invalid code', 'error');
             }
         }
 
         function showTask(taskNum) {
-            for (let i = 1; i <= totalTasks; i++) {
-                const taskEl = document.getElementById(`task${i}`);
-                if (taskEl) {
-                    taskEl.classList.toggle('hidden-task', i !== taskNum);
-                }
-            }
+            document.querySelectorAll('.task-card').forEach(t => t.classList.remove('active'));
+            document.getElementById(`task${taskNum}`).classList.add('active');
             
-            const progressPercent = (taskNum / totalTasks) * 100;
-            document.getElementById('progressFill').style.width = `${progressPercent}%`;
-
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
+            const progress = (taskNum / totalTasks) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
             
-            if (taskNum === 1) {
-                nextBtn.innerText = 'Next';
-                prevBtn.style.visibility = 'hidden';
-            } else if (taskNum === totalTasks) {
-                nextBtn.innerText = 'Finish';
-                prevBtn.style.visibility = 'visible';
-            } else {
-                nextBtn.innerText = 'Next';
-                prevBtn.style.visibility = 'visible';
-            }
+            document.getElementById('prevBtn').style.visibility = taskNum === 1 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').textContent = taskNum === totalTasks ? 'Finish' : 'Next';
         }
 
         function nextTask() {
             if (currentTask === totalTasks) {
-                document.getElementById('completionPopup').classList.remove('hidden');
-                // Mark lesson as completed
-                if (currentUser) {
-                    completeLesson(1); // Lesson ID 1 for now
-                }
+                completeLesson(1);
+                alert('Congratulations! You completed the lesson!');
+                navigate('home');
             } else {
                 currentTask++;
                 showTask(currentTask);
@@ -1719,252 +1126,57 @@
             }
         }
 
-        function closePopupAndGoHome() {
-            document.getElementById('completionPopup').classList.add('hidden');
-            openPage('home');
+        // ============================================
+        // STATISTICS
+        // ============================================
+        async function loadStatistics() {
+            const { count: totalUsers } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+            
+            const { data: progress } = await supabase
+                .from('user_progress')
+                .select('*');
+            
+            const totalPoints = progress?.length || 0;
+            
+            document.getElementById('totalStudents').textContent = totalUsers || 0;
+            document.getElementById('totalPoints').textContent = totalPoints;
         }
 
         // ============================================
-        // STATISTICS FUNCTIONS
-        // ============================================
-        async function fetchStudentData() {
-            try {
-                const response = await fetch(STUDENTS_API_URL);
-                const data = await response.json();
-                return data.data || [];
-            } catch (error) {
-                return [];
-            }
-        }
-
-        function calculateStatistics(students) {
-            if (!students.length) return null;
-            
-            const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
-            
-            const top5Grid = document.getElementById('top5Grid');
-            const top5 = sorted.slice(0, 5);
-            top5Grid.innerHTML = top5.map(s => `
-                <div class="top-student-card">
-                    <div class="top-student-name">${s.name || 'Unknown'}</div>
-                    <div class="top-student-score">${s.total || 0} pts</div>
-                </div>
-            `).join('');
-            
-            const categories = { quiz: 0, homework: 0, weekly: 0, presentation: 0 };
-            let quizCount = 0, weeklyCount = 0, presCount = 0;
-            
-            students.forEach(s => {
-                if (s.quiz) { categories.quiz += s.quiz; quizCount++; }
-                if (s.w1) { categories.weekly += s.w1; weeklyCount++; }
-                if (s.pres1) { categories.presentation += s.pres1; presCount++; }
-            });
-            
-            categories.quiz = quizCount ? (categories.quiz / quizCount).toFixed(1) : 0;
-            categories.weekly = weeklyCount ? (categories.weekly / weeklyCount).toFixed(1) : 0;
-            categories.presentation = presCount ? (categories.presentation / presCount).toFixed(1) : 0;
-            
-            const distribution = {
-                excellent: students.filter(s => s.total >= 70).length,
-                good: students.filter(s => s.total >= 50 && s.total < 70).length,
-                needsWork: students.filter(s => s.total < 50).length
-            };
-            
-            return { categories, distribution, sorted, top5 };
-        }
-
-        async function renderStatisticsPage() {
-            document.getElementById('statsLoading').style.display = 'block';
-            document.getElementById('statsCards').style.display = 'none';
-            document.getElementById('top5Heading').style.display = 'none';
-            document.getElementById('top5Table').style.display = 'none';
-            document.getElementById('categoryHeading').style.display = 'none';
-            document.getElementById('categoryChartContainer').style.display = 'none';
-            document.getElementById('distributionHeading').style.display = 'none';
-            document.getElementById('distributionChartContainer').style.display = 'none';
-            document.getElementById('fullTableHeading').style.display = 'none';
-            document.getElementById('fullStudentTable').style.display = 'none';
-            
-            const students = await fetchStudentData();
-            if (!students.length) {
-                document.getElementById('statsLoading').innerHTML = '<p>No data available. Please check back later.</p>';
-                return;
-            }
-            
-            const stats = calculateStatistics(students);
-            if (!stats) return;
-            
-            document.getElementById('statsLoading').style.display = 'none';
-            document.getElementById('statsCards').style.display = 'grid';
-            document.getElementById('top5Heading').style.display = 'block';
-            document.getElementById('top5Table').style.display = 'table';
-            document.getElementById('categoryHeading').style.display = 'block';
-            document.getElementById('categoryChartContainer').style.display = 'block';
-            document.getElementById('distributionHeading').style.display = 'block';
-            document.getElementById('distributionChartContainer').style.display = 'block';
-            document.getElementById('fullTableHeading').style.display = 'block';
-            document.getElementById('fullStudentTable').style.display = 'table';
-            
-            const totalStudents = students.length;
-            const totalPoints = students.reduce((sum, s) => sum + (s.total || 0), 0);
-            const activeStudents = students.filter(s => (s.total || 0) > 0).length;
-            
-            document.getElementById('statsCards').innerHTML = `
-                <div class="stats-card">
-                    <div class="stats-number">${totalStudents}</div>
-                    <div class="stats-label">Total Students</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number">${totalPoints}</div>
-                    <div class="stats-label">Total Points</div>
-                </div>
-                <div class="stats-card">
-                    <div class="stats-number">${activeStudents}</div>
-                    <div class="stats-label">Active Students</div>
-                </div>
-            `;
-            
-            document.getElementById('top5Table').innerHTML = `
-                <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
-                ${stats.top5.map(s => `
-                    <tr>
-                        <td>${s.name || 'Unknown'}</td>
-                        <td><strong>${s.total || 0}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
-                    </tr>
-                `).join('')}
-            `;
-            
-            document.getElementById('fullStudentTable').innerHTML = `
-                <tr><th>Name</th><th>Total Points</th><th>Progress</th></tr>
-                ${stats.sorted.map(s => `
-                    <tr>
-                        <td>${s.name || 'Unknown'}</td>
-                        <td><strong>${s.total || 0}</strong></td>
-                        <td><div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(100, s.total || 0)}%"></div></div></td>
-                    </tr>
-                `).join('')}
-            `;
-            
-            if (!chartsInitialized) {
-                createCategoryChart(stats.categories);
-                createDistributionChart(stats.distribution);
-                chartsInitialized = true;
-            } else {
-                updateCharts(stats.categories, stats.distribution);
-            }
-        }
-
-        function createCategoryChart(catData) {
-            const ctx = document.getElementById('categoryChart').getContext('2d');
-            categoryChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Quizzes', 'Homework', 'Weekly', 'Presentation'],
-                    datasets: [{
-                        label: 'Average Score',
-                        data: [catData.quiz, catData.homework, catData.weekly, catData.presentation],
-                        backgroundColor: ['#1e5a88', '#367bb5', '#5e9fcf', '#84b3d9'],
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, max: 20 } }
-                }
-            });
-        }
-
-        function createDistributionChart(distData) {
-            const ctx = document.getElementById('distributionChart').getContext('2d');
-            distributionChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Excellent (70+)', 'Good (50-69)', 'Needs Work (<50)'],
-                    datasets: [{
-                        data: [distData.excellent, distData.good, distData.needsWork],
-                        backgroundColor: ['#1e5a88', '#5e9fcf', '#b5d0e8'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } },
-                    cutout: '65%'
-                }
-            });
-        }
-
-        function updateCharts(catData, distData) {
-            if (categoryChart) {
-                categoryChart.data.datasets[0].data = [catData.quiz, catData.homework, catData.weekly, catData.presentation];
-                categoryChart.update();
-            }
-            if (distributionChart) {
-                distributionChart.data.datasets[0].data = [distData.excellent, distData.good, distData.needsWork];
-                distributionChart.update();
-            }
-        }
-
-        // ============================================
-        // TOP PERFORMER FUNCTIONS
+        // TOP PERFORMER
         // ============================================
         function loadTopPerformer() {
             const saved = localStorage.getItem('fluencyTopPerformer');
             if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    
-                    const nameEl = document.getElementById('topPerformerName');
-                    if (nameEl) nameEl.textContent = data.name || 'Hatim';
-                    
-                    const pointsEl = document.getElementById('topPerformerPoints');
-                    if (pointsEl) pointsEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.points || 71} points`;
-                    
-                    const badgeEl = document.getElementById('topPerformerBadge');
-                    if (badgeEl) badgeEl.textContent = data.badge || 'Most consistent learner this month';
-                    
-                    if (data.avatar) {
-                        const avatarImg = document.querySelector('#topPerformerAvatar img');
-                        if (avatarImg) avatarImg.src = data.avatar;
-                    }
-                } catch (e) {}
+                const data = JSON.parse(saved);
+                document.getElementById('topPerformerName').textContent = data.name || 'Hatim';
+                document.getElementById('topPerformerPoints').innerHTML = `<i class="fa-regular fa-star"></i> ${data.points || 71} points`;
+                if (data.avatar) {
+                    document.querySelector('#topPerformerAvatar img').src = data.avatar;
+                }
             }
         }
 
         // ============================================
-        // UTILITY FUNCTIONS
+        // UTILITIES
         // ============================================
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.querySelector('.dark-mode-toggle i');
-            if (document.body.classList.contains('dark-mode')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        }
-
-        function showTempMessage() {
-            alert("Social media links will be added soon. Stay tuned!");
-        }
-
-        function isNumberKey(evt) {
-            const charCode = evt.which ? evt.which : evt.keyCode;
-            return !(charCode > 31 && (charCode < 48 || charCode > 57));
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
         }
 
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.style.background = type === 'success' ? '#1e5a88' : '#cc3366';
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px; 
+                background: ${type === 'success' ? '#28a745' : '#dc3545'}; 
+                color: white; padding: 1rem 2rem; border-radius: 50px;
+                z-index: 9999; animation: slideIn 0.3s;
+            `;
             notification.textContent = message;
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
@@ -1974,49 +1186,22 @@
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
+            await checkUser();
+            loadTopPerformer();
+            loadStatistics();
+            
             // Check dark mode preference
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
-                const icon = document.querySelector('.dark-mode-toggle i');
-                if (icon) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                }
+                document.querySelector('.dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
             }
-            
-            // Load saved lesson code
-            const savedCode = localStorage.getItem('fluencyLessonCode');
-            if (savedCode) {
-                lessonCode = savedCode;
-            }
-            
-            // Load top performer
-            loadTopPerformer();
-            
-            // Load lesson data
-            await loadLessonFromCloud();
-            
-            // Check authentication
-            await checkAuth();
-            
-            // Set up auth state listener
-            supabase.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN') {
-                    checkAuth();
-                } else if (event === 'SIGNED_OUT') {
-                    checkAuth();
-                }
-            });
-            
-            // Load student statistics
-            const students = await fetchStudentData();
-            if (students.length) calculateStatistics(students);
         });
 
-        // Enter key for code input
-        document.getElementById('codeInput')?.addEventListener('keypress', e => {
-            if (e.key === 'Enter') checkCode();
-        });
+        // Close modal on outside click
+        window.onclick = function(e) {
+            const modal = document.getElementById('authModal');
+            if (e.target === modal) closeAuthModal();
+        };
     </script>
 </body>
 </html>
