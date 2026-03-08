@@ -6,6 +6,7 @@
     <title>Fluency • Language Mastery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -43,7 +44,10 @@
         body.dark-mode .student-table,
         body.dark-mode .student-table th,
         body.dark-mode .student-table td,
-        body.dark-mode .custom-popup {
+        body.dark-mode .custom-popup,
+        body.dark-mode .auth-card,
+        body.dark-mode .profile-dropdown,
+        body.dark-mode .user-menu {
             background: rgba(20, 35, 50, 0.9) !important;
             color: #e0e9f5 !important;
             border-color: rgba(255,255,255,0.1) !important;
@@ -63,22 +67,6 @@
         body.dark-mode .btn-primary {
             background: linear-gradient(115deg, #2b5780, #3f6b99);
             color: white;
-        }
-
-        body.dark-mode .progress-bar-container {
-            background: #2d4055;
-        }
-
-        body.dark-mode .progress-fill {
-            background: #5e9fcf;
-        }
-
-        body.dark-mode .student-table .progress-bar {
-            background: #2d4055;
-        }
-
-        body.dark-mode .student-table .progress-fill {
-            background: #5e9fcf;
         }
 
         /* ===== ANIMATED BACKGROUND ===== */
@@ -124,26 +112,6 @@
             100% { transform: translateX(-200px) translateY(-50px) rotate(15deg); opacity: 0; }
         }
 
-        .floating-words span:nth-child(1) { top: 15%; animation-duration: 18s; animation-delay: -2s; }
-        .floating-words span:nth-child(2) { top: 40%; animation-duration: 22s; animation-delay: -7s; }
-        .floating-words span:nth-child(3) { top: 70%; animation-duration: 25s; animation-delay: -3s; }
-        .floating-words span:nth-child(4) { top: 20%; animation-duration: 30s; animation-delay: -12s; }
-        .floating-words span:nth-child(5) { top: 85%; animation-duration: 19s; animation-delay: -5s; }
-        .floating-words span:nth-child(6) { top: 55%; animation-duration: 27s; animation-delay: -9s; }
-        .floating-words span:nth-child(7) { top: 10%; animation-duration: 24s; animation-delay: -15s; }
-        .floating-words span:nth-child(8) { top: 95%; animation-duration: 21s; animation-delay: -1s; }
-
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
         /* ===== HEADER ===== */
         header {
             display: flex;
@@ -158,7 +126,6 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.5);
-            transition: background 0.3s;
         }
 
         body.dark-mode header {
@@ -174,11 +141,6 @@
             color: transparent;
             letter-spacing: -0.5px;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .logo:hover {
-            filter: drop-shadow(0 4px 8px rgba(0,100,200,0.2));
         }
 
         nav {
@@ -230,6 +192,250 @@
             color: #ffdb9f;
         }
 
+        /* ===== USER MENU ===== */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #c1dcf5, #a6c9ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f4970;
+            font-size: 1.5rem;
+            border: 2px solid white;
+            transition: 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            min-width: 250px;
+            box-shadow: 0 15px 30px rgba(0,40,80,0.15);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-menu:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown .user-info {
+            padding: 0.5rem 0 1rem;
+            border-bottom: 1px solid rgba(75,130,190,0.2);
+            margin-bottom: 0.8rem;
+        }
+
+        .profile-dropdown .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #175277;
+        }
+
+        .profile-dropdown .user-email {
+            font-size: 0.9rem;
+            color: #5f7d9c;
+        }
+
+        .profile-dropdown .streak-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 0;
+            color: #1e5a88;
+            font-weight: 500;
+        }
+
+        .profile-dropdown .streak-info i {
+            color: #ffaa33;
+        }
+
+        .profile-dropdown .menu-item {
+            padding: 0.7rem 1rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #1e3a5f;
+        }
+
+        .profile-dropdown .menu-item:hover {
+            background: rgba(75,130,190,0.1);
+        }
+
+        .profile-dropdown .menu-item i {
+            width: 20px;
+            color: #327ab3;
+        }
+
+        .profile-dropdown .logout-item {
+            color: #cc3366;
+            border-top: 1px solid rgba(75,130,190,0.2);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .profile-dropdown .logout-item i {
+            color: #cc3366;
+        }
+
+        /* ===== AUTH CARD ===== */
+        .auth-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            margin: 2.5rem auto;
+            max-width: 500px;
+            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.15);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(220, 240, 255, 0.3);
+            padding: 0.5rem;
+            border-radius: 3rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1e4f7a;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .auth-tab.active {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        body.dark-mode .auth-tab.active {
+            background: #2d4055;
+            color: #e0e9f5;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 3rem;
+            border: 1px solid #c7ddef;
+            background: white;
+            font-size: 1rem;
+            margin: 0.8rem 0;
+            outline: none;
+        }
+
+        .auth-input:focus {
+            border-color: #1e5a88;
+            box-shadow: 0 0 0 3px rgba(30,90,136,0.1);
+        }
+
+        body.dark-mode .auth-input {
+            background: #2d4055;
+            border-color: #4a6380;
+            color: white;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 3rem;
+            border: none;
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+
+        .auth-message {
+            text-align: center;
+            font-size: 0.95rem;
+            margin: 1rem 0;
+        }
+
+        .auth-error {
+            color: #cc3366;
+        }
+
+        .auth-success {
+            color: #28a745;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #5f7d9c;
+        }
+
+        .auth-switch span {
+            color: #1e5a88;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* ===== STREAK BADGE ===== */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #d4e9fc;
+            padding: 0.5rem 1.5rem;
+            border-radius: 3rem;
+            color: #1e5a88;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .streak-badge i {
+            color: #ffaa33;
+        }
+
         /* ===== MAIN CONTAINER ===== */
         .container {
             max-width: 1200px;
@@ -239,7 +445,6 @@
             z-index: 5;
         }
 
-        /* ===== CARDS ===== */
         .section {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
@@ -249,13 +454,6 @@
             margin: 2.5rem 0;
             box-shadow: 0 25px 45px -12px rgba(0,40,80,0.15);
             border: 1px solid rgba(255,255,255,0.6);
-            transition: transform 0.3s ease, box-shadow 0.4s, background 0.3s;
-        }
-
-        .section:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 32px 55px -10px rgba(25,85,130,0.2);
-            border-color: rgba(255,255,255,0.9);
         }
 
         h1, h2, h3 {
@@ -270,49 +468,6 @@
             color: #b3d6f0;
         }
 
-        h1 { font-size: clamp(2.2rem, 5vw, 3rem); letter-spacing: -0.02em; }
-        h2 { font-size: clamp(2rem, 4vw, 2.5rem); letter-spacing: -0.01em; }
-        h3 { font-size: clamp(1.5rem, 3vw, 1.8rem); }
-
-        p {
-            font-size: 1.2rem;
-            color: #254e77;
-            margin-bottom: 1.2rem;
-            font-weight: 400;
-        }
-
-        body.dark-mode p {
-            color: #b5d0e8;
-        }
-
-        .arrow-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0.5rem 0 1.5rem;
-            color: #84b3d9;
-            font-size: 1.6rem;
-            gap: 1rem;
-        }
-
-        .arrow-section .line {
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #84b3d9, transparent);
-        }
-
-        .arrow-section i {
-            font-size: 2rem;
-            color: #5e9fcf;
-            animation: slideDown 2.2s infinite;
-        }
-
-        @keyframes slideDown {
-            0% { transform: translateY(-8px); opacity: 0.3; }
-            50% { transform: translateY(8px); opacity: 1; }
-            100% { transform: translateY(-8px); opacity: 0.3; }
-        }
-
         .quote {
             background: rgba(220, 240, 255, 0.7);
             backdrop-filter: blur(4px);
@@ -321,9 +476,6 @@
             margin: 2rem 0 1rem;
             font-style: italic;
             border-left: 6px solid #4e8fc9;
-            font-size: 1.3rem;
-            color: #103a5e;
-            box-shadow: inset 0 2px 10px rgba(255,255,255,0.8);
         }
 
         /* ===== TOP PERFORMER CARD ===== */
@@ -349,9 +501,6 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 1.2rem;
-            font-size: 3.5rem;
-            color: #1f4970;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
             border: 3px solid white;
             overflow: hidden;
         }
@@ -366,7 +515,6 @@
             font-size: 2.2rem;
             font-weight: 600;
             color: #175277;
-            margin-bottom: 0.25rem;
         }
 
         .leader-points {
@@ -376,7 +524,6 @@
             font-weight: 500;
             color: #0f3d60;
             margin: 0.8rem 0;
-            font-size: 1.1rem;
         }
 
         /* ===== TOP 5 GRID ===== */
@@ -393,19 +540,12 @@
             padding: 1.2rem;
             text-align: center;
             box-shadow: 0 10px 20px -5px rgba(40,100,150,0.15);
-            border: 1px solid rgba(255,255,255,0.8);
-            transition: transform 0.2s;
-        }
-
-        .top-student-card:hover {
-            transform: translateY(-4px);
         }
 
         .top-student-name {
             font-size: 1.3rem;
             font-weight: 600;
             color: #175277;
-            margin-bottom: 0.3rem;
         }
 
         .top-student-score {
@@ -424,70 +564,16 @@
             font-size: 1.1rem;
             color: #1e4f7a;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 16px rgba(45, 100, 150, 0.1);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.6rem;
             border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(2px);
-        }
-
-        .btn i {
-            font-size: 1.2rem;
-            color: #3d7cb0;
-        }
-
-        .btn:hover {
-            background: #e8f2fc;
-            transform: scale(1.04);
-            box-shadow: 0 14px 24px rgba(35, 110, 180, 0.15);
-            border-color: #b0d1f0;
         }
 
         .btn-primary {
             background: linear-gradient(115deg, #1e5a88, #367bb5);
             color: white;
-            box-shadow: 0 10px 20px rgba(25, 95, 155, 0.3);
-        }
-
-        .btn-primary i {
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(115deg, #1b4f78, #2d6ca3);
-        }
-
-        /* ===== INPUT ===== */
-        input {
-            padding: 1rem 1.8rem;
-            border-radius: 60px;
-            border: 1px solid #c7ddef;
-            background: white;
-            font-size: 1.1rem;
-            width: 300px;
-            max-width: 100%;
-            margin: 0.8rem 0;
-            outline: none;
-            transition: 0.2s;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
-        }
-
-        input:focus {
-            border-color: #639fd1;
-            box-shadow: 0 0 0 3px rgba(90, 155, 215, 0.15);
-        }
-
-        .input-hint {
-            font-size: 0.9rem;
-            color: #5f7d9c;
-            margin-top: -0.5rem;
-            margin-bottom: 0.8rem;
-        }
-        body.dark-mode .input-hint {
-            color: #a0b8d0;
         }
 
         /* ===== LESSON TASKS ===== */
@@ -496,7 +582,6 @@
             flex-direction: column;
             gap: 1.8rem;
             margin-top: 2rem;
-            position: relative;
         }
 
         .task-card {
@@ -505,11 +590,6 @@
             border-radius: 2rem;
             padding: 2rem;
             border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 8px 16px rgba(0,30,50,0.05);
-        }
-
-        body.dark-mode .task-card {
-            background: rgba(30, 45, 60, 0.8);
         }
 
         .task-title {
@@ -521,16 +601,6 @@
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
-            text-align: center;
-        }
-
-        body.dark-mode .task-title {
-            color: #b3d6f0;
-        }
-
-        .task-title i {
-            font-size: 1.9rem;
-            color: #538cc0;
         }
 
         .video-wrapper {
@@ -539,10 +609,7 @@
             height: 0;
             border-radius: 1.5rem;
             overflow: hidden;
-            background: #bdd6ec;
             margin: 1.5rem 0;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .video-wrapper iframe {
@@ -554,26 +621,14 @@
             border: none;
         }
 
-        .deadline-info {
+        .deadline-info, .marks-info {
             background: #d9ecfd;
             border-radius: 60px;
             padding: 0.7rem 2rem;
             display: inline-block;
             font-weight: 500;
             color: #145580;
-            margin: 1rem 0;
-            font-size: 1.1rem;
-        }
-
-        .marks-info {
-            background: #d9ecfd;
-            border-radius: 60px;
-            padding: 0.7rem 2rem;
-            display: inline-block;
-            font-weight: 500;
-            color: #145580;
-            margin: 0.5rem 0 1rem;
-            font-size: 1.1rem;
+            margin: 0.5rem 0;
         }
 
         .instructions {
@@ -584,31 +639,20 @@
             border-left: 4px solid #4e8fc9;
         }
 
-        .instructions p {
-            margin-bottom: 0.5rem;
-            color: #254e77;
-        }
-
-        .lesson-centered {
-            text-align: center;
-        }
-
         .progress-container {
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 1.5rem 0;
-            background: rgba(255,255,255,0.5);
-            border-radius: 50px;
-            padding: 0.5rem 1rem;
         }
+
         .progress-bar-container {
             width: 200px;
             height: 8px;
             background: #d9ecfd;
             border-radius: 4px;
-            margin: 0 1rem;
         }
+
         .progress-fill {
             height: 100%;
             background: #1e5a88;
@@ -643,7 +687,6 @@
             text-align: center;
             flex: 1 1 200px;
             box-shadow: 0 15px 25px -8px rgba(0,50,80,0.1);
-            border: 1px solid rgba(255,255,255,0.8);
         }
 
         .contact-card i {
@@ -666,14 +709,12 @@
             padding: 1.5rem;
             text-align: center;
             box-shadow: 0 8px 16px rgba(0,30,50,0.05);
-            border: 1px solid rgba(255,255,255,0.8);
         }
 
         .stats-number {
             font-size: 2.8rem;
             font-weight: 700;
             color: #1e5a88;
-            margin-bottom: 0.5rem;
         }
 
         .stats-label {
@@ -685,10 +726,6 @@
             position: relative;
             height: 300px;
             margin: 2rem 0;
-        }
-
-        .category-chart-container {
-            height: 350px;
         }
 
         .student-table {
@@ -705,17 +742,11 @@
             padding: 0.8rem;
             background: rgba(75, 130, 190, 0.2);
             color: #103a5e;
-            font-size: 1.1rem;
         }
 
         .student-table td {
             padding: 0.8rem;
             border-bottom: 1px solid rgba(75, 130, 190, 0.1);
-            font-size: 1.1rem;
-        }
-
-        .student-table tr:last-child td {
-            border-bottom: none;
         }
 
         .student-table .progress-bar {
@@ -759,19 +790,6 @@
             z-index: 999;
         }
 
-        .popup-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #1e5a88;
-            margin-bottom: 1rem;
-        }
-
-        .popup-message {
-            font-size: 1.3rem;
-            color: #254e77;
-            margin-bottom: 2rem;
-        }
-
         .popup-btn {
             background: linear-gradient(115deg, #1e5a88, #367bb5);
             color: white;
@@ -781,11 +799,6 @@
             font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .popup-btn:hover {
-            transform: scale(1.05);
         }
 
         /* ===== LOADING SPINNER ===== */
@@ -829,23 +842,10 @@
             padding: 3rem 6% 2rem;
             border-radius: 3rem 3rem 0 0;
             margin-top: 5rem;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s;
         }
 
         body.dark-mode footer {
             background: #0a1a2a;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 70%);
         }
 
         .footer-content {
@@ -877,12 +877,6 @@
             color: #c7e2fc;
             text-decoration: none;
             font-weight: 400;
-            transition: color 0.2s;
-            font-size: 1.1rem;
-        }
-
-        .footer-links a:hover {
-            color: white;
         }
 
         .social-icons {
@@ -901,16 +895,8 @@
             align-items: center;
             justify-content: center;
             font-size: 1.3rem;
-            transition: 0.25s;
             border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer;
             text-decoration: none;
-        }
-
-        .social-icons a:hover {
-            background: #2f577b;
-            color: white;
-            transform: translateY(-5px);
         }
 
         .footer-bottom {
@@ -918,64 +904,21 @@
             margin-top: 2.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 1rem;
-            color: #99bcd9;
         }
 
         .hidden {
             display: none;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 gap: 0.8rem;
-                padding: 1rem 4%;
             }
             nav {
                 gap: 1rem;
                 justify-content: center;
             }
-            .section {
-                padding: 1.8rem;
-                margin: 1.5rem 0;
-            }
-            h1 { font-size: 2.2rem; }
-            h2 { font-size: 2rem; }
-            .arrow-section .line {
-                width: 40px;
-            }
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-links {
-                justify-content: center;
-            }
-            body { font-size: 1.1rem; }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 4%;
-            }
-            .section {
-                padding: 1.5rem;
-                border-radius: 1.8rem;
-            }
-            .btn {
-                padding: 0.8rem 1.8rem;
-                font-size: 1rem;
-            }
-            input {
-                width: 100%;
-            }
-            .leader-avatar {
-                width: 100px;
-                height: 100px;
-            }
-            body { font-size: 1rem; }
         }
     </style>
 </head>
@@ -1000,254 +943,318 @@
             <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
                 <i class="fas fa-moon"></i>
             </button>
+            
+            <!-- User Menu (shown after login) -->
+            <div id="userMenu" class="user-menu" style="display: none;">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div class="profile-dropdown">
+                    <div class="user-info">
+                        <div class="user-name" id="dropdownUserName">Fluency User</div>
+                        <div class="user-email" id="dropdownUserEmail"></div>
+                    </div>
+                    <div class="streak-info">
+                        <i class="fa-regular fa-fire-flame"></i>
+                        <span>Current streak: <span id="userStreak">0</span> days</span>
+                    </div>
+                    <div class="menu-item" onclick="showMyProgress()">
+                        <i class="fa-regular fa-chart-line"></i>
+                        <span>My Progress</span>
+                    </div>
+                    <div class="menu-item" onclick="showSettings()">
+                        <i class="fa-regular fa-gear"></i>
+                        <span>Settings</span>
+                    </div>
+                    <div class="menu-item logout-item" onclick="logout()">
+                        <i class="fa-regular fa-sign-out"></i>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
     <div class="container">
-        <!-- HOME PAGE -->
-        <div id="home">
-            <div class="section">
-                <h1>Master English through daily practice</h1>
-                <p>Fluency is a structured, no‑fluff program: every day a new lesson with video, reading, vocabulary and speaking. Clear progress, real results.</p>
-                <div class="quote">
-                    “Language is the road map of a culture. It tells you where its people come from and where they are going.” – Rita Mae Brown
+        <!-- AUTH SECTION (shown when no user) -->
+        <div id="authSection" class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <h3>Welcome Back</h3>
+                <input type="email" id="loginEmail" class="auth-input" placeholder="Email" required>
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Password" required>
+                <div id="loginMessage" class="auth-message auth-error"></div>
+                <button class="auth-button" onclick="handleLogin()">Login</button>
+                <div class="auth-switch">
+                    Don't have an account? <span onclick="switchAuthTab('register')">Sign up</span>
                 </div>
             </div>
 
-            <div class="arrow-section">
-                <span class="line"></span>
-                <i class="fa-solid fa-chevron-down"></i>
-                <span class="line"></span>
-            </div>
-
-            <div class="section">
-                <h2>How the program works</h2>
-                <p>– One 20‑minute lesson delivered daily<br>
-                   – Focus on real‑life phrases and pronunciation<br>
-                   – Vocabulary from context, not lists<br>
-                   – Speaking tasks with community feedback<br>
-                   – Progress dashboard to track consistency</p>
-                <p>We believe in steady, measurable improvement – no miracles, just disciplined practice.</p>
-            </div>
-
-            <div class="arrow-section">
-                <span class="line"></span>
-                <i class="fa-solid fa-chevron-down"></i>
-                <span class="line"></span>
-            </div>
-
-            <!-- TOP PERFORMER - INDEPENDENT FROM API -->
-            <div class="section" style="text-align: center;">
-                <h2>Top performer</h2>
-                <div class="leader-card" id="topPerformerCard">
-                    <div class="leader-avatar" id="topPerformerAvatar">
-                        <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Top Student" style="width:100%; height:100%; border-radius:50%; object-fit: cover;">
-                    </div>
-                    <div class="leader-name" id="topPerformerName">Hatim</div>
-                    <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
-                    <p style="margin-top: 0.8rem;" id="topPerformerBadge">Most consistent learner this month</p>
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form">
+                <h3>Create Account</h3>
+                <input type="text" id="registerName" class="auth-input" placeholder="Full Name (optional)">
+                <input type="email" id="registerEmail" class="auth-input" placeholder="Email" required>
+                <input type="password" id="registerPassword" class="auth-input" placeholder="Password" required>
+                <input type="password" id="registerConfirm" class="auth-input" placeholder="Confirm Password" required>
+                <div id="registerMessage" class="auth-message"></div>
+                <button class="auth-button" onclick="handleRegister()">Sign Up</button>
+                <div class="auth-switch">
+                    Already have an account? <span onclick="switchAuthTab('login')">Login</span>
                 </div>
-
-                <!-- Top 5 Students Section (from API) -->
-                <h3 style="margin-top: 3rem;">Top 5 Students</h3>
-                <div class="top5-grid" id="top5Grid"></div>
-            </div>
-
-            <div class="arrow-section">
-                <span class="line"></span>
-                <i class="fa-solid fa-chevron-down"></i>
-                <span class="line"></span>
-            </div>
-
-            <div class="section" style="text-align: center;">
-                <h2>Start today's lesson</h2>
-                <p>Use the code provided by your instructor.</p>
-                <button class="btn btn-primary" onclick="startLesson()"><i class="fa-regular fa-circle-play"></i> Begin lesson</button>
             </div>
         </div>
 
-        <!-- LESSON PAGE -->
-        <div id="lessonPage" class="hidden">
-            <div class="section lesson-centered" id="lessonCodeSection">
-                <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
-                <input id="codeInput" type="text" placeholder="e.g. 1234" maxlength="4" pattern="\d*" inputmode="numeric" onkeypress="return isNumberKey(event)">
-                <div class="input-hint">The code is sent by the coordinator.</div>
-                <button class="btn btn-primary" onclick="checkCode()">Access</button>
+        <!-- MAIN CONTENT (shown after login) -->
+        <div id="mainContent" style="display: none;">
+            <!-- Streak Badge -->
+            <div class="streak-badge" id="streakBadge">
+                <i class="fa-regular fa-fire-flame"></i>
+                <span>Current streak: <span id="streakCount">0</span> days</span>
             </div>
 
-            <div id="lessonContent" class="hidden">
-                <div class="section lesson-centered">
-                    <h2>Today's session</h2>
-                    <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
-                    <div class="marks-info" id="marksDisplay"><i class="fa-regular fa-star"></i> 5 Marks</div>
-                    <div class="deadline-info" id="deadlineDisplay"></div>
-                    
-                    <!-- Instructions box -->
-                    <div class="instructions">
-                        <p><strong>Instructions</strong></p>
-                        <p>• Watch the video carefully. You can use subtitles.</p>
-                        <p>• Answer the reflection questions in your notebook.</p>
-                        <p>• Read the passage aloud at least twice.</p>
-                        <p>• Learn the vocabulary words and try to use them in a sentence.</p>
-                        <p>• Record your speaking task and share it in the WhatsApp group.</p>
-                        <p>• All tasks must be submitted before the deadline above.</p>
+            <!-- HOME PAGE -->
+            <div id="home">
+                <div class="section">
+                    <h1>Master English through daily practice</h1>
+                    <p>Fluency is a structured, no‑fluff program: every day a new lesson with video, reading, vocabulary and speaking. Clear progress, real results.</p>
+                    <div class="quote">
+                        “Language is the road map of a culture. It tells you where its people come from and where they are going.” – Rita Mae Brown
+                    </div>
+                </div>
+
+                <div class="arrow-section">
+                    <span class="line"></span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                    <span class="line"></span>
+                </div>
+
+                <div class="section">
+                    <h2>How the program works</h2>
+                    <p>– One 20‑minute lesson delivered daily<br>
+                       – Focus on real‑life phrases and pronunciation<br>
+                       – Vocabulary from context, not lists<br>
+                       – Speaking tasks with community feedback<br>
+                       – Progress dashboard to track consistency</p>
+                </div>
+
+                <div class="arrow-section">
+                    <span class="line"></span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                    <span class="line"></span>
+                </div>
+
+                <!-- TOP PERFORMER -->
+                <div class="section" style="text-align: center;">
+                    <h2>Top performer</h2>
+                    <div class="leader-card" id="topPerformerCard">
+                        <div class="leader-avatar" id="topPerformerAvatar">
+                            <img src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Top Student">
+                        </div>
+                        <div class="leader-name" id="topPerformerName">Hatim</div>
+                        <div class="leader-points" id="topPerformerPoints"><i class="fa-regular fa-star"></i> 71 points</div>
+                        <p style="margin-top: 0.8rem;" id="topPerformerBadge">Most consistent learner this month</p>
                     </div>
 
-                    <!-- Progress indicator (without text) -->
-                    <div class="progress-container">
-                        <div class="progress-bar-container">
-                            <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                    <!-- Top 5 Students -->
+                    <h3 style="margin-top: 3rem;">Top 5 Students</h3>
+                    <div class="top5-grid" id="top5Grid"></div>
+                </div>
+
+                <div class="arrow-section">
+                    <span class="line"></span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                    <span class="line"></span>
+                </div>
+
+                <div class="section" style="text-align: center;">
+                    <h2>Start today's lesson</h2>
+                    <p>Use the code provided by your instructor.</p>
+                    <button class="btn btn-primary" onclick="startLesson()"><i class="fa-regular fa-circle-play"></i> Begin lesson</button>
+                </div>
+            </div>
+
+            <!-- LESSON PAGE -->
+            <div id="lessonPage" class="hidden">
+                <div class="section lesson-centered" id="lessonCodeSection">
+                    <h2><i class="fa-regular fa-keyboard" style="margin-right: 0.8rem;"></i> Enter lesson code</h2>
+                    <input id="codeInput" type="text" placeholder="e.g. 1234" maxlength="4" pattern="\d*" inputmode="numeric" onkeypress="return isNumberKey(event)">
+                    <div class="input-hint">The code is sent by the coordinator.</div>
+                    <button class="btn btn-primary" onclick="checkCode()">Access</button>
+                </div>
+
+                <div id="lessonContent" class="hidden">
+                    <div class="section lesson-centered">
+                        <h2>Today's session</h2>
+                        <p><i class="fa-regular fa-clock" style="color:#2f77b3;"></i> You have <strong>48 hours</strong> to complete this lesson.</p>
+                        <div class="marks-info" id="marksDisplay"><i class="fa-regular fa-star"></i> 5 Marks</div>
+                        <div class="deadline-info" id="deadlineDisplay"></div>
+                        
+                        <div class="instructions">
+                            <p><strong>Instructions</strong></p>
+                            <p>• Watch the video carefully. You can use subtitles.</p>
+                            <p>• Answer the reflection questions in your notebook.</p>
+                            <p>• Read the passage aloud at least twice.</p>
+                            <p>• Learn the vocabulary words and try to use them in a sentence.</p>
+                            <p>• Record your speaking task and share it in the WhatsApp group.</p>
+                            <p>• All tasks must be submitted before the deadline above.</p>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar-container">
+                                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tasks -->
-                <div class="lesson-tasks" id="lessonTasks">
-                    <!-- Task 1: Video -->
-                    <div class="task-card" id="task1">
-                        <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
-                        <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
+                    <!-- Tasks -->
+                    <div class="lesson-tasks" id="lessonTasks">
+                        <div class="task-card" id="task1">
+                            <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
+                            </div>
+                            <p>Listen actively. You may use subtitles the first time.</p>
                         </div>
-                        <p>Listen actively. You may use subtitles the first time.</p>
-                    </div>
 
-                    <!-- Task 2: Reflection -->
-                    <div class="task-card hidden-task" id="task2">
-                        <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-                        <p>• What are two main ways technology has improved daily life?</p>
-                        <p>• Mention one negative effect of technology discussed.</p>
-                        <p>• How does technology influence communication?</p>
-                    </div>
+                        <div class="task-card hidden-task" id="task2">
+                            <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
+                            <p>• What are two main ways technology has improved daily life?</p>
+                            <p>• Mention one negative effect of technology discussed.</p>
+                            <p>• How does technology influence communication?</p>
+                        </div>
 
-                    <!-- Task 3: Reading -->
-                    <div class="task-card hidden-task" id="task3">
-                        <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                        <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
-                            “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
+                        <div class="task-card hidden-task" id="task3">
+                            <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+                            <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7;">
+                                “Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...”
+                            </div>
+                        </div>
+
+                        <div class="task-card hidden-task" id="task4">
+                            <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+                            <ul style="margin-left: 1.8rem;">
+                                <li><strong>persistence</strong> – continuing despite difficulty</li>
+                                <li><strong>momentum</strong> – force that keeps something moving</li>
+                                <li><strong>consistency</strong> – doing the same thing regularly</li>
+                                <li><strong>exposure</strong> – contact with something (e.g. language)</li>
+                                <li><strong>discipline</strong> – controlled behaviour to achieve a goal</li>
+                            </ul>
+                        </div>
+
+                        <div class="task-card hidden-task" id="task5">
+                            <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
+                            <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
+                            <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
                         </div>
                     </div>
 
-                    <!-- Task 4: Vocabulary -->
-                    <div class="task-card hidden-task" id="task4">
-                        <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-                        <ul style="margin-left: 1.8rem; color: inherit;">
-                            <li><strong>persistence</strong> – continuing despite difficulty</li>
-                            <li><strong>momentum</strong> – force that keeps something moving</li>
-                            <li><strong>consistency</strong> – doing the same thing regularly</li>
-                            <li><strong>exposure</strong> – contact with something (e.g. language)</li>
-                            <li><strong>discipline</strong> – controlled behaviour to achieve a goal</li>
-                        </ul>
-                    </div>
-
-                    <!-- Task 5: Speaking -->
-                    <div class="task-card hidden-task" id="task5">
-                        <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
-                        <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
-                        <button class="btn" style="margin-top: 0.8rem;" onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
+                    <!-- Navigation buttons -->
+                    <div class="task-nav-buttons" id="taskNav">
+                        <button class="btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextTask()">Next</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Navigation buttons -->
-                <div class="task-nav-buttons" id="taskNav">
-                    <button class="btn" id="prevBtn" onclick="prevTask()" style="visibility: hidden;">Previous</button>
-                    <button class="btn btn-primary" id="nextBtn" onclick="nextTask()">Next</button>
+            <!-- Popup for completion message -->
+            <div id="completionPopup" class="hidden">
+                <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
+                <div class="custom-popup">
+                    <div class="popup-title">You Did It!</div>
+                    <div class="popup-message">You have successfully completed all tasks. Your dedication is truly inspiring. Keep up the great work!</div>
+                    <button class="popup-btn" onclick="closePopupAndGoHome()">Continue</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Popup for completion message -->
-        <div id="completionPopup" class="hidden">
-            <div class="popup-overlay" onclick="closePopupAndGoHome()"></div>
-            <div class="custom-popup">
-                <div class="popup-title">You Did It!</div>
-                <div class="popup-message">You have successfully completed all tasks. Your dedication is truly inspiring. Keep up the great work!</div>
-                <button class="popup-btn" onclick="closePopupAndGoHome()">Continue</button>
-            </div>
-        </div>
-
-        <!-- ABOUT PAGE -->
-        <div id="about" class="hidden">
-            <div class="section">
-                <h2>About Fluency</h2>
-                <p>Fluency was created for adult learners who want practical English skills without hype. Our curriculum focuses on the most useful words and sentence structures, repeated until they become automatic.</p>
-                <p>We combine short video clips, graded reading passages, and daily speaking drills. Every lesson builds on previous ones, reinforcing vocabulary in context.</p>
-                <p>No gamification gimmicks – just honest, structured practice. The only thing we track is your consistency, because that's what truly matters.</p>
-            </div>
-        </div>
-
-        <!-- SERVICES PAGE -->
-        <div id="services" class="hidden">
-            <div class="section">
-                <h2>What we offer</h2>
-                <p>– Daily video lesson with comprehension check</p>
-                <p>– Reading passage + vocabulary focus</p>
-                <p>– Weekly speaking task with peer feedback</p>
-                <p>– Personal progress report (streak, points, areas to improve)</p>
-                <p>– Access to WhatsApp community for questions & practice</p>
-            </div>
-        </div>
-
-        <!-- STATISTICS PAGE -->
-        <div id="statistics" class="hidden">
-            <div class="section">
-                <h2>Student Statistics</h2>
-                <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
-
-                <!-- Loading indicator -->
-                <div id="statsLoading" style="text-align: center; padding: 2rem;">
-                    <div class="loading-spinner"></div>
-                    <p style="margin-top: 1rem;">Loading statistics...</p>
+            <!-- ABOUT PAGE -->
+            <div id="about" class="hidden">
+                <div class="section">
+                    <h2>About Fluency</h2>
+                    <p>Fluency was created for adult learners who want practical English skills without hype. Our curriculum focuses on the most useful words and sentence structures, repeated until they become automatic.</p>
+                    <p>We combine short video clips, graded reading passages, and daily speaking drills. Every lesson builds on previous ones, reinforcing vocabulary in context.</p>
+                    <p>No gamification gimmicks – just honest, structured practice. The only thing we track is your consistency, because that's what truly matters.</p>
                 </div>
-
-                <!-- Stats Cards -->
-                <div class="stats-grid" id="statsCards" style="display: none;"></div>
-
-                <!-- Top 5 Students Table -->
-                <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
-                <table class="student-table" id="top5Table" style="display: none;"></table>
-
-                <!-- Category Performance Chart -->
-                <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
-                <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-
-                <!-- Grade Distribution Chart -->
-                <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
-                <div class="chart-container" id="distributionChartContainer" style="display: none;">
-                    <canvas id="distributionChart"></canvas>
-                </div>
-
-                <!-- Full Student Table -->
-                <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
-                <table class="student-table" id="fullStudentTable" style="display: none;"></table>
             </div>
-        </div>
 
-        <!-- CONTACT PAGE -->
-        <div id="contact" class="hidden">
-            <div class="section">
-                <h2>Contact & community</h2>
-                <p>Reach out directly or join our learning group.</p>
-                <div class="contact-grid">
-                    <div class="contact-card">
-                        <i class="fa-regular fa-user"></i>
-                        <h3>Amer Abdulrhman</h3>
-                        <p>Program Director</p>
+            <!-- SERVICES PAGE -->
+            <div id="services" class="hidden">
+                <div class="section">
+                    <h2>What we offer</h2>
+                    <p>– Daily video lesson with comprehension check</p>
+                    <p>– Reading passage + vocabulary focus</p>
+                    <p>– Weekly speaking task with peer feedback</p>
+                    <p>– Personal progress report (streak, points, areas to improve)</p>
+                    <p>– Access to WhatsApp community for questions & practice</p>
+                </div>
+            </div>
+
+            <!-- STATISTICS PAGE -->
+            <div id="statistics" class="hidden">
+                <div class="section">
+                    <h2>Student Statistics</h2>
+                    <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
+
+                    <!-- Loading indicator -->
+                    <div id="statsLoading" style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner"></div>
+                        <p style="margin-top: 1rem;">Loading statistics...</p>
                     </div>
-                    <div class="contact-card">
-                        <i class="fa-regular fa-phone"></i>
-                        <h3>Phone</h3>
-                        <p>+966 55 259 7139</p>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid" id="statsCards" style="display: none;"></div>
+
+                    <!-- Top 5 Students Table -->
+                    <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
+                    <table class="student-table" id="top5Table" style="display: none;"></table>
+
+                    <!-- Category Performance Chart -->
+                    <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
+                    <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
+                        <canvas id="categoryChart"></canvas>
                     </div>
-                    <div class="contact-card">
-                        <i class="fa-regular fa-envelope"></i>
-                        <h3>Email</h3>
-                        <p>mnb145367@gmail.com</p>
+
+                    <!-- Grade Distribution Chart -->
+                    <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
+                    <div class="chart-container" id="distributionChartContainer" style="display: none;">
+                        <canvas id="distributionChart"></canvas>
                     </div>
+
+                    <!-- Full Student Table -->
+                    <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
+                    <table class="student-table" id="fullStudentTable" style="display: none;"></table>
                 </div>
-                <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
+            </div>
+
+            <!-- CONTACT PAGE -->
+            <div id="contact" class="hidden">
+                <div class="section">
+                    <h2>Contact & community</h2>
+                    <p>Reach out directly or join our learning group.</p>
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <i class="fa-regular fa-user"></i>
+                            <h3>Amer Abdulrhman</h3>
+                            <p>Program Director</p>
+                        </div>
+                        <div class="contact-card">
+                            <i class="fa-regular fa-phone"></i>
+                            <h3>Phone</h3>
+                            <p>+966 55 259 7139</p>
+                        </div>
+                        <div class="contact-card">
+                            <i class="fa-regular fa-envelope"></i>
+                            <h3>Email</h3>
+                            <p>mnb145367@gmail.com</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1278,65 +1285,345 @@
 
     <script>
         // ============================================
-        // روابط API منفصلة
+        // SUPABASE CONFIGURATION
         // ============================================
-        const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec'; // API الطلاب
-        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // API الدروس
+        const SUPABASE_URL = 'https://gxwqopilkzgvevhaviyz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4d3FvcGlsa3pndmV2aGF2aXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDM4NDMsImV4cCI6MjA4ODQ3OTg0M30.ghpphewyov2iDG9mJF5o_6KPU68_HVm9ChMAaT5fPRw';
 
-        // Global variables
+        // Initialize Supabase client
+        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbx4i4Z6dVGuIacLIKP9TtwQc3IpzNv47TNGXYKZmCmizuuESWBUWPEKSXwSH6qgakqzew/exec';
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec';
+
         let studentsData = [];
         let chartsInitialized = false;
         let categoryChart, distributionChart;
-        let lessonCode = "1234"; // Default value
+        let lessonCode = "1234";
         let currentTask = 1;
         const totalTasks = 5;
+        let currentUser = null;
+        let userProgress = [];
 
         // ============================================
-        // تحميل بيانات الدرس من API الدروس
+        // AUTHENTICATION FUNCTIONS
+        // ============================================
+
+        // Check current auth session
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.getElementById('userMenu').style.display = 'inline-block';
+                
+                // Update user info in dropdown
+                document.getElementById('dropdownUserEmail').textContent = user.email;
+                const userName = user.user_metadata?.name || 'Fluency User';
+                document.getElementById('dropdownUserName').textContent = userName;
+                
+                // Load user progress
+                await loadUserProgress(user.id);
+            } else {
+                currentUser = null;
+                document.getElementById('authSection').style.display = 'block';
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'none';
+            }
+        }
+
+        // Switch between login and register tabs
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        // Handle login
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                document.getElementById('loginMessage').textContent = 'Please enter email and password';
+                return;
+            }
+            
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+            
+            if (error) {
+                document.getElementById('loginMessage').textContent = error.message;
+            } else {
+                document.getElementById('loginMessage').textContent = '';
+                await checkAuth();
+                showNotification('Successfully logged in!');
+            }
+        }
+
+        // Handle registration
+        async function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            const messageDiv = document.getElementById('registerMessage');
+            messageDiv.className = 'auth-message';
+            
+            if (!email || !password) {
+                messageDiv.textContent = 'Email and password are required';
+                messageDiv.classList.add('auth-error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                messageDiv.textContent = 'Passwords do not match';
+                messageDiv.classList.add('auth-error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                messageDiv.textContent = 'Password must be at least 6 characters';
+                messageDiv.classList.add('auth-error');
+                return;
+            }
+            
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        name: name || 'Fluency User'
+                    }
+                }
+            });
+            
+            if (error) {
+                messageDiv.textContent = error.message;
+                messageDiv.classList.add('auth-error');
+            } else {
+                messageDiv.textContent = 'Registration successful! Please check your email for verification.';
+                messageDiv.classList.add('auth-success');
+                
+                // Clear form
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirm').value = '';
+                
+                // Switch to login tab after 3 seconds
+                setTimeout(() => switchAuthTab('login'), 3000);
+            }
+        }
+
+        // Handle logout
+        async function logout() {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                showNotification('Error logging out: ' + error.message, 'error');
+            } else {
+                currentUser = null;
+                await checkAuth();
+                showNotification('Logged out successfully');
+            }
+        }
+
+        // ============================================
+        // USER PROGRESS FUNCTIONS
+        // ============================================
+
+        // Load user progress from Supabase
+        async function loadUserProgress(userId) {
+            try {
+                // Get today's date
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Get all progress for this user
+                const { data, error } = await supabase
+                    .from('user_progress')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .order('completed_date', { ascending: false });
+                
+                if (error) {
+                    console.error('Error loading progress:', error);
+                    return;
+                }
+                
+                userProgress = data || [];
+                
+                // Calculate streak
+                const streak = calculateStreak(userProgress);
+                document.getElementById('streakCount').textContent = streak;
+                document.getElementById('userStreak').textContent = streak;
+                
+            } catch (error) {
+                console.error('Error in loadUserProgress:', error);
+            }
+        }
+
+        // Calculate current streak
+        function calculateStreak(progress) {
+            if (!progress || progress.length === 0) return 0;
+            
+            let streak = 0;
+            let currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            
+            // Group by date
+            const completedDates = [...new Set(progress.map(p => p.completed_date))];
+            
+            for (let i = 0; i < completedDates.length; i++) {
+                const progressDate = new Date(completedDates[i]);
+                progressDate.setHours(0, 0, 0, 0);
+                
+                const diffDays = Math.floor((currentDate - progressDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === streak) {
+                    streak++;
+                    currentDate = progressDate;
+                } else if (diffDays > streak) {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        // Complete a lesson
+        async function completeLesson(lessonId) {
+            if (!currentUser) {
+                showNotification('Please login first');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Check if already completed today
+            const alreadyCompleted = userProgress.some(p => 
+                p.lesson_id === lessonId && p.completed_date === today
+            );
+            
+            if (alreadyCompleted) {
+                showNotification('You have already completed this lesson today!');
+                return;
+            }
+            
+            const { data, error } = await supabase
+                .from('user_progress')
+                .insert([
+                    {
+                        user_id: currentUser.id,
+                        lesson_id: lessonId,
+                        completed_date: today
+                    }
+                ]);
+            
+            if (error) {
+                if (error.code === '23505') {
+                    showNotification('Lesson already completed today');
+                } else {
+                    showNotification('Error saving progress: ' + error.message);
+                }
+            } else {
+                showNotification('Lesson completed! Great job! 🎉');
+                await loadUserProgress(currentUser.id);
+            }
+        }
+
+        // Show my progress page
+        function showMyProgress() {
+            openPage('statistics');
+            
+            // Add user-specific stats here
+            const completedCount = userProgress.length;
+            const streak = calculateStreak(userProgress);
+            
+            showNotification(`You've completed ${completedCount} lessons with a ${streak}-day streak!`);
+        }
+
+        // Show settings
+        function showSettings() {
+            alert('Settings page coming soon!');
+        }
+
+        // ============================================
+        // PAGE NAVIGATION
+        // ============================================
+        function reload() { 
+            location.reload(); 
+        }
+
+        function openPage(page) {
+            const pages = ['home', 'lessonPage', 'about', 'services', 'statistics', 'contact'];
+            pages.forEach(p => {
+                const element = document.getElementById(p);
+                if (element) element.classList.add('hidden');
+            });
+            
+            const targetElement = document.getElementById(page);
+            if (targetElement) {
+                targetElement.classList.remove('hidden');
+            }
+
+            if (page === 'statistics') {
+                renderStatisticsPage();
+            }
+        }
+
+        function startLesson() {
+            openPage('lessonPage');
+            document.getElementById('lessonContent').classList.add('hidden');
+            document.getElementById('lessonCodeSection').style.display = 'block';
+        }
+
+        // ============================================
+        // LESSON CODE FUNCTIONS
         // ============================================
         async function loadLessonFromCloud() {
             try {
-                console.log('Loading lesson from cloud...');
                 const response = await fetch(LESSON_API_URL);
                 const result = await response.json();
-                console.log('Lesson API response:', result);
                 
                 if (result && result.data) {
-                    // تحديث lessonCode أولاً
                     if (result.data.lessonCode) {
-                        lessonCode = String(result.data.lessonCode); // تأكد من تحويله إلى نص
-                        console.log('Lesson code updated to:', lessonCode);
-                        
-                        // تخزين الكود في localStorage للاستخدام المستقبلي
+                        lessonCode = String(result.data.lessonCode);
                         localStorage.setItem('fluencyLessonCode', lessonCode);
                     }
-                    
                     applyLessonData(result.data);
-                    console.log('✅ Lesson data loaded from cloud.');
                 } else {
-                    console.log('No cloud data, using local backup.');
-                    loadSavedLessonData(); // استخدام النسخة الاحتياطية المحلية
+                    loadSavedLessonData();
                 }
             } catch (error) {
-                console.error('Error loading from cloud, using local backup.', error);
                 loadSavedLessonData();
             }
         }
 
         function applyLessonData(data) {
-            // تحديث كود الدرس
             if (data.lessonCode) {
                 lessonCode = String(data.lessonCode);
-                console.log('Applying lesson code:', lessonCode);
             }
             
-            // تحديث العلامات
             const marksElement = document.querySelector('.marks-info');
             if (marksElement && data.marks) {
                 marksElement.innerHTML = `<i class="fa-regular fa-star"></i> ${data.marks} Marks`;
             }
             
-            // تحديث الموعد النهائي
             if (data.deadline) {
                 const deadlineElement = document.getElementById('deadlineDisplay');
                 if (deadlineElement) {
@@ -1344,56 +1631,12 @@
                 }
             }
             
-            // تحديث الفيديو
             if (data.videoUrl) {
                 const videoFrame = document.querySelector('#task1 iframe');
                 if (videoFrame) videoFrame.src = data.videoUrl;
             }
-            
-            // تحديث الأسئلة
-            if (data.questions) {
-                const task2 = document.getElementById('task2');
-                if (task2) {
-                    const questionsHtml = data.questions.split('\n').filter(q => q.trim()).map(q => `<p>${q}</p>`).join('');
-                    task2.innerHTML = `
-                        <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-                        ${questionsHtml}
-                    `;
-                }
-            }
-            
-            // تحديث النص القرائي
-            if (data.reading) {
-                const task3 = document.getElementById('task3');
-                if (task3) {
-                    task3.innerHTML = `
-                        <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                        <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
-                            “${data.reading}”
-                        </div>
-                    `;
-                }
-            }
-            
-            // تحديث المفردات
-            if (data.vocabulary) {
-                const task4 = document.getElementById('task4');
-                if (task4) {
-                    const vocabHtml = data.vocabulary.split('\n').filter(v => v.trim()).map(v => {
-                        const parts = v.split('–');
-                        return `<li><strong>${parts[0].trim()}</strong> – ${parts[1]?.trim() || ''}</li>`;
-                    }).join('');
-                    task4.innerHTML = `
-                        <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-                        <ul style="margin-left: 1.8rem; color: inherit;">
-                            ${vocabHtml}
-                        </ul>
-                    `;
-                }
-            }
         }
 
-        // تحميل من localStorage
         function loadSavedLessonData() {
             const saved = localStorage.getItem('fluencyLessonData');
             if (saved) {
@@ -1401,32 +1644,95 @@
                     const data = JSON.parse(saved);
                     applyLessonData(data);
                     
-                    // تحديث lessonCode من localStorage أيضاً
                     const savedCode = localStorage.getItem('fluencyLessonCode');
                     if (savedCode) {
                         lessonCode = savedCode;
-                        console.log('Loaded lesson code from localStorage:', lessonCode);
                     }
-                } catch (e) {
-                    console.error('Error parsing local backup', e);
-                }
+                } catch (e) {}
             }
         }
 
+        function checkCode() {
+            const input = document.getElementById('codeInput');
+            const enteredCode = input.value.trim();
+            
+            if (enteredCode === String(lessonCode)) {
+                document.getElementById('lessonContent').classList.remove('hidden');
+                document.getElementById('lessonCodeSection').style.display = 'none';
+                showTask(1);
+                input.value = '';
+                
+                // Track lesson access in progress
+                if (currentUser) {
+                    console.log('User accessed lesson');
+                }
+            } else {
+                alert('Incorrect code. Please try again.');
+                input.style.borderColor = '#cc7b7b';
+                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
+            }
+        }
+
+        function showTask(taskNum) {
+            for (let i = 1; i <= totalTasks; i++) {
+                const taskEl = document.getElementById(`task${i}`);
+                if (taskEl) {
+                    taskEl.classList.toggle('hidden-task', i !== taskNum);
+                }
+            }
+            
+            const progressPercent = (taskNum / totalTasks) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            
+            if (taskNum === 1) {
+                nextBtn.innerText = 'Next';
+                prevBtn.style.visibility = 'hidden';
+            } else if (taskNum === totalTasks) {
+                nextBtn.innerText = 'Finish';
+                prevBtn.style.visibility = 'visible';
+            } else {
+                nextBtn.innerText = 'Next';
+                prevBtn.style.visibility = 'visible';
+            }
+        }
+
+        function nextTask() {
+            if (currentTask === totalTasks) {
+                document.getElementById('completionPopup').classList.remove('hidden');
+                // Mark lesson as completed
+                if (currentUser) {
+                    completeLesson(1); // Lesson ID 1 for now
+                }
+            } else {
+                currentTask++;
+                showTask(currentTask);
+            }
+        }
+
+        function prevTask() {
+            if (currentTask > 1) {
+                currentTask--;
+                showTask(currentTask);
+            }
+        }
+
+        function closePopupAndGoHome() {
+            document.getElementById('completionPopup').classList.add('hidden');
+            openPage('home');
+        }
+
         // ============================================
-        // تحميل بيانات الطلاب من API الطلاب
+        // STATISTICS FUNCTIONS
         // ============================================
         async function fetchStudentData() {
             try {
                 const response = await fetch(STUDENTS_API_URL);
                 const data = await response.json();
-                if (!data.success) {
-                    console.error('API Error:', data.error);
-                    return [];
-                }
                 return data.data || [];
             } catch (error) {
-                console.error('Failed to fetch student data:', error);
                 return [];
             }
         }
@@ -1434,10 +1740,8 @@
         function calculateStatistics(students) {
             if (!students.length) return null;
             
-            // Sort by total
             const sorted = [...students].sort((a, b) => (b.total || 0) - (a.total || 0));
             
-            // Update top 5 grid in home page
             const top5Grid = document.getElementById('top5Grid');
             const top5 = sorted.slice(0, 5);
             top5Grid.innerHTML = top5.map(s => `
@@ -1447,30 +1751,16 @@
                 </div>
             `).join('');
             
-            // Calculate category averages
-            const categories = {
-                quiz: 0, homework: 0, weekly: 0, presentation: 0
-            };
-            
+            const categories = { quiz: 0, homework: 0, weekly: 0, presentation: 0 };
             let quizCount = 0, weeklyCount = 0, presCount = 0;
             
             students.forEach(s => {
                 if (s.quiz) { categories.quiz += s.quiz; quizCount++; }
-                if (s.hw1) categories.homework += s.hw1;
-                if (s.hw2) categories.homework += s.hw2;
-                if (s.hw3) categories.homework += s.hw3;
-                if (s.hw4) categories.homework += s.hw4;
-                if (s.hw5) categories.homework += s.hw5;
-                if (s.hw6) categories.homework += s.hw6;
-                if (s.hw7) categories.homework += s.hw7;
-                if (s.hw8) categories.homework += s.hw8;
-                if (s.hw9) categories.homework += s.hw9;
                 if (s.w1) { categories.weekly += s.w1; weeklyCount++; }
                 if (s.pres1) { categories.presentation += s.pres1; presCount++; }
             });
             
             categories.quiz = quizCount ? (categories.quiz / quizCount).toFixed(1) : 0;
-            categories.homework = (categories.homework / (students.length * 9)).toFixed(1);
             categories.weekly = weeklyCount ? (categories.weekly / weeklyCount).toFixed(1) : 0;
             categories.presentation = presCount ? (categories.presentation / presCount).toFixed(1) : 0;
             
@@ -1483,9 +1773,6 @@
             return { categories, distribution, sorted, top5 };
         }
 
-        // ============================================
-        // RENDER STATISTICS PAGE
-        // ============================================
         async function renderStatisticsPage() {
             document.getElementById('statsLoading').style.display = 'block';
             document.getElementById('statsCards').style.display = 'none';
@@ -1568,7 +1855,6 @@
             }
         }
 
-        // Chart functions
         function createCategoryChart(catData) {
             const ctx = document.getElementById('categoryChart').getContext('2d');
             categoryChart = new Chart(ctx, {
@@ -1585,13 +1871,8 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#103a5e' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, max: 20, grid: { color: 'rgba(75,130,190,0.1)' } }
-                    }
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 20 } }
                 }
             });
         }
@@ -1611,9 +1892,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    },
+                    plugins: { legend: { position: 'bottom' } },
                     cutout: '65%'
                 }
             });
@@ -1631,7 +1910,7 @@
         }
 
         // ============================================
-        // TOP PERFORMER (Independent - localStorage)
+        // TOP PERFORMER FUNCTIONS
         // ============================================
         function loadTopPerformer() {
             const saved = localStorage.getItem('fluencyTopPerformer');
@@ -1652,138 +1931,12 @@
                         const avatarImg = document.querySelector('#topPerformerAvatar img');
                         if (avatarImg) avatarImg.src = data.avatar;
                     }
-                } catch (e) {
-                    console.error('Error loading top performer', e);
-                }
+                } catch (e) {}
             }
-        }
-
-        // ============================================
-        // PAGE NAVIGATION
-        // ============================================
-        function reload() { location.reload(); }
-
-        function openPage(page) {
-            const pages = ['home','lessonPage','about','services','statistics','contact'];
-            pages.forEach(p => {
-                const element = document.getElementById(p);
-                if (element) element.classList.add('hidden');
-            });
-            
-            const targetElement = document.getElementById(page);
-            if (targetElement) {
-                targetElement.classList.remove('hidden');
-            }
-
-            if (page === 'statistics') {
-                renderStatisticsPage();
-            }
-        }
-
-        function startLesson() {
-            openPage('lessonPage');
-            document.getElementById('lessonContent').classList.add('hidden');
-            document.getElementById('lessonCodeSection').style.display = 'block';
-        }
-
-        // ============================================
-        // LESSON CODE & NAVIGATION
-        // ============================================
-        function checkCode() {
-            const input = document.getElementById('codeInput');
-            const enteredCode = input.value.trim();
-            
-            console.log('Entered code:', enteredCode);
-            console.log('Expected code:', lessonCode);
-            console.log('Code types:', typeof enteredCode, typeof lessonCode);
-            
-            // Convert both to strings for comparison
-            if (enteredCode === String(lessonCode)) {
-                console.log('✅ Code correct!');
-                document.getElementById('lessonContent').classList.remove('hidden');
-                document.getElementById('lessonCodeSection').style.display = 'none';
-                showTask(1);
-                input.value = '';
-            } else {
-                console.log('❌ Code incorrect!');
-                alert('Incorrect code. Please try again.');
-                input.style.borderColor = '#cc7b7b';
-                setTimeout(() => input.style.borderColor = '#c7ddef', 800);
-            }
-        }
-
-        function showTask(taskNum) {
-            for (let i = 1; i <= totalTasks; i++) {
-                const taskEl = document.getElementById(`task${i}`);
-                if (taskEl) {
-                    taskEl.classList.toggle('hidden-task', i !== taskNum);
-                }
-            }
-            const progressPercent = (taskNum / totalTasks) * 100;
-            document.getElementById('progressFill').style.width = `${progressPercent}%`;
-
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            
-            if (taskNum === 1) {
-                nextBtn.innerText = 'Next';
-                prevBtn.style.visibility = 'hidden';
-            } else if (taskNum === totalTasks) {
-                nextBtn.innerText = 'Finish';
-                prevBtn.style.visibility = 'visible';
-            } else {
-                nextBtn.innerText = 'Next';
-                prevBtn.style.visibility = 'visible';
-            }
-        }
-
-        function nextTask() {
-            if (currentTask === totalTasks) {
-                document.getElementById('completionPopup').classList.remove('hidden');
-            } else {
-                currentTask++;
-                showTask(currentTask);
-            }
-        }
-
-        function prevTask() {
-            if (currentTask > 1) {
-                currentTask--;
-                showTask(currentTask);
-            }
-        }
-
-        function closePopupAndGoHome() {
-            document.getElementById('completionPopup').classList.add('hidden');
-            openPage('home');
         }
 
         // ============================================
         // UTILITY FUNCTIONS
-        // ============================================
-        function showTempMessage() {
-            alert("Social media links will be added soon. Stay tuned!");
-        }
-
-        function isNumberKey(evt) {
-            const charCode = evt.which ? evt.which : evt.keyCode;
-            return !(charCode > 31 && (charCode < 48 || charCode > 57));
-        }
-
-        document.getElementById('codeInput')?.addEventListener('keypress', e => {
-            if (e.key === 'Enter') checkCode();
-        });
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        // ============================================
-        // DARK MODE
         // ============================================
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
@@ -1799,31 +1952,70 @@
             }
         }
 
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            const icon = document.querySelector('.dark-mode-toggle i');
-            if (icon) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
+        function showTempMessage() {
+            alert("Social media links will be added soon. Stay tuned!");
+        }
+
+        function isNumberKey(evt) {
+            const charCode = evt.which ? evt.which : evt.keyCode;
+            return !(charCode > 31 && (charCode < 48 || charCode > 57));
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.background = type === 'success' ? '#1e5a88' : '#cc3366';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
         }
 
         // ============================================
-        // INITIAL LOAD
+        // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
-            // Load saved lesson code from localStorage first
+            // Check dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                const icon = document.querySelector('.dark-mode-toggle i');
+                if (icon) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+            }
+            
+            // Load saved lesson code
             const savedCode = localStorage.getItem('fluencyLessonCode');
             if (savedCode) {
                 lessonCode = savedCode;
-                console.log('Initial lesson code from localStorage:', lessonCode);
             }
             
-            loadTopPerformer();           // من localStorage
-            await loadLessonFromCloud();   // من API الدروس
+            // Load top performer
+            loadTopPerformer();
             
-            const students = await fetchStudentData(); // من API الطلاب
+            // Load lesson data
+            await loadLessonFromCloud();
+            
+            // Check authentication
+            await checkAuth();
+            
+            // Set up auth state listener
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN') {
+                    checkAuth();
+                } else if (event === 'SIGNED_OUT') {
+                    checkAuth();
+                }
+            });
+            
+            // Load student statistics
+            const students = await fetchStudentData();
             if (students.length) calculateStatistics(students);
+        });
+
+        // Enter key for code input
+        document.getElementById('codeInput')?.addEventListener('keypress', e => {
+            if (e.key === 'Enter') checkCode();
         });
     </script>
 </body>
