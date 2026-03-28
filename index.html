@@ -1340,7 +1340,7 @@
             if (data.deadline) {
                 const deadlineElement = document.getElementById('deadlineDisplay');
                 if (deadlineElement) {
-                    deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} (23:59 your local time)`;
+                    deadlineElement.innerHTML = `<i class="fa-regular fa-calendar"></i> Deadline: ${data.deadline} `;
                 }
             }
             
@@ -1368,7 +1368,7 @@
                 if (task3) {
                     task3.innerHTML = `
                         <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                        <div style="background: transparent; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #d9ebf7; color: inherit;">
+                        <div style="background: transparent; border-radius: 1.8rem; padding: 1.8rem; border: 1px solid #d9ebf7; color: inherit;">
                             “${data.reading}”
                         </div>
                     `;
@@ -1646,7 +1646,7 @@
                     if (pointsEl) pointsEl.innerHTML = `<i class="fa-regular fa-star"></i> ${data.points || 71} points`;
                     
                     const badgeEl = document.getElementById('topPerformerBadge');
-                    if (badgeEl) badgeEl.textContent = data.badge || 'Most consistent learner this month';
+                    if (badgeEl) badgeEl.textContent = data.badge || 'Most consistent learner | Phase 1';
                     
                     if (data.avatar) {
                         const avatarImg = document.querySelector('#topPerformerAvatar img');
