@@ -6,829 +6,768 @@
     <title>Fluency • Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        :root{
-            --blue:#1e5a88;--blue-l:#367bb5;--blue-pale:#d9ecfd;--blue-soft:#f0f7ff;
-            --text:#1e2f4d;--muted:#5f7d9c;--border:#c7ddef;
-            --success:#28a745;--danger:#cc3366;--warning:#e08c00;--r:1.2rem;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body{font-family:'Calibri',sans-serif;background:linear-gradient(145deg,#e2f0ff,#fafcff);min-height:100vh;color:var(--text);font-size:1rem;}
-
-        /* LOGIN */
-        .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
-        .login-box{background:white;border-radius:2.5rem;padding:3rem;box-shadow:0 25px 45px -12px rgba(0,40,80,.3);text-align:center;width:100%;max-width:400px;}
-        .login-logo{font-size:3rem;font-weight:700;background:linear-gradient(130deg,#1f4e8c,#4a8abf);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.5rem;}
-        .login-box h2{color:var(--blue);margin-bottom:2rem;font-size:1.6rem;}
-        .login-box input{width:100%;padding:.9rem 1.4rem;border-radius:60px;border:2px solid var(--border);font-size:1rem;margin:.4rem 0;outline:none;transition:.2s;}
-        .login-box input:focus{border-color:var(--blue);}
-        .login-box button{width:100%;padding:.9rem;border-radius:60px;border:none;background:linear-gradient(115deg,var(--blue),var(--blue-l));color:white;font-size:1.05rem;font-weight:600;cursor:pointer;margin:.8rem 0;transition:.2s;}
-        .login-box button:hover{transform:scale(1.02);}
-        .err{color:var(--danger);margin-top:.8rem;font-size:.9rem;}
-
-        /* LAYOUT */
-        .app{display:none;min-height:100vh;}
-        .sidebar{
-            position:fixed;top:0;left:0;bottom:0;width:230px;
-            background:#103246;color:#e5f0fc;padding:1.2rem .8rem;
-            display:flex;flex-direction:column;gap:.2rem;z-index:200;overflow-y:auto;
-            box-shadow:4px 0 20px rgba(0,0,0,.15);
+        
+        body {
+            font-family: 'Calibri', sans-serif;
+            background: linear-gradient(145deg, #e2f0ff 0%, #fafcff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
-        .sb-logo{font-size:1.8rem;font-weight:700;background:linear-gradient(145deg,#aad0f5,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;padding:.4rem .7rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:.4rem;}
-        .nav-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;border-radius:.7rem;color:#b5d0e8;cursor:pointer;transition:.2s;font-size:.93rem;font-weight:500;}
-        .nav-item:hover{background:rgba(255,255,255,.08);color:white;}
-        .nav-item.active{background:rgba(255,255,255,.15);color:white;}
-        .nav-item i{width:16px;text-align:center;}
-        .nav-sec{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#6a90ae;padding:.7rem .8rem .2rem;margin-top:.3rem;}
-        .sb-logout{margin-top:auto;}
-        .main{margin-left:230px;padding:1.8rem;min-height:100vh;}
-
-        /* PANELS */
-        .panel{display:none;}.panel.active{display:block;}
-        .ph{margin-bottom:1.8rem;}.ph h2{font-size:1.7rem;color:var(--blue);margin-bottom:.2rem;}.ph p{color:var(--muted);font-size:.92rem;}
-
-        /* CARDS */
-        .card{background:white;border-radius:var(--r);padding:1.4rem;box-shadow:0 4px 16px rgba(0,40,80,.07);margin-bottom:1.4rem;}
-        .card h3{color:var(--blue);font-size:1.1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
-
-        /* FORMS */
-        .frow{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:.9rem;align-items:flex-end;}
-        .fg{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:140px;}
-        .fg label{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
-        .fg input,.fg textarea,.fg select{padding:.65rem .9rem;border-radius:.7rem;border:1.5px solid var(--border);font-size:.93rem;outline:none;transition:.2s;width:100%;font-family:'Calibri',sans-serif;background:white;}
-        .fg textarea{border-radius:.9rem;min-height:90px;resize:vertical;}
-        .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,90,136,.08);}
-        .hint{font-size:.78rem;color:var(--muted);margin-top:.15rem;}
-
-        /* BUTTONS */
-        .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:50px;border:1.5px solid var(--border);background:white;color:var(--blue);font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap;}
-        .btn:hover{background:var(--blue-soft);}
-        .btn-p{background:linear-gradient(115deg,var(--blue),var(--blue-l));color:white;border:none;box-shadow:0 4px 12px rgba(30,90,136,.25);}
-        .btn-p:hover{background:linear-gradient(115deg,#1a4e78,#2d6ca3);}
-        .btn-s{background:var(--success);color:white;border:none;}
-        .btn-s:hover{background:#1e8037;}
-        .btn-d{background:var(--danger);color:white;border:none;}
-        .btn-d:hover{background:#a82a52;}
-        .btn-w{background:var(--warning);color:white;border:none;}
-        .btn-w:hover{background:#b87000;}
-        .btn-sm{padding:.3rem .75rem;font-size:.8rem;}
-        .bgroup{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.5rem;}
-
-        /* STATUS BADGE */
-        .sync-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .7rem;border-radius:50px;font-size:.78rem;font-weight:600;}
-        .sync-ok{background:#d4edda;color:#155724;}
-        .sync-err{background:#f8d7da;color:#721c24;}
-        .sync-ing{background:var(--blue-pale);color:var(--blue);}
-
-        /* STATS ROW */
-        .srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.9rem;margin-bottom:1.4rem;}
-        .scard{background:white;border-radius:1rem;padding:.9rem;text-align:center;box-shadow:0 2px 8px rgba(0,40,80,.06);}
-        .scard .num{font-size:1.9rem;font-weight:700;color:var(--blue);}
-        .scard .lbl{font-size:.78rem;color:var(--muted);}
-
-        /* TABLE */
-        .twrap{overflow-x:auto;border-radius:.9rem;}
-        table{width:100%;border-collapse:collapse;font-size:.9rem;}
-        thead th{background:rgba(30,90,136,.08);padding:.65rem .75rem;text-align:left;font-size:.77rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);white-space:nowrap;}
-        tbody td{padding:.55rem .75rem;border-bottom:1px solid rgba(30,90,136,.07);vertical-align:middle;}
-        tbody tr:last-child td{border-bottom:none;}
-        tbody tr:hover{background:var(--blue-soft);}
-
-        .rank{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.72rem;font-weight:700;}
-        .r1{background:#ffd700;color:#7a5200;}.r2{background:#c0c0c0;color:#444;}.r3{background:#cd7f32;color:#fff;}.rn{background:var(--blue-pale);color:var(--blue);}
-
-        .bar{width:90px;height:7px;background:var(--blue-pale);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;}
-        .bar-fill{height:100%;background:var(--blue);border-radius:4px;}
-
-        /* MODAL */
-        .modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
-        .modal-bg.open{display:flex;}
-        .modal{background:white;border-radius:var(--r);padding:1.8rem;width:100%;max-width:480px;box-shadow:0 30px 60px rgba(0,40,80,.3);}
-        .modal h3{color:var(--blue);margin-bottom:1.2rem;font-size:1.3rem;}
-        .modal-foot{display:flex;justify-content:flex-end;gap:.8rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);}
-
-        /* NOTIFICATION */
-        .notif{position:fixed;bottom:22px;right:22px;padding:.8rem 1.4rem;border-radius:50px;color:white;font-weight:600;font-size:.9rem;box-shadow:0 8px 20px rgba(0,0,0,.2);z-index:9999;animation:nUp .3s ease;pointer-events:none;}
-        .nok{background:var(--success);}.nerr{background:var(--danger);}.nfo{background:var(--blue);}
-        @keyframes nUp{from{transform:translateY(15px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-        .search-row{display:flex;gap:.7rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
-        .search-row input{flex:1;min-width:180px;padding:.55rem .9rem;border-radius:50px;border:1.5px solid var(--border);font-size:.88rem;outline:none;transition:.2s;}
-        .search-row input:focus{border-color:var(--blue);}
-        .tag{display:inline-block;padding:.15rem .55rem;border-radius:50px;font-size:.75rem;font-weight:600;}
-        .tag-b{background:var(--blue-pale);color:var(--blue);}
-
-        @media(max-width:600px){
-            .sidebar{width:190px;}.main{margin-left:190px;padding:1rem;}
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.3);
+            text-align: center;
+        }
+        
+        .login-box h2 {
+            color: #1e5a88;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .login-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 60px;
+            border: 2px solid #c7ddef;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            outline: none;
+            transition: 0.2s;
+        }
+        
+        .login-box input:focus {
+            border-color: #1e5a88;
+            box-shadow: 0 0 0 3px rgba(30,90,136,0.1);
+        }
+        
+        .login-box button {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: 0.2s;
+        }
+        
+        .login-box button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(30,90,136,0.2);
+        }
+        
+        .error-msg {
+            color: #cc3366;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0,40,80,0.3);
+        }
+        
+        .admin-panel h2 {
+            color: #1e5a88;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .admin-panel h2 i {
+            font-size: 2rem;
+        }
+        
+        .admin-section {
+            background: rgba(220, 240, 255, 0.3);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-section h3 {
+            color: #175277;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #c7ddef;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        
+        .form-group textarea {
+            border-radius: 1rem;
+            min-height: 100px;
+            font-family: 'Calibri', sans-serif;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #1e5a88;
+            box-shadow: 0 0 0 2px rgba(30,90,136,0.1);
+        }
+        
+        .btn {
+            background: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e4f7a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(45, 100, 150, 0.1);
+            border: 1px solid #c7ddef;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(30,90,136,0.2);
+        }
+        
+        .btn-danger {
+            background: #cc3366;
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background: #b22d5a;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .preview-box {
+            background: #f0f7ff;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid #c7ddef;
+        }
+        
+        .preview-box h4 {
+            color: #175277;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timestamp {
+            color: #5f7d9c;
+            font-size: 0.85rem;
+            text-align: right;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #c7ddef;
+        }
+        
+        .help-text {
+            color: #5f7d9c;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+        
+        .icon-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #c1dcf5;
+        }
+        
+        .icon-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .test-button {
+            background: #ffc107;
+            color: #1e4f7a;
+            border: none;
+        }
+        
+        .test-button:hover {
+            background: #e0a800;
         }
     </style>
 </head>
 <body>
-
-<!-- LOGIN -->
-<div id="loginWrap" class="login-wrap">
-    <div class="login-box">
-        <div class="login-logo">Fluency</div>
-        <h2><i class="fa-regular fa-shield-halved"></i> Admin Panel</h2>
-        <input type="password" id="pw" placeholder="Enter password" onkeypress="if(event.key==='Enter')login()">
-        <button onclick="login()"><i class="fa-regular fa-arrow-right-to-bracket"></i> Login</button>
-        <div id="loginErr" class="err"></div>
-        <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;"><i class="fa-regular fa-circle-info"></i> Authorized personnel only</p>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h2><i class="fa-regular fa-lock"></i> Admin Login</h2>
+            <input type="password" id="adminPassword" placeholder="Enter password" onkeypress="if(event.key==='Enter') checkPassword()">
+            <button onclick="checkPassword()">Login to Dashboard</button>
+            <div id="loginError" class="error-msg"></div>
+            <div style="margin-top: 1rem; font-size: 0.8rem; color: #5f7d9c;">
+                <i class="fa-regular fa-circle-info"></i> Authorized personnel only
+            </div>
+        </div>
     </div>
-</div>
-
-<!-- ADMIN APP -->
-<div id="app" class="app">
-    <aside class="sidebar">
-        <div class="sb-logo">Fluency</div>
-        <div class="nav-sec">Overview</div>
-        <div class="nav-item active" onclick="go('dashboard')"><i class="fa-regular fa-house"></i> Dashboard</div>
-        <div class="nav-sec">Lesson</div>
-        <div class="nav-item" onclick="go('lesson')"><i class="fa-regular fa-book"></i> Lesson Settings</div>
-        <div class="nav-item" onclick="go('topperf')"><i class="fa-regular fa-crown"></i> Top Performer</div>
-        <div class="nav-sec">Students</div>
-        <div class="nav-item" onclick="go('students')"><i class="fa-regular fa-users"></i> Manage Students</div>
-        <div class="nav-item" onclick="go('reports')"><i class="fa-regular fa-chart-bar"></i> Reports</div>
-        <div class="nav-sec">System</div>
-        <div class="nav-item" onclick="go('settings')"><i class="fa-regular fa-gear"></i> API Settings</div>
-        <div class="nav-item" onclick="go('backup')"><i class="fa-regular fa-floppy-disk"></i> Backup</div>
-        <div class="nav-item sb-logout" onclick="logout()"><i class="fa-regular fa-right-from-bracket"></i> Logout</div>
-    </aside>
-
-    <main class="main">
-
-        <!-- DASHBOARD -->
-        <div id="p-dashboard" class="panel active">
-            <div class="ph"><h2><i class="fa-regular fa-house"></i> Dashboard</h2><p>Program overview</p></div>
-            <div style="margin-bottom:1rem;">
-                <span id="syncBadge" class="sync-badge sync-ing"><i class="fa-regular fa-rotate fa-spin"></i> Connecting...</span>
+    
+    <!-- Admin Panel (Hidden initially) -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>
+            <i class="fa-regular fa-gear"></i>
+            Lesson Control Panel
+            <span style="margin-left: auto; font-size: 0.9rem; color: #5f7d9c;">
+                <i class="fa-regular fa-clock"></i> <span id="liveTimestamp"></span>
+            </span>
+        </h2>
+        
+        <!-- Independent Top Performer Settings -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-crown"></i> Top Performer (Manual Control)</h3>
+            <p class="help-text">
+                <i class="fa-regular fa-circle-info"></i> This section is independent from the student data table.
+            </p>
+            
+            <div class="form-group">
+                <input type="text" id="topPerformerName" placeholder="Student Name" value="Hatim" style="flex: 2;">
+                <input type="number" id="topPerformerPoints" placeholder="Points" value="71" min="0" max="1000" style="flex: 1;">
             </div>
-            <div class="srow" id="dashStats"></div>
-            <div class="card"><h3><i class="fa-regular fa-trophy"></i> Top 5 Students</h3><div id="dashTop5"></div></div>
-            <div class="card"><h3><i class="fa-regular fa-circle-info"></i> Current Lesson</h3><div id="dashLesson" style="color:var(--muted);font-size:.9rem;"></div></div>
-        </div>
-
-        <!-- LESSON SETTINGS -->
-        <div id="p-lesson" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-book"></i> Lesson Settings</h2><p>Changes are saved to the cloud and visible on all devices instantly.</p></div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-key"></i> Basic Settings</h3>
-                <div class="frow">
-                    <div class="fg"><label>Lesson Code</label><input id="lCode" placeholder="e.g. 1234" maxlength="8"></div>
-                    <div class="fg" style="max-width:110px;"><label>Marks</label><input id="lMarks" type="number" placeholder="5" min="1" max="20"></div>
-                    <div class="fg" style="max-width:180px;"><label>Deadline</label><input id="lDeadline" type="date"></div>
-                </div>
-                <div class="hint" style="margin-bottom:.8rem;">The deadline date is stored exactly as selected and displayed correctly in all timezones.</div>
-                <button class="btn btn-p" onclick="saveLesson()"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+            
+            <div class="form-group">
+                <input type="text" id="topPerformerBadge" placeholder="Badge text (e.g., Most consistent learner)" value="Most consistent learner this month" style="flex: 3;">
             </div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-film"></i> Video</h3>
-                <div class="fg" style="margin-bottom:.8rem;"><label>YouTube URL or Embed Link</label><input id="lVideo" placeholder="https://www.youtube.com/embed/..."></div>
-                <div class="bgroup">
-                    <button class="btn" onclick="previewVideo()"><i class="fa-regular fa-eye"></i> Preview</button>
-                    <button class="btn btn-p" onclick="saveLesson()"><i class="fa-regular fa-save"></i> Save</button>
-                </div>
-                <div id="vidPreview" style="display:none;margin-top:.8rem;border-radius:.9rem;overflow:hidden;">
-                    <iframe id="vidFrame" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                </div>
+            
+            <div class="form-group">
+                <input type="text" id="topPerformerAvatar" placeholder="Avatar Image URL (optional)" value="https://i.ibb.co/4RQ0RChK/hatim.jpg" style="flex: 3;">
             </div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-pen-to-square"></i> Reflection Questions</h3>
-                <div class="fg" style="margin-bottom:.8rem;"><label>One per line</label><textarea id="lQuestions" rows="5" placeholder="• Question 1&#10;• Question 2"></textarea></div>
-                <button class="btn btn-p" onclick="saveLesson()"><i class="fa-regular fa-save"></i> Save</button>
+            
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <button class="btn btn-primary" onclick="saveTopPerformer()"><i class="fa-regular fa-floppy-disk"></i> Save Top Performer</button>
+                <button class="btn" onclick="previewTopPerformer()"><i class="fa-regular fa-eye"></i> Preview</button>
+                <button class="btn" onclick="resetTopPerformer()"><i class="fa-regular fa-arrow-rotate-left"></i> Reset to Default</button>
             </div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-book-open"></i> Reading Passage</h3>
-                <div class="fg" style="margin-bottom:.8rem;"><label>Passage</label><textarea id="lReading" rows="7" placeholder="Enter the reading passage..."></textarea></div>
-                <button class="btn btn-p" onclick="saveLesson()"><i class="fa-regular fa-save"></i> Save</button>
-            </div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-lightbulb"></i> Vocabulary</h3>
-                <div class="fg" style="margin-bottom:.4rem;"><label>One per line — <code>word – definition</code></label><textarea id="lVocab" rows="6" placeholder="persistence – continuing despite difficulty"></textarea></div>
-                <div class="hint" style="margin-bottom:.8rem;">Use a dash (–) or hyphen (-) between word and definition.</div>
-                <button class="btn btn-p" onclick="saveLesson()"><i class="fa-regular fa-save"></i> Save</button>
-            </div>
-
-            <div class="bgroup" style="margin-top:.5rem;">
-                <button class="btn btn-s" onclick="saveLesson(true)"><i class="fa-regular fa-floppy-disk"></i> Save ALL Changes</button>
-                <button class="btn" onclick="loadLessonFields()"><i class="fa-regular fa-rotate"></i> Reload</button>
-            </div>
-        </div>
-
-        <!-- TOP PERFORMER -->
-        <div id="p-topperf" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-crown"></i> Top Performer</h2><p>Control who is featured as the top student on the homepage.</p></div>
-            <div class="card">
-                <div class="frow">
-                    <div class="fg"><label>Student Name</label><input id="tpName" placeholder="Hatim"></div>
-                    <div class="fg" style="max-width:110px;"><label>Points</label><input id="tpPoints" type="number" placeholder="71" min="0"></div>
-                </div>
-                <div class="fg" style="margin-bottom:.8rem;"><label>Badge Text</label><input id="tpBadge" placeholder="Most consistent learner this month"></div>
-                <div class="fg" style="margin-bottom:1.2rem;"><label>Avatar Image URL</label><input id="tpAvatar" placeholder="https://..."><div class="hint">Direct image URL (ibb.co, imgur, etc.)</div></div>
-                <div class="bgroup">
-                    <button class="btn btn-p" onclick="saveTopPerformer()"><i class="fa-regular fa-floppy-disk"></i> Save</button>
-                    <button class="btn" onclick="autoTP()"><i class="fa-regular fa-wand-magic-sparkles"></i> Auto-select top student</button>
-                    <button class="btn" onclick="toggleTPPreview()"><i class="fa-regular fa-eye"></i> Preview</button>
-                </div>
-                <div id="tpPreview" style="display:none;margin-top:1.2rem;background:var(--blue-soft);border-radius:1rem;padding:1rem;">
-                    <div style="display:flex;align-items:center;gap:1rem;">
-                        <img id="tpImg" src="" style="width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);">
-                        <div>
-                            <strong id="tpPrevName" style="font-size:1.05rem;"></strong>
-                            <span id="tpPrevPts" style="margin-left:.8rem;color:var(--blue);"></span>
-                            <div id="tpPrevBadge" style="font-size:.82rem;color:var(--muted);"></div>
-                        </div>
+            
+            <!-- Live Preview -->
+            <div id="topPerformerPreview" class="preview-box" style="margin-top: 1rem; display: none;">
+                <h4>Preview:</h4>
+                <div style="display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem; border-radius: 1rem;">
+                    <div class="icon-preview">
+                        <img id="previewAvatar" src="https://i.ibb.co/4RQ0RChK/hatim.jpg" alt="Preview">
+                    </div>
+                    <div>
+                        <strong id="previewName" style="font-size: 1.2rem;">Hatim</strong>
+                        <span id="previewPoints" style="margin-left: 1rem; color: #1e5a88;">71 pts</span>
+                        <div id="previewBadge" style="font-size: 0.9rem; color: #5f7d9c;">Most consistent learner this month</div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- STUDENTS -->
-        <div id="p-students" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-users"></i> Manage Students</h2><p>Add, edit grades, and delete students. All changes sync to the cloud.</p></div>
-
-            <div class="card">
-                <h3><i class="fa-regular fa-user-plus"></i> Add New Student</h3>
-                <div class="frow">
-                    <div class="fg"><label>Full Name *</label><input id="newName" placeholder="Student name" onkeypress="if(event.key==='Enter')addStudent()"></div>
-                    <div class="fg" style="max-width:140px;"><label>Grade (0–100)</label><input id="newGrade" type="number" placeholder="0" min="0" max="100"></div>
-                    <div class="fg" style="max-width:140px;align-self:flex-end;">
-                        <button class="btn btn-p" onclick="addStudent()" style="width:100%;justify-content:center;"><i class="fa-regular fa-plus"></i> Add</button>
-                    </div>
-                </div>
+        
+        <!-- Basic Settings -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-key"></i> Basic Settings</h3>
+            <div class="form-group">
+                <input type="text" id="lessonCode" placeholder="Lesson Code (e.g., 1234)" value="1234" style="flex: 1;">
+                <input type="number" id="marks" placeholder="Marks (e.g., 5)" value="5" min="1" max="20" style="flex: 1;">
+                <input type="date" id="deadline" value="" style="flex: 1;">
             </div>
-
-            <div class="card">
-                <div class="search-row">
-                    <input id="stuSearch" placeholder="Search by name..." oninput="renderStudents()">
-                    <button class="btn" onclick="renderStudents()"><i class="fa-regular fa-rotate"></i></button>
-                    <span id="stuCount" class="tag tag-b"></span>
-                    <button class="btn btn-p" onclick="pushStudents()"><i class="fa-regular fa-cloud-arrow-up"></i> Sync to cloud</button>
-                </div>
-                <div class="twrap">
-                    <table>
-                        <thead><tr><th>#</th><th>Name</th><th>Grade</th><th>Actions</th></tr></thead>
-                        <tbody id="stuBody"></tbody>
-                    </table>
-                </div>
+            <button class="btn btn-primary" onclick="saveBasicSettings()" style="margin-top: 0.5rem;"><i class="fa-regular fa-floppy-disk"></i> Save Basic Settings</button>
+        </div>
+        
+        <!-- Video Settings -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-film"></i> Video Lesson</h3>
+            <div class="form-group">
+                <input type="text" id="videoUrl" placeholder="YouTube Video URL or Embed Link" value="https://www.youtube.com/embed/D3mNn0btW6s" style="flex: 2;">
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn" onclick="previewVideo()"><i class="fa-regular fa-eye"></i> Preview</button>
+                <button class="btn btn-primary" onclick="saveVideo()"><i class="fa-regular fa-save"></i> Save Video</button>
+            </div>
+            <div id="videoPreview" class="preview-box" style="display: none;"></div>
+        </div>
+        
+        <!-- Reflection Questions -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-pen-to-square"></i> Reflection Questions</h3>
+            <p class="help-text">Enter one question per line</p>
+            <div class="form-group">
+                <textarea id="questions" placeholder="Enter questions (one per line)" rows="5">• What are two main ways technology has improved daily life?
+• Mention one negative effect of technology discussed.
+• How does technology influence communication?</textarea>
+            </div>
+            <button class="btn btn-primary" onclick="saveQuestions()"><i class="fa-regular fa-save"></i> Save Questions</button>
+        </div>
+        
+        <!-- Reading Passage -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-book-open"></i> Reading Passage</h3>
+            <div class="form-group">
+                <textarea id="reading" placeholder="Enter reading passage" rows="8">Technology has transformed almost every aspect of human life over the last few decades. From communication and education to healthcare and entertainment, modern innovations have changed how we live, work, and connect with others. Smartphones, the internet, and artificial intelligence have made information more accessible than ever, allowing people to learn and communicate at a global scale...</textarea>
+            </div>
+            <button class="btn btn-primary" onclick="saveReading()"><i class="fa-regular fa-save"></i> Save Reading</button>
+        </div>
+        
+        <!-- Vocabulary -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-lightbulb"></i> Vocabulary</h3>
+            <p class="help-text">One per line - format: word – definition</p>
+            <div class="form-group">
+                <textarea id="vocabulary" placeholder="Enter vocabulary (one per line, format: word - definition)" rows="6">persistence – continuing despite difficulty
+momentum – force that keeps something moving
+consistency – doing the same thing regularly
+exposure – contact with something (e.g. language)
+discipline – controlled behaviour to achieve a goal</textarea>
+            </div>
+            <button class="btn btn-primary" onclick="saveVocabulary()"><i class="fa-regular fa-save"></i> Save Vocabulary</button>
+        </div>
+        
+        <!-- Test Connection Section -->
+        <div class="admin-section">
+            <h3><i class="fa-regular fa-wifi"></i> Test Connection</h3>
+            <p class="help-text">Test if the lesson code is being saved correctly</p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn test-button" onclick="testLessonCode()"><i class="fa-regular fa-flask"></i> Test Lesson Code</button>
+                <button class="btn test-button" onclick="viewSavedData()"><i class="fa-regular fa-eye"></i> View Saved Data</button>
             </div>
         </div>
-
-        <!-- REPORTS -->
-        <div id="p-reports" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-chart-bar"></i> Reports</h2><p>Full ranking of all students.</p></div>
-            <div class="srow" id="repStats"></div>
-            <div class="card">
-                <h3><i class="fa-regular fa-table"></i> Full Ranking</h3>
-                <div class="search-row"><input id="repSearch" placeholder="Search..." oninput="renderReports()"></div>
-                <div class="twrap">
-                    <table>
-                        <thead><tr><th>Rank</th><th>Name</th><th>Grade</th><th>Progress</th></tr></thead>
-                        <tbody id="repBody"></tbody>
-                    </table>
-                </div>
-            </div>
+        
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button class="btn btn-success" onclick="saveAllChanges()" style="flex: 2;"><i class="fa-regular fa-floppy-disk"></i> Save All Changes</button>
+            <button class="btn" onclick="loadCurrentData()"><i class="fa-regular fa-rotate"></i> Refresh</button>
+            <button class="btn" onclick="previewLesson()"><i class="fa-regular fa-eye"></i> Preview Lesson</button>
+            <button class="btn btn-danger" onclick="resetToDefaults()"><i class="fa-regular fa-arrow-rotate-left"></i> Reset All</button>
+            <button class="btn" onclick="logout()"><i class="fa-regular fa-sign-out"></i> Logout</button>
         </div>
-
-        <!-- API SETTINGS -->
-        <div id="p-settings" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-gear"></i> API Settings</h2><p>Configure the Google Apps Script backend URL.</p></div>
-            <div class="card">
-                <h3><i class="fa-regular fa-link"></i> Apps Script URL</h3>
-                <div class="fg" style="margin-bottom:.8rem;">
-                    <label>Web App URL</label>
-                    <input id="apiUrlInput" placeholder="https://script.google.com/macros/s/...">
-                    <div class="hint">Deploy your Apps Script as a web app (Execute as: Me, Access: Anyone) and paste the URL here.</div>
-                </div>
-                <div class="bgroup">
-                    <button class="btn btn-p" onclick="saveApiUrl()"><i class="fa-regular fa-floppy-disk"></i> Save URL</button>
-                    <button class="btn" onclick="testConnection()"><i class="fa-regular fa-wifi"></i> Test Connection</button>
-                </div>
-                <div id="connResult" style="margin-top:.8rem;font-size:.88rem;color:var(--muted);"></div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-regular fa-code"></i> Setup Instructions</h3>
-                <ol style="margin-left:1.2rem;color:var(--muted);font-size:.9rem;line-height:2;">
-                    <li>Go to <strong>script.google.com</strong> and create a new project.</li>
-                    <li>Paste the contents of <code>Code.gs</code> into the editor.</li>
-                    <li>Click <strong>Deploy → New deployment → Web app</strong>.</li>
-                    <li>Set <em>Execute as</em>: <strong>Me</strong>, <em>Who has access</em>: <strong>Anyone</strong>.</li>
-                    <li>Copy the deployment URL and paste it above.</li>
-                    <li>Click <strong>Save URL</strong>, then <strong>Test Connection</strong>.</li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- BACKUP -->
-        <div id="p-backup" class="panel">
-            <div class="ph"><h2><i class="fa-regular fa-floppy-disk"></i> Backup & Import</h2></div>
-            <div class="card">
-                <h3><i class="fa-regular fa-download"></i> Export</h3>
-                <p style="color:var(--muted);font-size:.9rem;margin-bottom:.8rem;">Download all data as a JSON file.</p>
-                <button class="btn btn-p" onclick="exportData()"><i class="fa-regular fa-download"></i> Export JSON</button>
-            </div>
-            <div class="card">
-                <h3><i class="fa-regular fa-upload"></i> Import</h3>
-                <p style="color:var(--muted);font-size:.9rem;margin-bottom:.8rem;">Import from a backup. <strong>This overwrites current data.</strong></p>
-                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-                <button class="btn btn-w" onclick="document.getElementById('importFile').click()"><i class="fa-regular fa-upload"></i> Choose File</button>
-            </div>
-            <div class="card">
-                <h3><i class="fa-regular fa-triangle-exclamation"></i> Danger Zone</h3>
-                <div class="bgroup">
-                    <button class="btn btn-d" onclick="clearStudents()"><i class="fa-regular fa-users-slash"></i> Delete All Students</button>
-                    <button class="btn btn-d" onclick="resetAll()"><i class="fa-regular fa-bomb"></i> Reset Everything</button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-</div>
-
-<!-- EDIT STUDENT MODAL -->
-<div class="modal-bg" id="editModal">
-    <div class="modal">
-        <h3><i class="fa-regular fa-pencil"></i> Edit Student</h3>
-        <input type="hidden" id="editIdx">
-        <div class="frow" style="margin-bottom:.8rem;">
-            <div class="fg"><label>Full Name *</label><input id="editName" placeholder="Student name"></div>
-        </div>
-        <div class="fg" style="margin-bottom:.8rem;">
-            <label>Grade (0–100)</label>
-            <input id="editGrade" type="number" placeholder="0" min="0" max="100">
-            <div class="hint">Enter the student's total grade as a single number.</div>
-        </div>
-        <div class="modal-foot">
-            <button class="btn" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-p" onclick="saveEdit()"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+        
+        <!-- Last Updated Info -->
+        <div class="timestamp" id="lastUpdated">
+            Last saved: Never
         </div>
     </div>
-</div>
+    
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const ADMIN_PASSWORD = 'fluency2026'; // ⚠️ غيرها لكلمة سر قوية
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbxYEI-ROn15R3RzhBza9Js_WroAPfwoUbdQ9vooOGyaDKuTY9ApNNndCNs0jd4Sk4ejAA/exec'; // API الدروس
 
-<script>
-// ============================================================
-//  CONFIG
-// ============================================================
-const ADMIN_PASS = 'fluency2026';
-
-// Restored original students from the previous system
-const DEFAULT_STUDENTS = [
-    { id: 'S001', name: 'Hatim',   grade: 71, total: 71 },
-    { id: 'S002', name: 'Omar',    grade: 65, total: 65 },
-    { id: 'S003', name: 'Yusuf',   grade: 58, total: 58 },
-    { id: 'S004', name: 'Ibrahim', grade: 52, total: 52 },
-    { id: 'S005', name: 'Khalid',  grade: 47, total: 47 },
-];
-
-// ============================================================
-//  API
-// ============================================================
-function getApiUrl() { return localStorage.getItem('fluency_api_url') || ''; }
-
-async function apiGet(params = {}) {
-    const url = getApiUrl();
-    if (!url) throw new Error('No API URL set');
-    const qs = new URLSearchParams(params).toString();
-    const r = await fetch(url + (qs ? '?' + qs : ''));
-    return r.json();
-}
-
-async function apiPost(body) {
-    const url = getApiUrl();
-    if (!url) throw new Error('No API URL set');
-    await fetch(url, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    });
-}
-
-// ============================================================
-//  LOCAL STORAGE HELPERS
-// ============================================================
-function ls(key, val) {
-    if (val !== undefined) localStorage.setItem('fl_' + key, JSON.stringify(val));
-    else { try { return JSON.parse(localStorage.getItem('fl_' + key)); } catch(e){ return null; } }
-}
-
-function getStudents() { return ls('students') || JSON.parse(JSON.stringify(DEFAULT_STUDENTS)); }
-function saveStudentsLocal(arr) { ls('students', arr); }
-
-function getLessonLocal() { return ls('lesson') || {}; }
-function saveLessonLocal(d) { ls('lesson', d); }
-
-function getTPLocal() {
-    return ls('topPerformer') || { name: 'Hatim', points: 71, badge: 'Most consistent learner this month', avatar: 'https://i.ibb.co/4RQ0RChK/hatim.jpg' };
-}
-function saveTPLocal(d) { ls('topPerformer', d); }
-
-// ============================================================
-//  LOGIN
-// ============================================================
-function login() {
-    if (document.getElementById('pw').value === ADMIN_PASS) {
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('app').style.display = 'flex';
-        initApp();
-    } else {
-        document.getElementById('loginErr').textContent = '❌ Incorrect password';
-    }
-}
-function logout() {
-    document.getElementById('loginWrap').style.display = 'flex';
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('pw').value = '';
-    document.getElementById('loginErr').textContent = '';
-}
-document.addEventListener('keypress', e => {
-    if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') login();
-});
-
-// ============================================================
-//  INIT
-// ============================================================
-async function initApp() {
-    // Seed default students if none exist
-    if (!ls('students')) { saveStudentsLocal(DEFAULT_STUDENTS); }
-
-    loadLessonFields();
-    loadTPFields();
-    document.getElementById('apiUrlInput').value = getApiUrl();
-    renderDashboard();
-    renderStudents();
-
-    // Try to pull from cloud
-    await syncFromCloud();
-}
-
-async function syncFromCloud() {
-    setBadge('ing', 'Syncing...');
-    try {
-        const data = await apiGet({ action: 'getAll' });
-        if (data.students && data.students.length) {
-            saveStudentsLocal(data.students);
+        // ============================================
+        // LOGIN FUNCTION
+        // ============================================
+        function checkPassword() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadCurrentData();
+                loadTopPerformer();
+                updateTimestamp();
+                showNotification('✅ Welcome, Admin!');
+            } else {
+                document.getElementById('loginError').innerText = '❌ Incorrect password';
+            }
         }
-        if (data.lesson && Object.keys(data.lesson).length) {
-            saveLessonLocal(data.lesson);
-            loadLessonFields();
+        
+        function logout() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').innerText = '';
         }
-        if (data.topPerformer && data.topPerformer.name) {
-            saveTPLocal(data.topPerformer);
-            loadTPFields();
+
+        // ============================================
+        // TOP PERFORMER FUNCTIONS (INDEPENDENT - LOCAL)
+        // ============================================
+        function loadTopPerformer() {
+            const saved = localStorage.getItem('fluencyTopPerformer');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('topPerformerName').value = data.name || 'Hatim';
+                    document.getElementById('topPerformerPoints').value = data.points || 71;
+                    document.getElementById('topPerformerBadge').value = data.badge || 'Most consistent learner this month';
+                    document.getElementById('topPerformerAvatar').value = data.avatar || 'https://i.ibb.co/4RQ0RChK/hatim.jpg';
+                } catch (e) {
+                    console.error('Error loading top performer:', e);
+                }
+            }
         }
-        setBadge('ok', 'Synced ✓');
-        renderDashboard();
-        renderStudents();
-        notify('✅ Synced from cloud', 'ok');
-    } catch(e) {
-        setBadge('err', 'Offline — using local data');
-    }
-}
+        
+        function saveTopPerformer() {
+            const topPerformerData = {
+                name: document.getElementById('topPerformerName').value,
+                points: parseInt(document.getElementById('topPerformerPoints').value) || 71,
+                badge: document.getElementById('topPerformerBadge').value,
+                avatar: document.getElementById('topPerformerAvatar').value,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('fluencyTopPerformer', JSON.stringify(topPerformerData));
+            showNotification('✅ Top Performer saved!');
+            
+            if (document.getElementById('topPerformerPreview').style.display === 'block') {
+                updatePreview();
+            }
+        }
+        
+        function previewTopPerformer() {
+            const preview = document.getElementById('topPerformerPreview');
+            if (preview.style.display === 'none') {
+                updatePreview();
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+        
+        function updatePreview() {
+            document.getElementById('previewName').textContent = document.getElementById('topPerformerName').value;
+            document.getElementById('previewPoints').textContent = document.getElementById('topPerformerPoints').value + ' pts';
+            document.getElementById('previewBadge').textContent = document.getElementById('topPerformerBadge').value;
+            document.getElementById('previewAvatar').src = document.getElementById('topPerformerAvatar').value;
+        }
+        
+        function resetTopPerformer() {
+            if (confirm('Reset Top Performer to default values?')) {
+                localStorage.removeItem('fluencyTopPerformer');
+                document.getElementById('topPerformerName').value = 'Hatim';
+                document.getElementById('topPerformerPoints').value = 71;
+                document.getElementById('topPerformerBadge').value = 'Most consistent learner this month';
+                document.getElementById('topPerformerAvatar').value = 'https://i.ibb.co/4RQ0RChK/hatim.jpg';
+                showNotification('🔄 Reset to default');
+                updatePreview();
+            }
+        }
 
-function setBadge(type, msg) {
-    const el = document.getElementById('syncBadge');
-    if (!el) return;
-    el.className = 'sync-badge ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-ing');
-    el.innerHTML = (type === 'ing' ? '<i class="fa-regular fa-rotate fa-spin"></i> ' : '') + msg;
-}
+        // ============================================
+        // LOAD LESSON DATA FROM CLOUD
+        // ============================================
+        async function loadLessonFromCloud() {
+            try {
+                console.log('Loading lesson from cloud...');
+                const response = await fetch(LESSON_API_URL);
+                const result = await response.json();
+                console.log('Lesson API response:', result);
+                
+                if (result && result.data) {
+                    document.getElementById('lessonCode').value = result.data.lessonCode || '1234';
+                    document.getElementById('marks').value = result.data.marks || '5';
+                    document.getElementById('deadline').value = result.data.deadline || getDefaultDeadline();
+                    document.getElementById('videoUrl').value = result.data.videoUrl || '';
+                    document.getElementById('questions').value = result.data.questions || '';
+                    document.getElementById('reading').value = result.data.reading || '';
+                    document.getElementById('vocabulary').value = result.data.vocabulary || '';
+                    showNotification('📂 Lesson data loaded from cloud');
+                } else {
+                    console.log('No cloud data, using defaults');
+                    setDefaultDates();
+                }
+            } catch (error) {
+                console.error('Error loading from cloud, using local backup.', error);
+                loadCurrentDataLocal(); // use local backup
+            }
+        }
 
-// ============================================================
-//  PANEL NAVIGATION
-// ============================================================
-function go(name) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('p-' + name)?.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => {
-        if ((n.getAttribute('onclick') || '').includes("'" + name + "'")) n.classList.add('active');
-    });
-    if (name === 'reports') renderReports();
-    if (name === 'dashboard') renderDashboard();
-}
+        function loadCurrentDataLocal() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('lessonCode').value = data.lessonCode || '1234';
+                    document.getElementById('marks').value = data.marks || '5';
+                    document.getElementById('deadline').value = data.deadline || getDefaultDeadline();
+                    document.getElementById('videoUrl').value = data.videoUrl || '';
+                    document.getElementById('questions').value = data.questions || '';
+                    document.getElementById('reading').value = data.reading || '';
+                    document.getElementById('vocabulary').value = data.vocabulary || '';
+                    showNotification('📂 Loaded from local backup');
+                } catch (e) {
+                    setDefaultDates();
+                }
+            } else {
+                setDefaultDates();
+            }
+        }
 
-// ============================================================
-//  DASHBOARD
-// ============================================================
-function renderDashboard() {
-    const students = getStudents();
-    const sorted = [...students].sort((a, b) => (b.grade || 0) - (a.grade || 0));
-    const total = students.length;
-    const avg = total ? (students.reduce((s, x) => s + (x.grade || 0), 0) / total).toFixed(1) : 0;
-    const top = sorted[0];
+        function setDefaultDates() {
+            document.getElementById('deadline').value = getDefaultDeadline();
+        }
 
-    document.getElementById('dashStats').innerHTML = `
-        <div class="scard"><div class="num">${total}</div><div class="lbl">Students</div></div>
-        <div class="scard"><div class="num">${avg}</div><div class="lbl">Avg Grade</div></div>
-        <div class="scard"><div class="num">${top ? top.grade || 0 : 0}</div><div class="lbl">Top Score</div></div>
-        <div class="scard"><div class="num">${students.filter(s => (s.grade || 0) >= 50).length}</div><div class="lbl">Passing</div></div>
-    `;
+        function getDefaultDeadline() {
+            const date = new Date();
+            date.setDate(date.getDate() + 2);
+            return date.toISOString().split('T')[0];
+        }
 
-    document.getElementById('dashTop5').innerHTML = sorted.length
-        ? `<table style="width:100%;"><thead><tr><th>Rank</th><th>Name</th><th>Grade</th></tr></thead><tbody>
-            ${sorted.slice(0, 5).map((s, i) => `<tr>
-                <td><span class="rank ${i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn'}">${i+1}</span></td>
-                <td>${s.name}</td>
-                <td><strong>${s.grade || 0}</strong></td>
-            </tr>`).join('')}
-           </tbody></table>`
-        : '<p style="color:var(--muted);">No students yet.</p>';
+        // ============================================
+        // SAVE LESSON DATA TO CLOUD
+        // ============================================
+        async function saveLessonToCloud() {
+            const data = {
+                lessonCode: document.getElementById('lessonCode').value,
+                marks: document.getElementById('marks').value,
+                deadline: document.getElementById('deadline').value,
+                videoUrl: document.getElementById('videoUrl').value,
+                questions: document.getElementById('questions').value,
+                reading: document.getElementById('reading').value,
+                vocabulary: document.getElementById('vocabulary').value,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            // Save lesson code to localStorage separately for immediate use
+            localStorage.setItem('fluencyLessonCode', data.lessonCode);
+            
+            try {
+                // Using no-cors mode for Google Apps Script
+                await fetch(LESSON_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                // Also save locally as backup
+                localStorage.setItem('fluencyLessonData', JSON.stringify(data));
+                
+                showNotification('✅ Lesson data saved! Code: ' + data.lessonCode);
+                updateTimestamp();
+            } catch (error) {
+                console.error('Error saving to cloud, saved locally only.', error);
+                localStorage.setItem('fluencyLessonData', JSON.stringify(data));
+                showNotification('⚠️ Saved locally only');
+            }
+        }
 
-    const ld = getLessonLocal();
-    document.getElementById('dashLesson').innerHTML = ld.lessonCode
-        ? `Code: <strong>${ld.lessonCode}</strong> &nbsp;|&nbsp; Deadline: <strong>${ld.deadline || '—'}</strong> &nbsp;|&nbsp; Marks: <strong>${ld.marks || '—'}</strong>`
-        : 'No lesson data saved yet.';
-}
+        // Individual save functions
+        async function saveBasicSettings() {
+            await saveLessonToCloud();
+        }
+        async function saveVideo() {
+            await saveLessonToCloud();
+        }
+        async function saveQuestions() {
+            await saveLessonToCloud();
+        }
+        async function saveReading() {
+            await saveLessonToCloud();
+        }
+        async function saveVocabulary() {
+            await saveLessonToCloud();
+        }
+        async function saveAllChanges() {
+            await saveLessonToCloud();
+            saveTopPerformer();
+        }
 
-// ============================================================
-//  LESSON
-// ============================================================
-function loadLessonFields() {
-    const d = getLessonLocal();
-    document.getElementById('lCode').value    = d.lessonCode || '1234';
-    document.getElementById('lMarks').value   = d.marks      || '5';
-    document.getElementById('lDeadline').value = d.deadline  || defDeadline();
-    document.getElementById('lVideo').value   = d.videoUrl   || 'https://www.youtube.com/embed/D3mNn0btW6s';
-    document.getElementById('lQuestions').value = d.questions || '';
-    document.getElementById('lReading').value = d.reading    || '';
-    document.getElementById('lVocab').value   = d.vocabulary || '';
-}
+        // ============================================
+        // TEST FUNCTIONS
+        // ============================================
+        function testLessonCode() {
+            const code = document.getElementById('lessonCode').value;
+            console.log('Current lesson code:', code);
+            
+            // Save to localStorage
+            localStorage.setItem('fluencyLessonCode', code);
+            
+            // Show test result
+            const savedCode = localStorage.getItem('fluencyLessonCode');
+            alert(`Test Results:
+Current code in field: ${code}
+Code saved to localStorage: ${savedCode}
+${code === savedCode ? '✅ Code saved successfully!' : '❌ Code save failed!'}`);
+        }
+        
+        function viewSavedData() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            const savedCode = localStorage.getItem('fluencyLessonCode');
+            
+            let message = '=== SAVED DATA ===\n';
+            message += `Lesson Code (localStorage): ${savedCode || 'Not set'}\n\n`;
+            
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    message += 'Full lesson data:\n';
+                    message += `Code: ${data.lessonCode}\n`;
+                    message += `Marks: ${data.marks}\n`;
+                    message += `Deadline: ${data.deadline}\n`;
+                    message += `Video: ${data.videoUrl ? 'Set' : 'Not set'}\n`;
+                } catch (e) {
+                    message += 'Error parsing saved data';
+                }
+            } else {
+                message += 'No saved lesson data found';
+            }
+            
+            alert(message);
+        }
 
-function defDeadline() { const d = new Date(); d.setDate(d.getDate()+2); return d.toISOString().split('T')[0]; }
+        // ============================================
+        // PREVIEW FUNCTIONS
+        // ============================================
+        function previewVideo() {
+            const url = document.getElementById('videoUrl').value;
+            let embedUrl = url;
+            
+            if (url.includes('youtube.com/watch?v=')) {
+                const videoId = url.split('v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            } else if (url.includes('youtu.be/')) {
+                const videoId = url.split('youtu.be/')[1].split('?')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            }
+            
+            const preview = document.getElementById('videoPreview');
+            preview.innerHTML = `<iframe width="100%" height="200" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+            preview.style.display = 'block';
+        }
+        
+        function previewLesson() {
+            window.open('index.html', '_blank');
+        }
 
-async function saveLesson() {
-    const d = {
-        lessonCode: document.getElementById('lCode').value.trim(),
-        marks:      document.getElementById('lMarks').value,
-        deadline:   document.getElementById('lDeadline').value,   // YYYY-MM-DD stored as-is
-        videoUrl:   document.getElementById('lVideo').value.trim(),
-        questions:  document.getElementById('lQuestions').value,
-        reading:    document.getElementById('lReading').value,
-        vocabulary: document.getElementById('lVocab').value,
-        lastUpdated: new Date().toISOString()
-    };
-    saveLessonLocal(d);
-    notify('✅ Saved locally. Syncing...', 'ok');
-    renderDashboard();
-    try {
-        await apiPost({ action: 'saveLesson', lesson: d });
-        notify('✅ Lesson synced to cloud! Code: ' + d.lessonCode, 'ok');
-    } catch(e) {
-        notify('⚠️ Saved locally only (no internet)', 'fo');
-    }
-}
+        // ============================================
+        // RESET FUNCTION
+        // ============================================
+        function resetToDefaults() {
+            if (confirm('Reset ALL data to default values? This cannot be undone.')) {
+                localStorage.removeItem('fluencyLessonData');
+                localStorage.removeItem('fluencyLessonCode');
+                localStorage.removeItem('fluencyTopPerformer');
+                loadCurrentData();
+                loadTopPerformer();
+                showNotification('🔄 Reset to defaults');
+            }
+        }
 
-function previewVideo() {
-    let url = document.getElementById('lVideo').value.trim();
-    if (url.includes('youtube.com/watch?v=')) { const id = url.split('v=')[1].split('&')[0]; url = `https://www.youtube.com/embed/${id}`; }
-    else if (url.includes('youtu.be/')) { const id = url.split('youtu.be/')[1].split('?')[0]; url = `https://www.youtube.com/embed/${id}`; }
-    document.getElementById('vidFrame').src = url;
-    document.getElementById('vidPreview').style.display = 'block';
-}
+        // ============================================
+        // LOAD CURRENT DATA (main function)
+        // ============================================
+        async function loadCurrentData() {
+            await loadLessonFromCloud(); // try cloud first
+            // Top performer is loaded separately
+        }
 
-// ============================================================
-//  TOP PERFORMER
-// ============================================================
-function loadTPFields() {
-    const d = getTPLocal();
-    document.getElementById('tpName').value   = d.name   || 'Hatim';
-    document.getElementById('tpPoints').value = d.points || 71;
-    document.getElementById('tpBadge').value  = d.badge  || 'Most consistent learner this month';
-    document.getElementById('tpAvatar').value = d.avatar || 'https://i.ibb.co/4RQ0RChK/hatim.jpg';
-}
+        // ============================================
+        // NOTIFICATION & TIMESTAMP
+        // ============================================
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        function updateTimestamp() {
+            const saved = localStorage.getItem('fluencyLessonData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.lastUpdated) {
+                        const date = new Date(data.lastUpdated);
+                        document.getElementById('lastUpdated').innerHTML = `Last saved: ${date.toLocaleString()}`;
+                        document.getElementById('liveTimestamp').textContent = date.toLocaleTimeString();
+                    }
+                } catch (e) {}
+            }
+        }
 
-async function saveTopPerformer() {
-    const d = {
-        name:   document.getElementById('tpName').value,
-        points: parseInt(document.getElementById('tpPoints').value) || 0,
-        badge:  document.getElementById('tpBadge').value,
-        avatar: document.getElementById('tpAvatar').value
-    };
-    saveTPLocal(d);
-    try { await apiPost({ action: 'saveTopPerformer', topPerformer: d }); notify('✅ Top Performer synced!', 'ok'); }
-    catch(e) { notify('✅ Saved locally', 'ok'); }
-}
-
-function autoTP() {
-    const students = getStudents();
-    if (!students.length) { notify('No students', 'err'); return; }
-    const top = [...students].sort((a, b) => (b.grade || 0) - (a.grade || 0))[0];
-    document.getElementById('tpName').value   = top.name;
-    document.getElementById('tpPoints').value = top.grade || 0;
-    document.getElementById('tpBadge').value  = 'Top performer this month';
-    notify('Auto-selected: ' + top.name, 'fo');
-}
-
-function toggleTPPreview() {
-    const el = document.getElementById('tpPreview');
-    const show = el.style.display === 'none';
-    el.style.display = show ? 'block' : 'none';
-    if (show) {
-        document.getElementById('tpImg').src         = document.getElementById('tpAvatar').value;
-        document.getElementById('tpPrevName').textContent  = document.getElementById('tpName').value;
-        document.getElementById('tpPrevPts').textContent   = document.getElementById('tpPoints').value + ' pts';
-        document.getElementById('tpPrevBadge').textContent = document.getElementById('tpBadge').value;
-    }
-}
-
-// ============================================================
-//  STUDENTS
-// ============================================================
-function addStudent() {
-    const name = document.getElementById('newName').value.trim();
-    if (!name) { notify('Please enter a name', 'err'); return; }
-    const grade = parseFloat(document.getElementById('newGrade').value) || 0;
-    const students = getStudents();
-    students.push({ id: 'S' + Date.now().toString().slice(-5), name, grade, total: grade });
-    saveStudentsLocal(students);
-    document.getElementById('newName').value  = '';
-    document.getElementById('newGrade').value = '';
-    renderStudents();
-    renderDashboard();
-    notify('✅ Student added: ' + name, 'ok');
-}
-
-function renderStudents() {
-    const search  = (document.getElementById('stuSearch')?.value || '').toLowerCase();
-    const students = getStudents();
-    const filtered = students.filter(s => s.name.toLowerCase().includes(search));
-    const sorted   = [...filtered].sort((a, b) => (b.grade || 0) - (a.grade || 0));
-
-    document.getElementById('stuCount').textContent = `${filtered.length} / ${students.length}`;
-    document.getElementById('stuBody').innerHTML = sorted.length
-        ? sorted.map(s => {
-            const idx = students.findIndex(x => x.id === s.id);
-            return `<tr>
-                <td>${students.indexOf(students.find(x => x.id === s.id)) + 1}</td>
-                <td><strong>${s.name}</strong></td>
-                <td><strong>${s.grade || 0}</strong></td>
-                <td style="display:flex;gap:.4rem;flex-wrap:wrap;">
-                    <button class="btn btn-sm btn-p" onclick="openEdit(${idx})"><i class="fa-regular fa-pencil"></i> Edit</button>
-                    <button class="btn btn-sm btn-d" onclick="deleteStu(${idx})"><i class="fa-regular fa-trash"></i></button>
-                </td>
-            </tr>`;
-        }).join('')
-        : `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:1.5rem;">No students yet.</td></tr>`;
-}
-
-function deleteStu(idx) {
-    const students = getStudents();
-    if (!confirm(`Delete "${students[idx]?.name}"?`)) return;
-    students.splice(idx, 1);
-    saveStudentsLocal(students);
-    renderStudents(); renderDashboard();
-    notify('Student deleted', 'fo');
-}
-
-function openEdit(idx) {
-    const s = getStudents()[idx];
-    if (!s) return;
-    document.getElementById('editIdx').value    = idx;
-    document.getElementById('editName').value   = s.name;
-    document.getElementById('editGrade').value  = s.grade || 0;
-    document.getElementById('editModal').classList.add('open');
-}
-function closeModal() { document.getElementById('editModal').classList.remove('open'); }
-document.getElementById('editModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-
-function saveEdit() {
-    const idx  = parseInt(document.getElementById('editIdx').value);
-    const name = document.getElementById('editName').value.trim();
-    if (!name) { notify('Name cannot be empty', 'err'); return; }
-    const grade = parseFloat(document.getElementById('editGrade').value) || 0;
-    const students = getStudents();
-    students[idx].name  = name;
-    students[idx].grade = grade;
-    students[idx].total = grade;
-    saveStudentsLocal(students);
-    closeModal();
-    renderStudents(); renderDashboard();
-    notify('✅ Student updated', 'ok');
-}
-
-async function pushStudents() {
-    const students = getStudents();
-    notify('Syncing...', 'fo');
-    try {
-        await apiPost({ action: 'saveStudents', students });
-        notify('✅ Students synced to cloud!', 'ok');
-    } catch(e) {
-        notify('⚠️ Sync failed — saved locally only', 'err');
-    }
-}
-
-// ============================================================
-//  REPORTS
-// ============================================================
-function renderReports() {
-    const search   = (document.getElementById('repSearch')?.value || '').toLowerCase();
-    const students = getStudents();
-    const sorted   = [...students].sort((a, b) => (b.grade || 0) - (a.grade || 0));
-    const filtered = sorted.filter(s => s.name.toLowerCase().includes(search));
-    const total    = students.length;
-    const avg      = total ? (students.reduce((s, x) => s + (x.grade || 0), 0) / total).toFixed(1) : 0;
-    const pass     = students.filter(s => (s.grade || 0) >= 50).length;
-
-    document.getElementById('repStats').innerHTML = `
-        <div class="scard"><div class="num">${total}</div><div class="lbl">Students</div></div>
-        <div class="scard"><div class="num">${avg}</div><div class="lbl">Average</div></div>
-        <div class="scard"><div class="num">${pass}</div><div class="lbl">Passing (50+)</div></div>
-        <div class="scard"><div class="num">${total - pass}</div><div class="lbl">Below 50</div></div>
-    `;
-
-    document.getElementById('repBody').innerHTML = filtered.length
-        ? filtered.map(s => {
-            const rank = sorted.indexOf(s) + 1;
-            const pct  = Math.min(100, s.grade || 0);
-            return `<tr>
-                <td><span class="rank ${rank===1?'r1':rank===2?'r2':rank===3?'r3':'rn'}">${rank}</span></td>
-                <td><strong>${s.name}</strong></td>
-                <td><strong>${s.grade || 0}</strong></td>
-                <td><div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></td>
-            </tr>`;
-        }).join('')
-        : `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:1.5rem;">No data.</td></tr>`;
-}
-
-// ============================================================
-//  API SETTINGS
-// ============================================================
-function saveApiUrl() {
-    const url = document.getElementById('apiUrlInput').value.trim();
-    localStorage.setItem('fluency_api_url', url);
-    notify('✅ API URL saved', 'ok');
-}
-
-async function testConnection() {
-    const el = document.getElementById('connResult');
-    el.textContent = 'Testing...';
-    try {
-        const data = await apiGet({ action: 'getAll' });
-        el.style.color = 'var(--success)';
-        el.textContent = '✅ Connection successful! Students found: ' + (data.students?.length || 0);
-    } catch(e) {
-        el.style.color = 'var(--danger)';
-        el.textContent = '❌ Connection failed. Check the URL and make sure the script is deployed as a public web app.';
-    }
-}
-
-// ============================================================
-//  BACKUP
-// ============================================================
-function exportData() {
-    const bundle = { exportedAt: new Date().toISOString(), students: getStudents(), lesson: getLessonLocal(), topPerformer: getTPLocal() };
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }));
-    a.download = 'fluency-backup-' + new Date().toISOString().slice(0,10) + '.json';
-    a.click();
-    notify('✅ Exported', 'ok');
-}
-
-function importData(e) {
-    const file = e.target.files[0]; if (!file) return;
-    const r = new FileReader();
-    r.onload = function(ev) {
-        try {
-            const d = JSON.parse(ev.target.result);
-            if (!confirm('This will overwrite current data. Continue?')) return;
-            if (d.students)     saveStudentsLocal(d.students);
-            if (d.lesson)       saveLessonLocal(d.lesson);
-            if (d.topPerformer) saveTPLocal(d.topPerformer);
-            loadLessonFields(); loadTPFields(); renderStudents(); renderDashboard();
-            notify('✅ Imported successfully', 'ok');
-        } catch(err) { notify('❌ Invalid JSON file', 'err'); }
-    };
-    r.readAsText(file);
-    e.target.value = '';
-}
-
-function clearStudents() {
-    if (!confirm('Delete ALL students permanently?')) return;
-    saveStudentsLocal([]);
-    renderStudents(); renderDashboard();
-    notify('All students deleted', 'fo');
-}
-
-function resetAll() {
-    if (!confirm('Reset EVERYTHING? This cannot be undone.')) return;
-    ['fl_students','fl_lesson','fl_topPerformer'].forEach(k => localStorage.removeItem(k));
-    initApp();
-    notify('Reset complete', 'fo');
-}
-
-// ============================================================
-//  NOTIFICATION
-// ============================================================
-function notify(msg, type = 'fo') {
-    const n = document.createElement('div');
-    n.className = 'notif n' + type; n.textContent = msg;
-    document.body.appendChild(n);
-    setTimeout(() => n.style.opacity = '0', 2600);
-    setTimeout(() => n.remove(), 3000);
-}
-</script>
+        // ============================================
+        // INITIAL LOAD
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Don't load automatically - wait for login
+        });
+        
+        // Enter key for login
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
+                checkPassword();
+            }
+        });
+        
+        // Auto-refresh timestamp every minute
+        setInterval(updateTimestamp, 60000);
+    </script>
 </body>
 </html>
