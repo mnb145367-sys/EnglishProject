@@ -919,7 +919,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             syncStatus.style.display = 'flex';
 
             try {
-                // Save to Google Sheet
+                // Save to Google Sheet with action parameter
                 const response = await fetch(LESSON_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1069,7 +1069,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
         }
 
         // ============================================
-        // SAVE LESSON DATA TO CLOUD
+        // SAVE LESSON DATA TO CLOUD - FIXED VERSION
         // ============================================
         async function saveLessonToCloud() {
             const data = {
@@ -1087,11 +1087,15 @@ discipline – controlled behaviour to achieve a goal</textarea>
             localStorage.setItem('fluencyLessonCode', data.lessonCode);
 
             try {
-                await fetch(LESSON_API_URL, {
+                // FIXED: Added action parameter to tell Google Apps Script what to do
+                const response = await fetch(LESSON_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        action: 'saveLesson',
+                        ...data
+                    })
                 });
 
                 // Also save locally as backup
