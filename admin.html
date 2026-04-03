@@ -633,7 +633,7 @@
 
                 <div class="form-group full-width">
                     <label>Badge / Achievement</label>
-                    <input type="text" id="topPerformerBadge" placeholder="e.g., Most consistent learner | Phase 1" value="Most consistent learner | Phase 1">
+                    <input type="text" id="topPerformerBadge" placeholder="e.g., Most consistent learner this month" value="Most consistent learner | Phase 1">
                 </div>
 
                 <div class="btn-group">
@@ -884,7 +884,28 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // ============================================
         // TOP PERFORMER FUNCTIONS
         // ============================================
-        function loadTopPerformer() {
+
+        // FIX: loadTopPerformer now tries cloud first, then falls back to localStorage.
+        // Previously it only read from localStorage, so admin always saw stale/local data.
+        async function loadTopPerformer() {
+            try {
+                const response = await fetch(LESSON_API_URL);
+                const result = await response.json();
+                if (result && result.topPerformer) {
+                    const tp = result.topPerformer;
+                    document.getElementById('topPerformerName').value = tp.name || 'Hatim';
+                    document.getElementById('topPerformerPoints').value = tp.points || 71;
+                    document.getElementById('topPerformerBadge').value = tp.badge || 'Most consistent learner | Phase 1';
+                    document.getElementById('topPerformerAvatar').value = tp.avatar || 'https://i.ibb.co/4RQ0RChK/hatim.jpg';
+                    updateAvatarPreview();
+                    // Keep localStorage in sync with what cloud returned
+                    localStorage.setItem('fluencyTopPerformer', JSON.stringify(tp));
+                    return;
+                }
+            } catch (e) {
+                console.log('Could not load top performer from cloud, using localStorage fallback');
+            }
+            // Fallback: read from localStorage
             const saved = localStorage.getItem('fluencyTopPerformer');
             if (saved) {
                 try {
@@ -1087,11 +1108,14 @@ discipline – controlled behaviour to achieve a goal</textarea>
             localStorage.setItem('fluencyLessonCode', data.lessonCode);
 
             try {
+                // FIX: Added action: 'saveLesson' to the POST body.
+                // Previously this was missing, so the Google Apps Script could not
+                // identify the request type and never wrote lesson data to the Sheet.
                 await fetch(LESSON_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({ action: 'saveLesson', ...data })
                 });
 
                 // Also save locally as backup
