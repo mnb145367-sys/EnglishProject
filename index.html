@@ -673,16 +673,106 @@
     }
 
     .task-card {
+      position: relative;
+      overflow: hidden;
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(6px);
       border-radius: 2rem;
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 8px 16px rgba(0, 30, 50, 0.05);
+      padding: 0;
+      border: 1px solid rgba(180, 220, 255, 0.5);
+      box-shadow: 0 8px 24px rgba(0, 30, 50, 0.07);
     }
 
     body.dark-mode .task-card {
       background: rgba(30, 45, 60, 0.8);
+      border-color: rgba(80, 140, 200, 0.2);
+    }
+
+    /* ── Task Banner (header for each task card) ── */
+    .task-banner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1.15rem 1.6rem;
+      background: linear-gradient(135deg, rgba(232,244,255,0.95) 0%, rgba(210,235,255,0.75) 100%);
+      border-bottom: 1px solid rgba(180, 220, 255, 0.45);
+      overflow: hidden;
+    }
+    body.dark-mode .task-banner {
+      background: linear-gradient(135deg, rgba(25,50,80,0.9) 0%, rgba(20,40,65,0.8) 100%);
+      border-bottom-color: rgba(60,120,190,0.25);
+    }
+    .task-banner .tb-shape {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .task-banner .tb-shape-1 {
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, #c5e2ff 0%, transparent 70%);
+      top: -65px; right: -40px;
+      opacity: 0.65;
+    }
+    .task-banner .tb-shape-2 {
+      width: 90px; height: 90px;
+      background: radial-gradient(circle, #dbeeff 0%, transparent 70%);
+      bottom: -35px; left: -15px;
+      opacity: 0.55;
+    }
+    .task-banner .tb-shape-3 {
+      width: 55px; height: 55px;
+      background: linear-gradient(135deg, #d0eaff, #b8d9f5);
+      top: 50%; right: 90px;
+      transform: translateY(-50%) rotate(22deg);
+      opacity: 0.35;
+      border-radius: 10px;
+    }
+    .task-banner-icon {
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, #3a9fd4, #1e6db5);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 14px rgba(25, 90, 160, 0.3);
+      position: relative; z-index: 1;
+      flex-shrink: 0;
+    }
+    body.dark-mode .task-banner-icon {
+      background: linear-gradient(135deg, #2a7ab5, #1a5a96);
+    }
+    .task-banner-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #18537b;
+      position: relative; z-index: 1;
+      flex: 1;
+    }
+    body.dark-mode .task-banner-title {
+      color: #b3d6f0;
+    }
+    .task-banner-badge {
+      background: linear-gradient(135deg, #e8f4ff, #d4ecff);
+      color: #1e5a88;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.22rem 0.85rem;
+      border-radius: 50px;
+      border: 1px solid rgba(30, 90, 136, 0.18);
+      box-shadow: 0 2px 6px rgba(0, 60, 120, 0.08);
+      position: relative; z-index: 1;
+      letter-spacing: 0.03em;
+    }
+    body.dark-mode .task-banner-badge {
+      background: rgba(50, 110, 180, 0.35);
+      color: #b3d6f0;
+      border-color: rgba(100, 160, 220, 0.3);
+    }
+
+    /* Task body padding (replaces old card padding) */
+    .task-body {
+      padding: 1.8rem 2rem 2rem;
     }
 
     .task-title {
@@ -1136,6 +1226,275 @@
       box-shadow: 0 0 0 3px rgba(200, 60, 60, 0.12);
     }
 
+    /* ╔══════════════════════════════════════════════════════╗
+       ║        VOICE RECORDER — PREMIUM UI SYSTEM           ║
+       ╚══════════════════════════════════════════════════════╝ */
+
+    /* ── Outer card ─────────────────────────────────────── */
+    .vr-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f0f8ff 100%);
+      border-radius: 2rem;
+      padding: 2rem 1.8rem 1.5rem;
+      border: 1px solid rgba(30, 90, 136, 0.12);
+      box-shadow:
+        0 30px 60px -15px rgba(0, 60, 120, 0.13),
+        0 4px 12px rgba(30, 90, 136, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vr-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(94, 159, 207, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    body.dark-mode .vr-card {
+      background: linear-gradient(145deg, rgba(20,38,55,0.95), rgba(14,28,42,0.98));
+      border-color: rgba(94, 159, 207, 0.18);
+      box-shadow: 0 30px 60px -15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* ── Header row ─────────────────────────────────────── */
+    .vr-header {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ── Mic Orbit ───────────────────────────────────────── */
+    .vr-mic-orbit {
+      position: relative;
+      width: 72px; height: 72px;
+      flex-shrink: 0;
+    }
+
+    .vr-mic-core {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1e5a88, #367bb5);
+      border-radius: 50%;
+      font-size: 1.5rem; color: white; z-index: 2;
+      box-shadow: 0 8px 20px rgba(30,90,136,0.35);
+      transition: background 0.4s ease, transform 0.3s ease;
+    }
+
+    .vr-mic-orbit.is-recording .vr-mic-core {
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      box-shadow: 0 8px 24px rgba(231,76,60,0.5);
+      animation: vrMicPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes vrMicPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.08); }
+    }
+
+    .vr-orbit-ring {
+      position: absolute; border-radius: 50%;
+      border: 2px solid rgba(30,90,136,0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(0);
+      opacity: 0;
+    }
+
+    .vr-ring-1 { width: 88px;  height: 88px; }
+    .vr-ring-2 { width: 108px; height: 108px; }
+    .vr-ring-3 { width: 128px; height: 128px; }
+
+    .vr-mic-orbit.is-recording .vr-ring-1 {
+      border-color: rgba(231,76,60,0.45);
+      animation: vrRingExpand 1.9s ease-out 0.0s infinite;
+    }
+    .vr-mic-orbit.is-recording .vr-ring-2 {
+      border-color: rgba(231,76,60,0.28);
+      animation: vrRingExpand 1.9s ease-out 0.4s infinite;
+    }
+    .vr-mic-orbit.is-recording .vr-ring-3 {
+      border-color: rgba(231,76,60,0.14);
+      animation: vrRingExpand 1.9s ease-out 0.8s infinite;
+    }
+
+    @keyframes vrRingExpand {
+      0%   { transform: translate(-50%,-50%) scale(0.7); opacity: 0.9; }
+      100% { transform: translate(-50%,-50%) scale(1.25); opacity: 0; }
+    }
+
+    /* ── Status + Timer ─────────────────────────────────── */
+    .vr-status-text {
+      font-size: 1.05rem; font-weight: 600;
+      color: #1e5a88; transition: color 0.3s ease;
+      letter-spacing: 0.01em;
+    }
+    body.dark-mode .vr-status-text { color: #7fc5ef; }
+    .vr-status-text.vr-recording   { color: #e74c3c; }
+    .vr-status-text.vr-done        { color: #1e8a48; }
+    body.dark-mode .vr-status-text.vr-done { color: #4cd07d; }
+
+    .vr-timer {
+      font-size: 1.85rem; font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 2px; color: #1e3a5f;
+      line-height: 1.1; margin-top: 0.1rem;
+      transition: color 0.3s ease;
+    }
+    body.dark-mode .vr-timer { color: #b3d6f0; }
+    .vr-timer.is-recording   { color: #c0392b; }
+
+    /* ── Waveform container ──────────────────────────────── */
+    .vr-waveform-container {
+      margin: 0.2rem 0 1.6rem;
+      background: rgba(240,248,255,0.7);
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem 0.5rem;
+      border: 1px solid rgba(30,90,136,0.08);
+      min-height: 88px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+    }
+    body.dark-mode .vr-waveform-container {
+      background: rgba(10,25,40,0.6);
+      border-color: rgba(94,159,207,0.1);
+    }
+
+    .vr-waveform {
+      display: flex; align-items: center; justify-content: center;
+      gap: 3px; height: 52px; width: 100%;
+    }
+
+    .vr-bar {
+      width: 4px; border-radius: 3px;
+      background: linear-gradient(180deg, #1e5a88 0%, #84b3d9 100%);
+      height: 5px; flex-shrink: 0;
+      transition: height 0.06s ease, background 0.1s ease;
+      will-change: height;
+    }
+
+    /* Gentle breathing when idle */
+    .vr-bar.idle {
+      animation: vrBarIdle var(--idle-dur, 2s) ease-in-out var(--idle-delay, 0s) infinite alternate;
+    }
+    @keyframes vrBarIdle {
+      from { height: 4px;  opacity: 0.4; }
+      to   { height: var(--idle-peak, 16px); opacity: 0.8; }
+    }
+
+    .vr-waveform-label {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #84b3d9;
+    }
+    body.dark-mode .vr-waveform-label { color: #3d6a8a; }
+
+    /* ── Control buttons ─────────────────────────────────── */
+    .vr-controls {
+      display: flex; justify-content: center;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+
+    .vr-btn-group {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.45rem;
+    }
+
+    .vr-btn {
+      width: 64px; height: 64px; border-radius: 50%; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease, opacity 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .vr-btn::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(255,255,255,0.15); opacity: 0; transition: opacity 0.2s;
+    }
+    .vr-btn:hover::after { opacity: 1; }
+    .vr-btn-icon { position: relative; z-index: 1; color: white; }
+
+    .vr-btn-record {
+      background: linear-gradient(145deg, #e74c3c, #c0392b);
+      box-shadow: 0 8px 20px rgba(231,76,60,0.35), 0 2px 6px rgba(231,76,60,0.2);
+    }
+    .vr-btn-record:hover:not(:disabled) {
+      transform: scale(1.1);
+      box-shadow: 0 14px 30px rgba(231,76,60,0.45);
+    }
+    .vr-btn-record.is-recording {
+      animation: vrRecordPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes vrRecordPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.6), 0 8px 20px rgba(231,76,60,0.25); }
+      50%       { box-shadow: 0 0 0 14px rgba(231,76,60,0), 0 8px 20px rgba(231,76,60,0.15); }
+    }
+
+    .vr-btn-stop {
+      background: linear-gradient(145deg, #2c3e50, #1a252f);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    .vr-btn-stop:hover:not(:disabled) {
+      transform: scale(1.1); box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    }
+
+    .vr-btn-play {
+      background: linear-gradient(145deg, #1e5a88, #367bb5);
+      box-shadow: 0 8px 20px rgba(30,90,136,0.35), 0 2px 6px rgba(30,90,136,0.2);
+    }
+    .vr-btn-play:hover:not(:disabled) {
+      transform: scale(1.1); box-shadow: 0 14px 30px rgba(30,90,136,0.45);
+    }
+
+    .vr-btn:disabled {
+      opacity: 0.3; cursor: not-allowed;
+      transform: none !important; box-shadow: none !important;
+    }
+
+    .vr-btn-label {
+      font-size: 0.82rem; font-weight: 600;
+      color: #5f7d9c; letter-spacing: 0.04em;
+    }
+    body.dark-mode .vr-btn-label { color: #5a86aa; }
+
+    /* ── Success badge ───────────────────────────────────── */
+    .vr-success-badge {
+      display: none;
+      align-items: center; gap: 0.6rem;
+      margin-top: 1.2rem;
+      background: linear-gradient(135deg, #d4edda, #e8f5e9);
+      color: #155724;
+      border: 1px solid #b8dfc4;
+      border-radius: 50px;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.95rem; font-weight: 600;
+      width: 100%; justify-content: center;
+      animation: vrBadgePop 0.45s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes vrBadgePop {
+      from { transform: scale(0.8); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    body.dark-mode .vr-success-badge {
+      background: rgba(30,100,50,0.25); color: #5dd88a;
+      border-color: rgba(40,120,60,0.3);
+    }
+
+    /* ── Error message ───────────────────────────────────── */
+    .vr-error-msg {
+      margin-top: 1rem;
+      background: #f8d7da; color: #721c24;
+      border: 1px solid #f5c6cb;
+      border-radius: 1rem; padding: 0.8rem 1.2rem;
+      font-size: 0.95rem; font-weight: 500;
+    }
+    body.dark-mode .vr-error-msg {
+      background: rgba(120,30,40,0.3); color: #f0a0a0;
+      border-color: rgba(150,40,50,0.4);
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       header {
@@ -1255,19 +1614,100 @@
 
       /* ===== VIDEO SECTION MODERN CARD ===== */
       .modern-video-card {
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(4px);
+        position: relative;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(10px);
         border-radius: 2rem;
         padding: 1.5rem;
         margin: 1.5rem 0;
-        box-shadow: 0 20px 35px -12px rgba(0, 40, 80, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 16px 40px -8px rgba(0, 50, 100, 0.10), 0 2px 8px rgba(30, 83, 123, 0.06);
+        border: 1px solid rgba(180, 220, 255, 0.55);
         transition: transform 0.25s ease, box-shadow 0.3s ease;
       }
 
       .modern-video-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 28px 40px -12px rgba(25, 85, 130, 0.2);
+        box-shadow: 0 24px 50px -8px rgba(0, 50, 100, 0.15), 0 4px 12px rgba(30, 83, 123, 0.08);
+      }
+
+      body.dark-mode .modern-video-card {
+        background: rgba(30, 45, 65, 0.85);
+        border-color: rgba(80, 140, 200, 0.25);
+      }
+
+      /* Decorative floating shapes */
+      .vd-shape {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .vd-shape-1 {
+        width: 230px; height: 230px;
+        background: radial-gradient(circle, #dbeeff 0%, transparent 70%);
+        top: -80px; right: -60px;
+        opacity: 0.75;
+      }
+      .vd-shape-2 {
+        width: 140px; height: 140px;
+        background: radial-gradient(circle, #c5e2ff 0%, transparent 70%);
+        bottom: -45px; left: -30px;
+        opacity: 0.65;
+      }
+      .vd-shape-3 {
+        width: 75px; height: 75px;
+        background: radial-gradient(circle, #a8d4f5 0%, transparent 70%);
+        top: 50%; left: 14px;
+        transform: translateY(-50%);
+        opacity: 0.55;
+      }
+      .vd-shape-4 {
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #d0eaff, #b8d9f5);
+        bottom: 20px; right: 24px;
+        border-radius: 12px;
+        transform: rotate(22deg);
+        opacity: 0.45;
+      }
+
+      /* Header banner inside video card */
+      .video-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        color: #18537b;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+        letter-spacing: 0.02em;
+      }
+      .video-card-header i {
+        font-size: 1.3rem;
+        color: #3a9fd4;
+      }
+      body.dark-mode .video-card-header {
+        color: #b3d6f0;
+      }
+      body.dark-mode .video-card-header i {
+        color: #7dc8f0;
+      }
+      .video-card-header .vd-badge {
+        margin-left: auto;
+        background: linear-gradient(135deg, #e8f4ff, #d4ecff);
+        color: #1e5a88;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.22rem 0.8rem;
+        border-radius: 50px;
+        border: 1px solid rgba(30, 90, 136, 0.15);
+        box-shadow: 0 2px 6px rgba(0, 60, 120, 0.08);
+      }
+      body.dark-mode .video-card-header .vd-badge {
+        background: rgba(60, 120, 180, 0.3);
+        color: #b3d6f0;
+        border-color: rgba(100, 160, 220, 0.3);
       }
 
       .video-title {
@@ -1690,26 +2130,56 @@
         <div class="lesson-tasks" id="lessonTasks">
           <!-- Task 1: Video -->
           <div class="task-card" id="task1">
-            <div class="task-title"><i class="fa-regular fa-film"></i> Watch the video</div>
-            <div class="modern-video-card">
-              <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
-              </div>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-circle-play"></i></div>
+              <span class="task-banner-title">Watch the Video</span>
+              <span class="task-banner-badge">Task 1</span>
             </div>
-            <p style="text-align:center; margin-top:0.8rem;">Listen actively. You may use subtitles the first time.</p>
+            <div class="task-body">
+              <div class="modern-video-card">
+                <div class="vd-shape vd-shape-1"></div>
+                <div class="vd-shape vd-shape-2"></div>
+                <div class="vd-shape vd-shape-3"></div>
+                <div class="vd-shape vd-shape-4"></div>
+                <div class="video-wrapper" style="position:relative; z-index:1;">
+                  <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
+                </div>
+              </div>
+              <p style="text-align:center; margin-top:0.8rem; color:#3a6d94;">Listen actively. You may use subtitles the first time.</p>
+            </div>
           </div>
 
           <!-- Task 2: Reflection -->
           <div class="task-card hidden-task" id="task2">
-            <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-            <p>• What are two main ways technology has improved daily life?</p>
-            <p>• Mention one negative effect of technology discussed.</p>
-            <p>• How does technology influence communication?</p>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-brain"></i></div>
+              <span class="task-banner-title">Reflect</span>
+              <span class="task-banner-badge">Task 2</span>
+            </div>
+            <div class="task-body">
+              <p>• What are two main ways technology has improved daily life?</p>
+              <p>• Mention one negative effect of technology discussed.</p>
+              <p>• How does technology influence communication?</p>
+            </div>
           </div>
 
-          <!-- Task 3: Reading -->
+          <!-- Task 3: Reading + Voice Recorder -->
           <div class="task-card hidden-task" id="task3">
-            <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+              <span class="task-banner-title">Read Aloud &amp; Record</span>
+              <span class="task-banner-badge">Task 3</span>
+            </div>
+            <div class="task-body">
             <div class="reading-controls">
               <button class="font-size-btn" id="decreaseFontBtn" title="Decrease font size"><i class="fa-solid fa-minus"></i> A</button>
               <button class="font-size-btn" id="increaseFontBtn" title="Increase font size"><i class="fa-solid fa-plus"></i> A</button>
@@ -1720,18 +2190,105 @@
               connect with others. Smartphones, the internet, and artificial intelligence have made information more
               accessible than ever, allowing people to learn and communicate at a global scale...
             </div>
+
+            <!-- Voice Recorder (embedded) -->
+            <div class="task-title" style="margin-top: 1.8rem;"><i class="fa-solid fa-microphone"></i> Speak &amp; Record</div>
+            <p style="margin-bottom: 1.5rem;">Read the passage above aloud. Record your voice below — your recording will be submitted automatically with your lesson.</p>
+
+            <div class="vr-card" id="voiceRecorderCard">
+
+              <!-- Header: animated mic orb + status + timer -->
+              <div class="vr-header">
+                <div class="vr-mic-orbit" id="vrMicOrbit">
+                  <div class="vr-orbit-ring vr-ring-1"></div>
+                  <div class="vr-orbit-ring vr-ring-2"></div>
+                  <div class="vr-orbit-ring vr-ring-3"></div>
+                  <div class="vr-mic-core">
+                    <i class="fa-solid fa-microphone" id="vrMicIcon"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="vr-status-text" id="vrStatus">Ready to record</div>
+                  <div class="vr-timer" id="vrTimer">0:00</div>
+                </div>
+              </div>
+
+              <!-- Real-time waveform visualizer -->
+              <div class="vr-waveform-container">
+                <div class="vr-waveform" id="vrWaveform">
+                  <!-- 34 bars injected by JavaScript -->
+                </div>
+                <div class="vr-waveform-label" id="vrWaveLabel">— idle —</div>
+              </div>
+
+              <!-- Control buttons -->
+              <div class="vr-controls">
+
+                <div class="vr-btn-group">
+                  <button class="vr-btn vr-btn-record" id="vrRecordBtn"
+                    onclick="vrStartRecording()" title="Start Recording">
+                    <span class="vr-btn-icon"><i class="fa-solid fa-microphone"></i></span>
+                  </button>
+                  <span class="vr-btn-label">Record</span>
+                </div>
+
+                <div class="vr-btn-group">
+                  <button class="vr-btn vr-btn-stop" id="vrStopBtn"
+                    onclick="vrStopRecording()" title="Stop" disabled>
+                    <span class="vr-btn-icon"><i class="fa-solid fa-stop"></i></span>
+                  </button>
+                  <span class="vr-btn-label">Stop</span>
+                </div>
+
+                <div class="vr-btn-group">
+                  <button class="vr-btn vr-btn-play" id="vrPlayBtn"
+                    onclick="vrTogglePlayback()" title="Play / Pause" disabled>
+                    <span class="vr-btn-icon" id="vrPlayIcon"><i class="fa-solid fa-play"></i></span>
+                  </button>
+                  <span class="vr-btn-label">Play</span>
+                </div>
+
+              </div>
+
+              <!-- Native audio player (shown after recording) -->
+              <audio id="vrAudioPlayer" controls
+                style="display:none; width:100%; margin-top:1rem; border-radius:50px;"
+                onplay="document.getElementById('vrPlayIcon').innerHTML='<i class=\'fa-solid fa-pause\'></i>'"
+                onpause="document.getElementById('vrPlayIcon').innerHTML='<i class=\'fa-solid fa-play\'></i>'"
+                onended="document.getElementById('vrPlayIcon').innerHTML='<i class=\'fa-solid fa-play\'></i>'">
+              </audio>
+
+              <!-- Success badge -->
+              <div class="vr-success-badge" id="vrSuccessBadge" style="display:none;">
+                <i class="fa-regular fa-circle-check"></i>
+                <span>Recording saved — will be submitted with your lesson</span>
+              </div>
+
+              <!-- Error message -->
+              <div class="vr-error-msg" id="vrErrorMsg" style="display:none;"></div>
+
+            </div><!-- /.vr-card -->
+            </div><!-- /.task-body -->
           </div>
 
           <!-- Task 4: Vocabulary -->
           <div class="task-card hidden-task" id="task4">
-            <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-spell-check"></i></div>
+              <span class="task-banner-title">Vocabulary</span>
+              <span class="task-banner-badge">Task 4</span>
+            </div>
+            <div class="task-body">
             <div class="vocabulary-grid" id="vocabGrid">
               <div class="vocab-card">
                 <div class="vocab-card-header"><span class="vocab-number">1</span><span class="vocab-word">persistence</span></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">continuing despite difficulty</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
-                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "persistence"…'></div></div>
+                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "persistence"…' disabled></div></div>
                 </div>
               </div>
               <div class="vocab-card">
@@ -1739,7 +2296,7 @@
                 <div class="vocab-card-body">
                   <div class="vocab-definition">force that keeps something moving</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
-                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "momentum"…'></div></div>
+                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "momentum"…' disabled></div></div>
                 </div>
               </div>
               <div class="vocab-card">
@@ -1747,7 +2304,7 @@
                 <div class="vocab-card-body">
                   <div class="vocab-definition">doing the same thing regularly</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
-                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "consistency"…'></div></div>
+                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "consistency"…' disabled></div></div>
                 </div>
               </div>
               <div class="vocab-card">
@@ -1755,7 +2312,7 @@
                 <div class="vocab-card-body">
                   <div class="vocab-definition">contact with something (e.g. language)</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
-                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "exposure"…'></div></div>
+                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "exposure"…' disabled></div></div>
                 </div>
               </div>
               <div class="vocab-card">
@@ -1763,37 +2320,34 @@
                 <div class="vocab-card-body">
                   <div class="vocab-definition">controlled behaviour to achieve a goal</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
-                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "discipline"…'></div></div>
+                  <div class="vocab-example"><input type="text" placeholder='Write a sentence using "discipline"…' disabled></div></div>
                 </div>
               </div>
             </div>
+            </div><!-- /.task-body -->
           </div>
 
-          <!-- Task 5: Speaking -->
+          <!-- Task 5: Questions -->
           <div class="task-card hidden-task" id="task5">
-            <div class="task-title"><i class="fa-regular fa-message"></i> Speaking</div>
-            <p>Read the passage from task 3 aloud. Record yourself and share it in the WhatsApp group.</p>
-            <button class="btn" style="margin-top: 0.8rem;"
-              onclick="window.open('https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t','_blank')"><i
-                class="fa-brands fa-whatsapp"></i> Open WhatsApp</button>
-          </div>
-
-          <!-- Task 6: Questions (NEW) -->
-          <div class="task-card hidden-task" id="task6">
-            <div class="task-title"><i class="fa-regular fa-question-circle"></i> Have Questions?</div>
-            <p style="margin-bottom: 1.5rem;">Use the box below to ask any questions about this lesson. Your questions
-              will be sent directly to your instructor.</p>
-            <div class="questions-box" style="margin-top: 0; text-align: left;">
-              <h3><i class="fa-regular fa-paper-plane"></i> Ask a Question</h3>
-              <input type="text" id="studentName" placeholder="Your name (optional)">
-              <textarea id="studentQuestion"
-                placeholder="Type your question here... For example: 'Can you explain the difference between technology and innovation?'"></textarea>
-              <button class="btn btn-primary" onclick="submitQuestion()">
-                <i class="fa-regular fa-paper-plane"></i> Submit Question
-              </button>
-              <div class="question-success" id="questionSuccess">
-                <i class="fa-regular fa-check-circle"></i>
-                <span>Your question has been sent successfully!</span>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-circle-question"></i></div>
+              <span class="task-banner-title">Ask a Question</span>
+              <span class="task-banner-badge">Task 5</span>
+            </div>
+            <div class="task-body">
+              <p style="margin-bottom: 1.5rem;">Use the box below to ask any questions about this lesson. Your questions will be sent directly to your instructor.</p>
+              <div class="questions-box" style="margin-top: 0; text-align: left;">
+                <h3><i class="fa-regular fa-paper-plane"></i> Ask a Question</h3>
+                <input type="text" id="studentName" placeholder="Your name (optional)">
+                <textarea id="studentQuestion"
+                  placeholder="Type your question here... For example: 'Can you explain the difference between technology and innovation?'"></textarea>
+                <div class="question-success" id="questionSuccess">
+                  <i class="fa-regular fa-check-circle"></i>
+                  <span>Your question has been sent successfully!</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1947,8 +2501,7 @@
           <div class="contact-card">
             <i class="fa-regular fa-envelope"></i>
             <h3>Email</h3>
-            <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                data-cfemail="5e33303c6f6a6b6d68691e39333f3732703d3133">[email&#160;protected]</a></p>
+            <p><a href="/cdn-cgi/l/email-protection#5c31323e6d68696f6a6b1c3b313d3530723f3331"><span class="__cf_email__" data-cfemail="0b6665693a3f3e383d3c4b6c666a626725686466">[email&#160;protected]</span></a></p>
           </div>
         </div>
         <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
@@ -1982,7 +2535,7 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
     // ============================================
     // API URLs
@@ -1990,16 +2543,16 @@
     // STUDENTS_API_URL - For Statistics page (DO NOT CHANGE)
     const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbwXavfCoGfyCA0moBn4OwmbjGGBk-gHFlYtr9gTSZRdznXD8fHjRqz82MwSFkyYRDIWdw/exec';
     // LESSON_API_URL - For Lesson data & Top Performer (Your new Apps Script)
-    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbz3QuPL0mzs2MYdPMSoS05Rq98ZtPWItbEzyQOnH2N1iwZPpLX65k9GljFg9d5_2yftUg/exec';
+    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
     // QUESTIONS_API_URL - For Questions submission (Your new Apps Script)
-    const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycbz3QuPL0mzs2MYdPMSoS05Rq98ZtPWItbEzyQOnH2N1iwZPpLX65k9GljFg9d5_2yftUg/exec';
+    const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
     // Global variables
     let studentsData = [];
     let chartsInitialized = false;
     let categoryChart, distributionChart;
     let lessonCode = "1234"; // Default value
     let currentTask = 1;
-    const totalTasks = 6; // Updated to include Questions task
+    const totalTasks = 5;
 
     // ============================================
     // QUESTIONS SUBMISSION
@@ -2009,14 +2562,11 @@
       const questionInput = document.getElementById('studentQuestion');
       const successBox = document.getElementById('questionSuccess');
 
-      const name = nameInput.value.trim();
-      const question = questionInput.value.trim();
+      const name = nameInput ? nameInput.value.trim() : '';
+      const question = questionInput ? questionInput.value.trim() : '';
 
-      if (!question) {
-        alert('Please enter your question before submitting.');
-        questionInput.focus();
-        return;
-      }
+      // If no question entered, skip silently
+      if (!question) return;
 
       // Create payload - MUST have 'action': 'submitQuestion' AND 'question' field
       const payload = {
@@ -2029,20 +2579,57 @@
       console.log('Submitting question with payload:', payload);
 
       try {
-        // Use no-cors mode for Google Apps Script
-        // Content-Type must be text/plain for no-cors — body is still valid JSON
+        // text/plain avoids CORS preflight; Apps Script parses JSON from e.postData.contents
         const response = await fetch(QUESTIONS_API_URL, {
           method: 'POST',
-          mode: 'no-cors',
+          redirect: 'follow',
           headers: {
             'Content-Type': 'text/plain'
           },
           body: JSON.stringify(payload)
         });
+        if (!response.ok) throw new Error('Question submit failed: ' + response.status);
 
-        // Note: With no-cors, response will be opaque
-        // We assume success and show the message
         console.log('Question submitted successfully');
+
+        // Audio fallback: send if not already sent by the nextTask handler
+        try {
+          console.log('VR: submitQuestion audio check — sent:', window.vrAudioSent, ', promise:', !!window.vrAudioReadyPromise, ', base64:', !!window.vrAudioBase64);
+          if (!window.vrAudioSent && window.vrAudioReadyPromise) {
+            console.log('VR: awaiting audio promise in submitQuestion...');
+            await window.vrAudioReadyPromise;
+          }
+          if (!window.vrAudioSent && window.vrAudioBase64) {
+            const audioExt = window.vrAudioBase64.startsWith('data:audio/webm') ? 'webm' : 'ogg';
+            const audioPayload = {
+              action: 'uploadAudio',
+              audioBase64: window.vrAudioBase64.split(',')[1],
+              mimeType: window.vrAudioBase64.split(';')[0].split(':')[1],
+              fileName: 'audio_lesson' + lessonCode + '_' + (name || 'Anonymous') + '_' + Date.now() + '.' + audioExt,
+              studentName: name || 'Anonymous',
+              lessonCode: lessonCode,
+              timestamp: new Date().toISOString()
+            };
+            console.log('VR: sending audio from submitQuestion fallback, size:', JSON.stringify(audioPayload).length);
+            const audioResp = await fetch(QUESTIONS_API_URL, {
+              method: 'POST',
+              redirect: 'follow',
+              headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify(audioPayload)
+            });
+            if (!audioResp.ok) throw new Error('Audio upload HTTP error: ' + audioResp.status);
+            const audioResult = await audioResp.json();
+            console.log('VR: submitQuestion fallback response:', JSON.stringify(audioResult));
+            if (!audioResult.success) throw new Error('Audio upload server error: ' + (audioResult.error || 'unknown'));
+            window.vrAudioSent = true;
+            console.log('VR: audio sent via submitQuestion fallback ✅');
+          } else {
+            console.log('VR: submitQuestion — audio already sent or not recorded');
+          }
+        } catch (audioErr) {
+          console.error('VR: submitQuestion audio fallback failed:', audioErr);
+          alert('Audio upload failed. Please try again.');
+        }
 
         // Show success message
         successBox.classList.add('show');
@@ -2205,26 +2792,9 @@
 
       // تحديث النص القرائي
       if (data.reading) {
-        const task3 = document.getElementById('task3');
-        if (task3) {
-          task3.innerHTML = `
-                        <div class="task-title"><i class="fa-regular fa-book-open"></i> Read aloud</div>
-                        <div class="reading-controls">
-                          <button class="font-size-btn" id="decreaseFontBtn" title="Decrease font size"><i class="fa-solid fa-minus"></i> A</button>
-                          <button class="font-size-btn" id="increaseFontBtn" title="Increase font size"><i class="fa-solid fa-plus"></i> A</button>
-                        </div>
-                        <div class="reading-content" id="readingContent">${String(data.reading).replace(/\n/g, '<br>')}</div>
-                    `;
-          // Re-init font controls after DOM rebuild
-          (function() {
-            const dec = document.getElementById('decreaseFontBtn');
-            const inc = document.getElementById('increaseFontBtn');
-            const rd  = document.getElementById('readingContent');
-            if (!dec || !inc || !rd) return;
-            let sz = 1.15;
-            dec.addEventListener('click', () => { if (sz > 0.9) { sz = Math.max(0.9, sz-0.1); rd.style.fontSize = sz.toFixed(2)+'rem'; } });
-            inc.addEventListener('click', () => { if (sz < 2.0) { sz = Math.min(2.0, sz+0.1); rd.style.fontSize = sz.toFixed(2)+'rem'; } });
-          })();
+        const rc = document.getElementById('readingContent');
+        if (rc) {
+          rc.innerHTML = String(data.reading).replace(/\n/g, '<br>');
         }
       }
 
@@ -4760,7 +5330,7 @@
     // ============================================
 
     // IMPORTANT: Replace this with your actual Apps Script URL after deploying
-    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycbz3QuPL0mzs2MYdPMSoS05Rq98ZtPWItbEzyQOnH2N1iwZPpLX65k9GljFg9d5_2yftUg/exec';
+    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
 
     // Track upload state
     let lessonImageUploaded = false;
@@ -4881,16 +5451,17 @@
         timestamp: new Date().toISOString()
       };
 
+      // Audio is now uploaded separately after image — see nextTask override
       try {
-        await fetch(IMAGE_UPLOAD_API_URL, {
+        const imgResp = await fetch(IMAGE_UPLOAD_API_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          // text/plain is required for no-cors — body is still valid JSON
+          redirect: 'follow',
+          // text/plain avoids CORS preflight; Apps Script parses JSON from e.postData.contents
           headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify(payload)
         });
+        if (!imgResp.ok) throw new Error('Image upload failed: ' + imgResp.status);
 
-        // With no-cors we assume success
         lessonImageUploaded = true;
         document.getElementById('uploadLoadingState').style.display = 'none';
         showUploadStatus('✅ Image uploaded successfully!', 'success');
@@ -4928,9 +5499,52 @@
             return; // BLOCK completion
           }
 
-          // Upload the image first, then show popup
+          // Upload image and submit question together, then upload audio, then show popup
           const success = await uploadImageToSheet();
           if (success) {
+            await submitQuestion();
+
+            // ── Dedicated audio upload (separate request) ──
+            try {
+              if (window.vrAudioReadyPromise) {
+                console.log('VR: awaiting audio encoding...');
+                await window.vrAudioReadyPromise;
+              }
+              if (window.vrAudioBase64 && !window.vrAudioSent) {
+                const studentName = (typeof studentEnteredName !== 'undefined' && studentEnteredName)
+                  ? studentEnteredName
+                  : (document.getElementById('studentName')?.value?.trim() || 'Anonymous');
+                const audioExt = window.vrAudioBase64.startsWith('data:audio/webm') ? 'webm' : 'ogg';
+                const audioPayload = {
+                  action:      'uploadAudio',
+                  audioBase64: window.vrAudioBase64.split(',')[1],
+                  mimeType:    window.vrAudioBase64.split(';')[0].split(':')[1],
+                  fileName:    'audio_lesson' + lessonCode + '_' + studentName + '_' + Date.now() + '.' + audioExt,
+                  studentName: studentName,
+                  lessonCode:  lessonCode,
+                  timestamp:   new Date().toISOString()
+                };
+                console.log('VR: sending audio separately, payload size:', JSON.stringify(audioPayload).length);
+                const audioResp2 = await fetch(IMAGE_UPLOAD_API_URL, {
+                  method: 'POST',
+                  redirect: 'follow',
+                  headers: { 'Content-Type': 'text/plain' },
+                  body: JSON.stringify(audioPayload)
+                });
+                if (!audioResp2.ok) throw new Error('Audio upload HTTP error: ' + audioResp2.status);
+                const audioResult2 = await audioResp2.json();
+                console.log('VR: nextTask audio response:', JSON.stringify(audioResult2));
+                if (!audioResult2.success) throw new Error('Audio upload server error: ' + (audioResult2.error || 'unknown'));
+                window.vrAudioSent = true;
+                console.log('VR: audio uploaded separately ✅');
+              } else {
+                console.log('VR: no audio to send (base64:', !!window.vrAudioBase64, ', sent:', window.vrAudioSent, ')');
+              }
+            } catch (audioErr) {
+              console.error('VR: separate audio upload failed:', audioErr);
+              alert('Audio recording could not be uploaded. Please try again.');
+            }
+
             document.getElementById('completionPopup').classList.remove('hidden');
           }
           // If upload fails, the error message is already shown – user can retry
@@ -4940,6 +5554,307 @@
         }
       };
     })();</script>
-</body>
+  <script>
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║   FLUENCY — VOICE RECORDER SYSTEM                           ║
+    // ║   MediaRecorder API + Web Audio AnalyserNode                ║
+    // ║   Real waveform · base64 submission · additive-only         ║
+    // ╚══════════════════════════════════════════════════════════════╝
 
+    // ── State variables ───────────────────────────────────────────
+    let vrMediaRecorder = null;
+    let vrAudioChunks   = [];
+    let vrAudioBlob     = null;
+    window.vrAudioBase64   = null;   // ← on window so all script blocks can access
+    window.vrAudioReadyPromise = null; // resolves when FileReader finishes encoding
+    window.vrAudioSent = false;        // prevents double-sending audio
+    let vrTimerInterval = null;
+    let vrSeconds       = 0;
+    let vrAnalyser      = null;
+    let vrAnimFrameId   = null;
+    let vrAudioCtx      = null;
+    let vrStream        = null;
+    const VR_BAR_COUNT  = 34;
+
+    // ── Build waveform bars on page load ─────────────────────────
+    (function vrBuildBars() {
+      const wf = document.getElementById('vrWaveform');
+      if (!wf) return;
+      const idlePeaks = [8,12,18,22,28,32,36,38,36,30,24,20,16,
+                         12,18,24,32,38,42,38,30,24,18,14,20,28,
+                         34,40,36,28,22,16,12,8];
+      const idleDurs  = [2.1,1.8,2.4,1.9,2.2,1.7,2.5,2.0,1.8,2.3,
+                         1.9,2.1,2.4,1.7,2.0,2.3,1.8,2.2,1.9,2.4,
+                         2.1,1.7,2.3,2.0,1.8,2.5,1.9,2.2,2.0,1.8,
+                         2.3,2.1,1.9,2.4];
+      for (let i = 0; i < VR_BAR_COUNT; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'vr-bar idle';
+        bar.style.setProperty('--idle-peak',  `${idlePeaks[i % idlePeaks.length]}px`);
+        bar.style.setProperty('--idle-dur',   `${idleDurs[i % idleDurs.length]}s`);
+        bar.style.setProperty('--idle-delay', `${(i * 0.065).toFixed(3)}s`);
+        wf.appendChild(bar);
+      }
+    })();
+
+    // ── Timer helpers ─────────────────────────────────────────────
+    function vrFormatTime(secs) {
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function vrStartTimer() {
+      vrSeconds = 0;
+      clearInterval(vrTimerInterval);
+      const el = document.getElementById('vrTimer');
+      vrTimerInterval = setInterval(() => {
+        vrSeconds++;
+        if (el) el.textContent = vrFormatTime(vrSeconds);
+      }, 1000);
+    }
+
+    function vrStopTimer() { clearInterval(vrTimerInterval); }
+
+    // ── Real-time waveform via Web Audio AnalyserNode ─────────────
+    function vrStartWaveAnimation() {
+      const bars = document.querySelectorAll('.vr-bar');
+      bars.forEach(b => { b.classList.remove('idle'); b.style.height = '5px'; });
+
+      const bufLen  = vrAnalyser.frequencyBinCount;
+      const dataArr = new Uint8Array(bufLen);
+      const step    = Math.max(1, Math.floor(bufLen / VR_BAR_COUNT));
+
+      function draw() {
+        vrAnimFrameId = requestAnimationFrame(draw);
+        vrAnalyser.getByteFrequencyData(dataArr);
+        bars.forEach((bar, i) => {
+          const raw = dataArr[Math.min(i * step, bufLen - 1)] || 0;
+          const pct = raw / 255;
+          // 5 → 52px range
+          const h = Math.round(5 + pct * 47);
+          bar.style.height = h + 'px';
+          // Color: cool blue (#1e5a88) → warm red (#eb3b2e) with amplitude
+          const r  = Math.round(30  + pct * 205);
+          const g  = Math.round(90  - pct * 55);
+          const b2 = Math.round(136 - pct * 110);
+          bar.style.background =
+            `linear-gradient(180deg, rgb(${r},${g},${b2}) 0%, #84b3d9 100%)`;
+        });
+      }
+      draw();
+    }
+
+    function vrStopWaveAnimation() {
+      if (vrAnimFrameId) { cancelAnimationFrame(vrAnimFrameId); vrAnimFrameId = null; }
+      document.querySelectorAll('.vr-bar').forEach(bar => {
+        bar.style.height = '';
+        bar.style.background = '';
+        bar.classList.add('idle');
+      });
+      const lbl = document.getElementById('vrWaveLabel');
+      if (lbl) lbl.textContent = '— idle —';
+    }
+
+    // ── UI state machine ──────────────────────────────────────────
+    function vrSetUI(state) {
+      const statusEl = document.getElementById('vrStatus');
+      const timerEl  = document.getElementById('vrTimer');
+      const recBtn   = document.getElementById('vrRecordBtn');
+      const stopBtn  = document.getElementById('vrStopBtn');
+      const playBtn  = document.getElementById('vrPlayBtn');
+      const orbit    = document.getElementById('vrMicOrbit');
+      const lbl      = document.getElementById('vrWaveLabel');
+
+      switch (state) {
+        case 'idle':
+          if (statusEl) { statusEl.textContent = 'Ready to record'; statusEl.className = 'vr-status-text'; }
+          if (timerEl)  timerEl.classList.remove('is-recording');
+          if (recBtn)   { recBtn.disabled = false; recBtn.classList.remove('is-recording'); }
+          if (stopBtn)  stopBtn.disabled = true;
+          if (playBtn)  playBtn.disabled = true;
+          if (orbit)    orbit.classList.remove('is-recording');
+          if (lbl)      lbl.textContent = '— idle —';
+          break;
+
+        case 'recording':
+          if (statusEl) { statusEl.textContent = '🔴 Recording...'; statusEl.className = 'vr-status-text vr-recording'; }
+          if (timerEl)  timerEl.classList.add('is-recording');
+          if (recBtn)   { recBtn.disabled = true; recBtn.classList.add('is-recording'); }
+          if (stopBtn)  stopBtn.disabled = false;
+          if (playBtn)  playBtn.disabled = true;
+          if (orbit)    orbit.classList.add('is-recording');
+          if (lbl)      lbl.textContent = '● LIVE';
+          document.getElementById('vrSuccessBadge').style.display = 'none';
+          document.getElementById('vrAudioPlayer').style.display  = 'none';
+          document.getElementById('vrErrorMsg').style.display     = 'none';
+          break;
+
+        case 'processing':
+          if (statusEl) { statusEl.textContent = '⏳ Processing...'; statusEl.className = 'vr-status-text'; }
+          if (timerEl)  timerEl.classList.remove('is-recording');
+          if (recBtn)   { recBtn.disabled = true; recBtn.classList.remove('is-recording'); }
+          if (stopBtn)  stopBtn.disabled = true;
+          if (playBtn)  playBtn.disabled = true;
+          if (orbit)    orbit.classList.remove('is-recording');
+          if (lbl)      lbl.textContent = '— processing —';
+          break;
+
+        case 'done':
+          if (statusEl) { statusEl.textContent = '✅ Recording complete!'; statusEl.className = 'vr-status-text vr-done'; }
+          if (timerEl)  timerEl.classList.remove('is-recording');
+          if (recBtn)   { recBtn.disabled = false; recBtn.classList.remove('is-recording'); }
+          if (stopBtn)  stopBtn.disabled = true;
+          if (playBtn)  playBtn.disabled = false;
+          if (lbl)      lbl.textContent = '— done —';
+          const badge  = document.getElementById('vrSuccessBadge');
+          if (badge)    { badge.style.display = 'flex'; }
+          const player = document.getElementById('vrAudioPlayer');
+          if (player)   player.style.display = 'block';
+          break;
+      }
+    }
+
+    // ── Start recording ───────────────────────────────────────────
+    async function vrStartRecording() {
+      document.getElementById('vrErrorMsg').style.display = 'none';
+      try {
+        vrStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+
+        // Web Audio: connect stream → analyser for waveform
+        vrAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = vrAudioCtx.createMediaStreamSource(vrStream);
+        vrAnalyser   = vrAudioCtx.createAnalyser();
+        vrAnalyser.fftSize = 128;
+        vrAnalyser.smoothingTimeConstant = 0.78;
+        source.connect(vrAnalyser);
+
+        // Pick best supported MIME type
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+          ? 'audio/webm;codecs=opus'
+          : MediaRecorder.isTypeSupported('audio/webm')
+            ? 'audio/webm'
+            : 'audio/ogg';
+
+        vrMediaRecorder = new MediaRecorder(vrStream, { mimeType });
+        vrAudioChunks   = [];
+
+        vrMediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) vrAudioChunks.push(e.data);
+        };
+        vrMediaRecorder.onstop = vrOnRecordingStop;
+        vrMediaRecorder.start(100);  // 100ms timeslices
+
+        vrStartTimer();
+        vrStartWaveAnimation();
+        vrSetUI('recording');
+
+      } catch (err) {
+        console.error('VR mic error:', err);
+        const errEl = document.getElementById('vrErrorMsg');
+        if (errEl) {
+          errEl.textContent = '❌ Microphone access denied. Please allow microphone permission in your browser and try again.';
+          errEl.style.display = 'block';
+        }
+        vrSetUI('idle');
+      }
+    }
+
+    // ── Stop recording ────────────────────────────────────────────
+    function vrStopRecording() {
+      vrStopTimer();
+      vrStopWaveAnimation();
+      vrSetUI('processing');
+
+      if (vrStream)        vrStream.getTracks().forEach(t => t.stop());
+      if (vrMediaRecorder && vrMediaRecorder.state !== 'inactive') vrMediaRecorder.stop();
+      if (vrAudioCtx)      { vrAudioCtx.close().catch(() => {}); vrAudioCtx = null; }
+      vrAnalyser = null;
+    }
+
+    // ── Finalize recording (called by onstop) ─────────────────────
+    function vrOnRecordingStop() {
+      if (!vrAudioChunks.length) { vrSetUI('idle'); return; }
+
+      const mimeType = vrMediaRecorder ? vrMediaRecorder.mimeType : 'audio/webm';
+      vrAudioBlob = new Blob(vrAudioChunks, { type: mimeType });
+
+      // Playback URL
+      const blobUrl = URL.createObjectURL(vrAudioBlob);
+      const player  = document.getElementById('vrAudioPlayer');
+      if (player) player.src = blobUrl;
+
+      // Convert to base64 for submission (stored as a Promise so uploadImageToSheet can await it)
+      window.vrAudioReadyPromise = new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          window.vrAudioBase64 = reader.result;  // full data URL: "data:audio/webm;base64,..."
+          console.log('VR: audio ready, size:', vrAudioBlob.size, 'bytes');
+          resolve(window.vrAudioBase64);
+        };
+        reader.onerror = () => {
+          console.error('VR: FileReader failed to encode audio');
+          reject(new Error('FileReader failed to encode audio'));
+        };
+        reader.readAsDataURL(vrAudioBlob);
+      });
+
+      // Show final time
+      const timerEl = document.getElementById('vrTimer');
+      if (timerEl) timerEl.textContent = vrFormatTime(vrSeconds);
+
+      vrSetUI('done');
+    }
+
+    // ── Toggle playback ───────────────────────────────────────────
+    function vrTogglePlayback() {
+      const player = document.getElementById('vrAudioPlayer');
+      if (!player || !player.src) return;
+      player.paused ? player.play() : player.pause();
+    }
+
+    // ── Upload audio to Apps Script ───────────────────────────────
+    async function uploadAudioToSheet() {
+      if (!window.vrAudioBase64) return false;
+
+      const studentName = (typeof studentEnteredName !== 'undefined' && studentEnteredName)
+        ? studentEnteredName
+        : (document.getElementById('studentName')?.value?.trim() || 'Anonymous');
+
+      const ext      = window.vrAudioBase64.startsWith('data:audio/webm') ? 'webm' : 'ogg';
+      const fileName = `audio_lesson${lessonCode}_${studentName}_${Date.now()}.${ext}`;
+      const base64Data = window.vrAudioBase64.split(',')[1];
+      const mimeType   = window.vrAudioBase64.split(';')[0].split(':')[1];
+
+      const payload = {
+        action:      'uploadAudio',
+        audioBase64: base64Data,
+        mimeType:    mimeType,
+        fileName:    fileName,
+        studentName: studentName,
+        lessonCode:  lessonCode,
+        timestamp:   new Date().toISOString()
+      };
+
+      try {
+        const resp = await fetch(IMAGE_UPLOAD_API_URL, {
+          method:  'POST',
+          redirect: 'follow',
+          headers: { 'Content-Type': 'text/plain' },
+          body:    JSON.stringify(payload)
+        });
+        if (!resp.ok) throw new Error('Audio upload HTTP error: ' + resp.status);
+        const respData = await resp.json();
+        console.log('VR: uploadAudioToSheet response:', JSON.stringify(respData));
+        if (!respData.success) throw new Error('Audio upload server error: ' + (respData.error || 'unknown'));
+        window.vrAudioSent = true;
+        console.log('VR: audio uploaded via uploadAudioToSheet ✅');
+        return true;
+      } catch (err) {
+        console.error('VR: uploadAudioToSheet failed:', err);
+        return false;
+      }
+    }
+  </script>
+</body>
 </html>
