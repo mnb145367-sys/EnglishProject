@@ -2095,6 +2095,21 @@
         </div>
         <br>
         <button class="btn btn-primary" onclick="checkName()" style="margin-top: 0.8rem;">
+          <i class="fa-regular fa-circle-play"></i> Next
+        </button>
+      </div>
+
+      <!-- ===== EMAIL ENTRY SECTION ===== -->
+      <div class="section lesson-centered" id="lessonEmailSection" style="display:none;">
+        <h2><i class="fa-regular fa-envelope" style="margin-right: 0.8rem;"></i> What's your email?</h2>
+        <p style="color:#254e77; margin-bottom: 1.2rem;">Enter your email to receive your corrected answer and detailed feedback.</p>
+        <input id="emailInput" type="email" placeholder="e.g. student@example.com" maxlength="100" autocomplete="email"
+          onkeypress="if(event.key==='Enter') checkEmail()">
+        <div id="emailError" class="input-hint" style="display:none; color:#cc4444;">
+          <i class="fa-solid fa-circle-exclamation"></i> <span id="emailErrorText">Please enter a valid email address.</span>
+        </div>
+        <br>
+        <button class="btn btn-primary" onclick="checkEmail()" style="margin-top: 0.8rem;">
           <i class="fa-regular fa-circle-play"></i> Start Lesson
         </button>
       </div>
@@ -2543,9 +2558,9 @@
     // STUDENTS_API_URL - For Statistics page (DO NOT CHANGE)
     const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbwXavfCoGfyCA0moBn4OwmbjGGBk-gHFlYtr9gTSZRdznXD8fHjRqz82MwSFkyYRDIWdw/exec';
     // LESSON_API_URL - For Lesson data & Top Performer (Your new Apps Script)
-    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
+    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
     // QUESTIONS_API_URL - For Questions submission (Your new Apps Script)
-    const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
+    const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
     // Global variables
     let studentsData = [];
     let chartsInitialized = false;
@@ -5216,8 +5231,9 @@
     // NAME ENTRY STEP — ADDITIONS
     // ============================================
 
-    // Global store for the student's name entered at the name step
+    // Global store for the student's name and email entered at entry steps
     let studentEnteredName = '';
+    let studentEnteredEmail = '';
 
     // ── Override checkCode: on success, show name section instead of jumping
     //    straight into lesson content. Error path is unchanged.
@@ -5253,9 +5269,11 @@
 
       window.startLesson = function () {
         if (_origStartLesson) _origStartLesson();
-        // Ensure name section is hidden and code section is visible
+        // Ensure name and email sections are hidden and code section is visible
         const nameSection = document.getElementById('lessonNameSection');
         if (nameSection) nameSection.style.display = 'none';
+        const emailSection = document.getElementById('lessonEmailSection');
+        if (emailSection) emailSection.style.display = 'none';
       };
     })();
 
@@ -5298,8 +5316,37 @@
         studentNameField.value = studentEnteredName;
       }
 
-      // Hide name section → show lesson content
+      // Hide name section → show email section
       document.getElementById('lessonNameSection').style.display = 'none';
+      document.getElementById('lessonEmailSection').style.display = 'block';
+      document.getElementById('emailInput').value = '';
+      document.getElementById('emailError').style.display = 'none';
+      document.getElementById('emailInput').focus();
+    }
+
+    // ── Validate email and proceed to lesson content
+    function checkEmail() {
+      const emailInput = document.getElementById('emailInput');
+      const emailError = document.getElementById('emailError');
+      const errorText = document.getElementById('emailErrorText');
+      const email = emailInput.value.trim();
+
+      // Reset styles
+      emailError.style.display = 'none';
+
+      // Validation: must be a valid email
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errorText.textContent = 'Please enter a valid email address.';
+        emailError.style.display = 'flex';
+        emailInput.focus();
+        return;
+      }
+
+      // Email is valid — store it globally
+      studentEnteredEmail = email;
+
+      // Hide email section → show lesson content
+      document.getElementById('lessonEmailSection').style.display = 'none';
       document.getElementById('lessonContent').classList.remove('hidden');
 
       // Start from task 1
@@ -5330,7 +5377,7 @@
     // ============================================
 
     // IMPORTANT: Replace this with your actual Apps Script URL after deploying
-    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycbz7InISQOBaUbMI2oIB7bNfrI-YyvmTKdLpQ3Z4g5HJN6kDDS6jCHX-1jSb0yD5GD0sMg/exec';
+    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
 
     // Track upload state
     let lessonImageUploaded = false;
@@ -5446,6 +5493,7 @@
         mimeType: mimeType,
         fileName: fileName,
         studentName: studentName,
+        studentEmail: (typeof studentEnteredEmail !== 'undefined' && studentEnteredEmail) ? studentEnteredEmail : '',
         lessonCode: lessonCode,
         question: questionVal,
         timestamp: new Date().toISOString()
