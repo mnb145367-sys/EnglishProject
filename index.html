@@ -210,6 +210,179 @@
       pointer-events: none;
     }
 
+    /* ===== NEWS TICKER ===== */
+    .news-ticker {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(180, 220, 255, 0.5);
+      color: #1e3a5f;
+      font-size: 0.87rem;
+      font-weight: 500;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      height: 36px;
+      position: relative;
+      z-index: 99;
+      box-shadow: 0 2px 10px rgba(30, 90, 140, 0.06);
+    }
+
+    body.dark-mode .news-ticker {
+      background: rgba(20, 35, 52, 0.7);
+      border-bottom-color: rgba(60, 120, 190, 0.25);
+      color: #b3d6f0;
+    }
+
+    .ticker-label {
+      background: linear-gradient(135deg, #3a9fd4, #1e6db5);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0 1rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: 0 6px 6px 0;
+      box-shadow: 2px 0 8px rgba(30, 109, 181, 0.18);
+    }
+
+    .ticker-track {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 2.5%, black 97%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 2.5%, black 97%, transparent 100%);
+    }
+
+    .ticker-content {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      white-space: nowrap;
+      animation: tickerScroll 42s linear infinite;
+      will-change: transform;
+    }
+
+    .ticker-content:hover { animation-play-state: paused; }
+
+    .ticker-item {
+      padding: 0 2.5rem;
+      color: #1e3a5f;
+      opacity: 0.85;
+    }
+
+    body.dark-mode .ticker-item { color: #b3d6f0; }
+
+    .ticker-item::before {
+      content: '◆';
+      margin-right: 0.75rem;
+      font-size: 0.5rem;
+      color: #3a9fd4;
+      opacity: 0.7;
+      vertical-align: middle;
+    }
+
+    @keyframes tickerScroll {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-content { animation: none; }
+    }
+
+    /* ===== TASK MOOD BACKGROUND SYSTEM ===== */
+    #taskMoodBg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;        /* between bg-animation(-2) and page content */
+      pointer-events: none;
+    }
+
+    .mood-layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+      will-change: opacity;
+    }
+
+    .mood-layer.active { opacity: 1; }
+    body.dark-mode .mood-layer.active { opacity: 0.5; }
+
+    /* Task 1 – Video / Study: calm drifting soft-blue blobs */
+    .mood-study {
+      background:
+        radial-gradient(ellipse at 15% 85%, rgba(100,180,255,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(150,215,255,0.07) 0%, transparent 50%);
+      animation: moodStudyDrift 22s ease-in-out infinite alternate;
+      transform-origin: center center;
+    }
+    @keyframes moodStudyDrift {
+      from { transform: scale(1)    translate(0,0); }
+      to   { transform: scale(1.06) translate(12px,-8px); }
+    }
+
+    /* Task 2 – Reflection / Thinking: subtle dot-grid pulse */
+    .mood-thinking {
+      background-image: radial-gradient(circle, rgba(80,120,180,0.07) 1px, transparent 1px);
+      background-size: 38px 38px;
+      animation: moodThinkingPulse 9s ease-in-out infinite;
+    }
+    @keyframes moodThinkingPulse {
+      0%,100% { opacity: 0.5; }
+      50%     { opacity: 1;   }
+    }
+
+    /* Task 3 – Read Aloud / Speaking: waveform ripple shimmer */
+    .mood-speaking {
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 10px,
+          rgba(60,155,212,0.04) 10px,
+          rgba(60,155,212,0.04) 11px
+        );
+      animation: moodSpeakingShift 5s ease-in-out infinite;
+    }
+    @keyframes moodSpeakingShift {
+      0%,100% { background-position: 0 0;    }
+      50%     { background-position: 22px 0; }
+    }
+
+    /* Task 4 – Vocabulary: warm calm glow breathe */
+    .mood-vocab {
+      background:
+        radial-gradient(ellipse at 50% 95%, rgba(100,210,160,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 5%,  rgba(100,180,255,0.07) 0%, transparent 55%);
+      animation: moodVocabBreath 14s ease-in-out infinite alternate;
+    }
+    @keyframes moodVocabBreath {
+      from { transform: scale(1);    }
+      to   { transform: scale(1.04); }
+    }
+
+    /* Task 5 – Questions / Challenge: dynamic purple-blue gradient pulse */
+    .mood-challenge {
+      background:
+        radial-gradient(ellipse at 30% 70%, rgba(170,110,230,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 30%, rgba(90,155,255,0.08)  0%, transparent 45%);
+      animation: moodChallengePulse 7s ease-in-out infinite alternate;
+    }
+    @keyframes moodChallengePulse {
+      from { transform: scale(1)    rotate(0deg);  }
+      to   { transform: scale(1.04) rotate(0.4deg); }
+    }
+
     /* ===== HEADER ===== */
     header {
       display: flex;
@@ -530,9 +703,14 @@
 
     .btn:hover {
       background: #e8f2fc;
-      transform: scale(1.04);
-      box-shadow: 0 14px 24px rgba(35, 110, 180, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(25, 90, 160, 0.18);
       border-color: #b0d1f0;
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.97);
+      transition: transform 0.08s ease;
     }
 
     .btn-primary {
@@ -547,6 +725,13 @@
 
     .btn-primary:hover {
       background: linear-gradient(115deg, #1b4f78, #2d6ca3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(25, 90, 160, 0.28);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.97);
+      transition: transform 0.08s ease;
     }
 
     /* ===== INPUT ===== */
@@ -890,6 +1075,88 @@
 
     .hidden-task {
       display: none !important;
+    }
+
+    /* ===== TASK 2 (REFLECT) — CENTRED CONTENT ===== */
+    /* Works for both static HTML and the API-replaced dynamic version */
+    #task2 p,
+    #task2 .task-title {
+      text-align: center;
+    }
+
+    /* ===== TASK CARD ENTER / EXIT ANIMATIONS ===== */
+
+    /* Forward exit — slide left + fade */
+    .task-card.task-exiting {
+      animation: taskSlideOut var(--exit-dur, 300ms) cubic-bezier(0.4,0,0.6,1) forwards;
+      pointer-events: none;
+    }
+    /* Backward exit — slide right + fade */
+    .task-card.task-exiting-back {
+      animation: taskSlideOutBack var(--exit-dur, 300ms) cubic-bezier(0.4,0,0.6,1) forwards;
+      pointer-events: none;
+    }
+    /* Forward enter — slide in from right */
+    .task-card.task-entering {
+      animation: taskSlideIn var(--enter-dur, 360ms) cubic-bezier(0.2,0,0.2,1) forwards;
+    }
+    /* Backward enter — slide in from left */
+    .task-card.task-entering-back {
+      animation: taskSlideInBack var(--enter-dur, 360ms) cubic-bezier(0.2,0,0.2,1) forwards;
+    }
+    /* Thinking task special: blur-to-focus entrance */
+    .task-card[data-task-type="thinking"].task-entering,
+    .task-card[data-task-type="thinking"].task-entering-back {
+      animation: taskFocusIn var(--enter-dur, 380ms) cubic-bezier(0.2,0,0.2,1) forwards;
+    }
+
+    @keyframes taskSlideOut {
+      from { opacity: 1; transform: translateX(0)     scale(1);    }
+      to   { opacity: 0; transform: translateX(-28px)  scale(0.98); }
+    }
+    @keyframes taskSlideOutBack {
+      from { opacity: 1; transform: translateX(0)    scale(1);    }
+      to   { opacity: 0; transform: translateX(28px)  scale(0.98); }
+    }
+    @keyframes taskSlideIn {
+      from { opacity: 0; transform: translateX(28px)  scale(0.98); }
+      to   { opacity: 1; transform: translateX(0)     scale(1);    }
+    }
+    @keyframes taskSlideInBack {
+      from { opacity: 0; transform: translateX(-28px) scale(0.98); }
+      to   { opacity: 1; transform: translateX(0)     scale(1);    }
+    }
+    @keyframes taskFocusIn {
+      from { opacity: 0; transform: scale(0.99); filter: blur(5px); }
+      to   { opacity: 1; transform: scale(1);    filter: blur(0);   }
+    }
+
+    /* ===== ENHANCED PROGRESS BAR ===== */
+    .progress-fill {
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* ===== ACCESSIBILITY: REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .task-card.task-exiting,
+      .task-card.task-exiting-back,
+      .task-card.task-entering,
+      .task-card.task-entering-back {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+      .mood-layer {
+        transition-duration: 0.01ms !important;
+      }
+      .mood-study, .mood-thinking, .mood-speaking,
+      .mood-vocab, .mood-challenge {
+        animation: none !important;
+      }
+      .bg-animation .floating-words span {
+        animation: none !important;
+      }
     }
 
     /* ===== CONTACT CARDS ===== */
@@ -1779,6 +2046,186 @@
         border-color: #4a6380;
       }
 
+      /* ===== WORD OF THE DAY ===== */
+      .wotd-card {
+        background: rgba(255,255,255,0.72);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(180,220,255,0.5);
+        border-radius: 2rem;
+        padding: 2rem 2.2rem 1.8rem;
+        margin-top: 2.5rem;
+        text-align: left;
+        box-shadow: 0 8px 28px rgba(20,70,130,0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      body.dark-mode .wotd-card {
+        background: rgba(25,42,60,0.85);
+        border-color: rgba(80,140,200,0.2);
+      }
+
+      .wotd-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 90% 10%, rgba(100,185,255,0.1) 0%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .wotd-header {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .wotd-badge {
+        background: linear-gradient(135deg, #3a9fd4, #1e6db5);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.85rem;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .wotd-date {
+        font-size: 0.78rem;
+        color: #7aabcc;
+        margin-left: auto;
+      }
+
+      body.dark-mode .wotd-date { color: #5d8faa; }
+
+      .wotd-word-row {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .wotd-word {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1a4a75;
+        letter-spacing: -0.5px;
+        line-height: 1;
+      }
+
+      body.dark-mode .wotd-word { color: #a8d4f0; }
+
+      .wotd-pos {
+        background: rgba(58,159,212,0.12);
+        color: #3a9fd4;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.7rem;
+        border-radius: 50px;
+        border: 1px solid rgba(58,159,212,0.25);
+        white-space: nowrap;
+        align-self: center;
+      }
+
+      .wotd-speak-btn {
+        background: rgba(58,159,212,0.1);
+        border: 1px solid rgba(58,159,212,0.3);
+        border-radius: 50%;
+        width: 34px; height: 34px;
+        display: flex; align-items: center; justify-content: center;
+        color: #3a9fd4;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        padding: 0;
+        margin-left: auto;
+      }
+
+      .wotd-speak-btn:hover {
+        background: rgba(58,159,212,0.22);
+        transform: scale(1.1);
+      }
+
+      .wotd-speak-btn.tts-speaking {
+        background: rgba(224,76,60,0.12);
+        border-color: rgba(224,76,60,0.35);
+        color: #e04c3c;
+        animation: ttsPulse 1.2s ease-in-out infinite;
+      }
+
+      .wotd-definition {
+        font-size: 1.05rem;
+        color: #2c4f70;
+        line-height: 1.6;
+        margin-bottom: 0.9rem;
+      }
+
+      body.dark-mode .wotd-definition { color: #90bcd8; }
+
+      .wotd-example {
+        font-size: 0.92rem;
+        color: #4a7a9b;
+        font-style: italic;
+        border-left: 3px solid rgba(58,159,212,0.35);
+        padding-left: 0.9rem;
+        line-height: 1.55;
+      }
+
+      body.dark-mode .wotd-example { color: #6699bb; }
+
+      /* ===== TTS (Text-to-Speech) BUTTONS ===== */
+      .tts-listen-btn {
+        background: linear-gradient(115deg, #1e5a88, #3a9fd4);
+        color: white !important;
+        border-color: transparent !important;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .tts-listen-btn:hover {
+        background: linear-gradient(115deg, #1b4f78, #2d8abf) !important;
+        transform: translateY(-1px) !important;
+      }
+      .tts-listen-btn.tts-speaking {
+        background: linear-gradient(115deg, #e04c3c, #c03528) !important;
+        animation: ttsPulse 1.4s ease-in-out infinite;
+      }
+
+      /* Vocab speak button – small circle in card header */
+      .vocab-speak-btn {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        width: 30px; height: 30px;
+        display: flex; align-items: center; justify-content: center;
+        color: white;
+        cursor: pointer;
+        font-size: 0.78rem;
+        transition: background 0.2s, transform 0.15s;
+        margin-left: auto;
+        flex-shrink: 0;
+        padding: 0;
+      }
+      .vocab-speak-btn:hover {
+        background: rgba(255,255,255,0.32);
+        transform: scale(1.12);
+      }
+      .vocab-speak-btn.tts-speaking {
+        background: rgba(255,200,180,0.4);
+        animation: ttsPulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes ttsPulse {
+        0%,100% { opacity: 1;   transform: scale(1); }
+        50%     { opacity: 0.65; transform: scale(0.95); }
+      }
+
       /* ===== VOCABULARY GRID (enhanced) ===== */
       .vocab-instruction {
         background: linear-gradient(135deg, #dff0fb, #eaf6ff);
@@ -1993,6 +2440,15 @@
   </div>
   <div class="bg-overlay"></div>
 
+  <!-- Task Mood Background Layers (GPU-composited, opacity-only transitions) -->
+  <div id="taskMoodBg" aria-hidden="true">
+    <div class="mood-layer mood-study"></div>
+    <div class="mood-layer mood-thinking"></div>
+    <div class="mood-layer mood-speaking"></div>
+    <div class="mood-layer mood-vocab"></div>
+    <div class="mood-layer mood-challenge"></div>
+  </div>
+
   <header>
     <div class="logo" onclick="reload()">Fluency</div>
     <nav>
@@ -2006,6 +2462,21 @@
       </button>
     </nav>
   </header>
+
+  <!-- News Ticker -->
+  <div class="news-ticker" aria-label="News ticker">
+    <span class="ticker-label"><i class="fa-solid fa-bullhorn"></i> News</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <span class="ticker-item">New lessons are added every week — stay consistent and keep learning!</span>
+        <span class="ticker-item">Practice makes permanent: record yourself speaking every day.</span>
+        <span class="ticker-item">Vocabulary tip: use each new word in a sentence to remember it faster.</span>
+        <span class="ticker-item">Don't forget to submit your lesson before the deadline to earn your marks.</span>
+        <span class="ticker-item">Fluency is built through small daily habits — keep showing up!</span>
+        <span class="ticker-item">Reading aloud improves both your pronunciation and your confidence.</span>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
     <!-- HOME PAGE -->
@@ -2058,6 +2529,23 @@
         <!-- Top 5 Students Section (from API) -->
         <h3 style="margin-top: 3rem;">Top 5 Students</h3>
         <div class="top5-grid" id="top5Grid"></div>
+
+        <!-- Word of the Day -->
+        <div class="wotd-card" id="wotdCard">
+          <div class="wotd-header">
+            <span class="wotd-badge"><i class="fa-solid fa-book-open"></i> Word of the Day</span>
+            <span class="wotd-date" id="wotdDate"></span>
+          </div>
+          <div class="wotd-word-row">
+            <span class="wotd-word" id="wotdWord"></span>
+            <span class="wotd-pos" id="wotdPos"></span>
+            <button class="wotd-speak-btn" id="wotdSpeakBtn" onclick="speakVocabWord(this, document.getElementById('wotdWord').innerText)" title="Hear pronunciation">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <div class="wotd-definition" id="wotdDef"></div>
+          <div class="wotd-example" id="wotdExample"></div>
+        </div>
       </div>
 
       <div class="arrow-section">
@@ -2144,7 +2632,7 @@
         <!-- Tasks -->
         <div class="lesson-tasks" id="lessonTasks">
           <!-- Task 1: Video -->
-          <div class="task-card" id="task1">
+          <div class="task-card" id="task1" data-task-type="video">
             <div class="task-banner">
               <div class="tb-shape tb-shape-1"></div>
               <div class="tb-shape tb-shape-2"></div>
@@ -2168,7 +2656,7 @@
           </div>
 
           <!-- Task 2: Reflection -->
-          <div class="task-card hidden-task" id="task2">
+          <div class="task-card hidden-task" id="task2" data-task-type="thinking">
             <div class="task-banner">
               <div class="tb-shape tb-shape-1"></div>
               <div class="tb-shape tb-shape-2"></div>
@@ -2185,7 +2673,7 @@
           </div>
 
           <!-- Task 3: Reading + Voice Recorder -->
-          <div class="task-card hidden-task" id="task3">
+          <div class="task-card hidden-task" id="task3" data-task-type="speaking">
             <div class="task-banner">
               <div class="tb-shape tb-shape-1"></div>
               <div class="tb-shape tb-shape-2"></div>
@@ -2196,6 +2684,9 @@
             </div>
             <div class="task-body">
             <div class="reading-controls">
+              <button class="font-size-btn tts-listen-btn" id="readListenBtn" onclick="speakReadingText(this)" title="Listen to pronunciation">
+                <i class="fa-solid fa-volume-high"></i> Listen
+              </button>
               <button class="font-size-btn" id="decreaseFontBtn" title="Decrease font size"><i class="fa-solid fa-minus"></i> A</button>
               <button class="font-size-btn" id="increaseFontBtn" title="Increase font size"><i class="fa-solid fa-plus"></i> A</button>
             </div>
@@ -2287,7 +2778,7 @@
           </div>
 
           <!-- Task 4: Vocabulary -->
-          <div class="task-card hidden-task" id="task4">
+          <div class="task-card hidden-task" id="task4" data-task-type="vocabulary">
             <div class="task-banner">
               <div class="tb-shape tb-shape-1"></div>
               <div class="tb-shape tb-shape-2"></div>
@@ -2299,7 +2790,7 @@
             <div class="task-body">
             <div class="vocabulary-grid" id="vocabGrid">
               <div class="vocab-card">
-                <div class="vocab-card-header"><span class="vocab-number">1</span><span class="vocab-word">persistence</span></div>
+                <div class="vocab-card-header"><span class="vocab-number">1</span><span class="vocab-word">persistence</span><button class="vocab-speak-btn" onclick="speakVocabWord(this,'persistence')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">continuing despite difficulty</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
@@ -2307,7 +2798,7 @@
                 </div>
               </div>
               <div class="vocab-card">
-                <div class="vocab-card-header"><span class="vocab-number">2</span><span class="vocab-word">momentum</span></div>
+                <div class="vocab-card-header"><span class="vocab-number">2</span><span class="vocab-word">momentum</span><button class="vocab-speak-btn" onclick="speakVocabWord(this,'momentum')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">force that keeps something moving</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
@@ -2315,7 +2806,7 @@
                 </div>
               </div>
               <div class="vocab-card">
-                <div class="vocab-card-header"><span class="vocab-number">3</span><span class="vocab-word">consistency</span></div>
+                <div class="vocab-card-header"><span class="vocab-number">3</span><span class="vocab-word">consistency</span><button class="vocab-speak-btn" onclick="speakVocabWord(this,'consistency')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">doing the same thing regularly</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
@@ -2323,7 +2814,7 @@
                 </div>
               </div>
               <div class="vocab-card">
-                <div class="vocab-card-header"><span class="vocab-number">4</span><span class="vocab-word">exposure</span></div>
+                <div class="vocab-card-header"><span class="vocab-number">4</span><span class="vocab-word">exposure</span><button class="vocab-speak-btn" onclick="speakVocabWord(this,'exposure')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">contact with something (e.g. language)</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
@@ -2331,7 +2822,7 @@
                 </div>
               </div>
               <div class="vocab-card">
-                <div class="vocab-card-header"><span class="vocab-number">5</span><span class="vocab-word">discipline</span></div>
+                <div class="vocab-card-header"><span class="vocab-number">5</span><span class="vocab-word">discipline</span><button class="vocab-speak-btn" onclick="speakVocabWord(this,'discipline')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button></div>
                 <div class="vocab-card-body">
                   <div class="vocab-definition">controlled behaviour to achieve a goal</div>
                   <div><div class="vocab-example-label"><i class="fa-regular fa-pen-to-square"></i> Your sentence</div>
@@ -2343,7 +2834,7 @@
           </div>
 
           <!-- Task 5: Questions -->
-          <div class="task-card hidden-task" id="task5">
+          <div class="task-card hidden-task" id="task5" data-task-type="challenge">
             <div class="task-banner">
               <div class="tb-shape tb-shape-1"></div>
               <div class="tb-shape tb-shape-2"></div>
@@ -2516,7 +3007,7 @@
           <div class="contact-card">
             <i class="fa-regular fa-envelope"></i>
             <h3>Email</h3>
-            <p><a href="/cdn-cgi/l/email-protection#5c31323e6d68696f6a6b1c3b313d3530723f3331"><span class="__cf_email__" data-cfemail="0b6665693a3f3e383d3c4b6c666a626725686466">[email&#160;protected]</span></a></p>
+            <p><a href="mailto:mnb145367@gmail.com">mnb145367@gmail.com</a></p>
           </div>
         </div>
         <p style="text-align: center; margin-top: 1.5rem;">We reply within 24h, usually faster.</p>
@@ -2539,9 +3030,9 @@
       <div class="social-icons">
         <a href="https://chat.whatsapp.com/I3HfXz4UllDFe06juUsGYC?mode=gi_t" target="_blank"><i
             class="fa-brands fa-whatsapp"></i></a>
-        <a onclick="showTempMessage()"><i class="fa-brands fa-twitter"></i></a>
+        <a onclick="showTempMessage()"><i class="fa-brands fa-x-twitter"></i></a>
         <a onclick="showTempMessage()"><i class="fa-brands fa-instagram"></i></a>
-        <a href="/cdn-cgi/l/email-protection#224f4c4013161711141562454f434b4e0c414d4f"><i
+        <a href="mailto:mnb145367@gmail.com"><i
             class="fa-regular fa-envelope"></i></a>
       </div>
     </div>
@@ -2558,7 +3049,7 @@
     // STUDENTS_API_URL - For Statistics page (DO NOT CHANGE)
     const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbwXavfCoGfyCA0moBn4OwmbjGGBk-gHFlYtr9gTSZRdznXD8fHjRqz82MwSFkyYRDIWdw/exec';
     // LESSON_API_URL - For Lesson data & Top Performer (Your new Apps Script)
-    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
+    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbw5QVWa9w2pusqjTjAUUDGLViIK2sggrhiAL507eNpcU166w13J07TstSj8YEsg3L1n/exec';
     // QUESTIONS_API_URL - For Questions submission (Your new Apps Script)
     const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
     // Global variables
@@ -2568,6 +3059,145 @@
     let lessonCode = "1234"; // Default value
     let currentTask = 1;
     const totalTasks = 5;
+
+    // ============================================
+    // TASK MOOD & TRANSITION SYSTEM
+    // ============================================
+    const TASK_CONFIG = {
+      1: { type: 'video',      moodClass: 'mood-study',     exitMs: 320, enterMs: 380 },
+      2: { type: 'thinking',   moodClass: 'mood-thinking',  exitMs: 280, enterMs: 400 },
+      3: { type: 'speaking',   moodClass: 'mood-speaking',  exitMs: 260, enterMs: 360 },
+      4: { type: 'vocabulary', moodClass: 'mood-vocab',     exitMs: 340, enterMs: 400 },
+      5: { type: 'challenge',  moodClass: 'mood-challenge', exitMs: 270, enterMs: 350 },
+    };
+
+    // Detect reduced-motion preference once at startup
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function activateMood(taskNum) {
+      const config = TASK_CONFIG[taskNum];
+      if (!config) return;
+      document.querySelectorAll('#taskMoodBg .mood-layer').forEach(function(el) {
+        el.classList.toggle('active', el.classList.contains(config.moodClass));
+      });
+    }
+
+    // ============================================
+    // ============================================
+    // WORD OF THE DAY
+    // ============================================
+    const WOTD_LIST = [
+      { word: 'resilience',   pos: 'noun',      def: 'The ability to recover quickly from difficulties or setbacks.',                         ex: '"Her resilience helped her pass the exam despite failing twice before."' },
+      { word: 'articulate',   pos: 'adjective', def: 'Able to express thoughts and ideas clearly and effectively.',                           ex: '"He gave an articulate explanation of the problem."' },
+      { word: 'persevere',    pos: 'verb',       def: 'To continue doing something despite difficulty or discouragement.',                     ex: '"You must persevere even when the lessons feel difficult."' },
+      { word: 'elaborate',    pos: 'verb',       def: 'To explain or describe something in more detail.',                                      ex: '"Can you elaborate on your answer?"' },
+      { word: 'fluent',       pos: 'adjective', def: 'Able to speak or write a language easily and accurately.',                              ex: '"After two years of practice, she became fluent in English."' },
+      { word: 'dedicate',     pos: 'verb',       def: 'To give time and effort to a particular activity or purpose.',                          ex: '"He dedicates one hour each day to reading in English."' },
+      { word: 'comprehend',   pos: 'verb',       def: 'To understand something fully.',                                                        ex: '"Read the passage twice to fully comprehend its meaning."' },
+      { word: 'momentum',     pos: 'noun',       def: 'The force or energy gained by movement or a series of events.',                         ex: '"Keep your momentum going — don\'t skip a single day."' },
+      { word: 'acknowledge',  pos: 'verb',       def: 'To accept or admit the existence or truth of something.',                               ex: '"Acknowledge your mistakes and learn from them."' },
+      { word: 'immerse',      pos: 'verb',       def: 'To involve yourself deeply in an activity or subject.',                                 ex: '"Immerse yourself in English by watching films without subtitles."' },
+      { word: 'consistent',   pos: 'adjective', def: 'Acting or done in the same way over time, especially to be fair or accurate.',          ex: '"Consistent daily practice is the key to fluency."' },
+      { word: 'intonation',   pos: 'noun',       def: 'The rise and fall of the voice in speaking.',                                           ex: '"Pay attention to your intonation when asking questions."' },
+      { word: 'context',      pos: 'noun',       def: 'The circumstances or setting that help to understand a word or event.',                 ex: '"Guess the meaning of unknown words from context."' },
+      { word: 'paraphrase',   pos: 'verb',       def: 'To express what someone has said or written using different words.',                    ex: '"Paraphrase the main idea of the paragraph in your own words."' },
+      { word: 'fluency',      pos: 'noun',       def: 'The quality of being able to speak or write smoothly and easily.',                      ex: '"Fluency comes from speaking, not just studying grammar."' },
+      { word: 'expand',       pos: 'verb',       def: 'To make or become larger or more extensive.',                                           ex: '"Read widely to expand your vocabulary."' },
+      { word: 'discipline',   pos: 'noun',       def: 'Controlled behaviour and regular training aimed at improving skills.',                  ex: '"Success in language learning requires discipline."' },
+      { word: 'exposure',     pos: 'noun',       def: 'Regular experience of something, especially a language.',                               ex: '"Daily exposure to English accelerates learning."' },
+      { word: 'reflect',      pos: 'verb',       def: 'To think carefully and deeply about something.',                                        ex: '"After each lesson, take a moment to reflect on what you learned."' },
+      { word: 'spontaneous',  pos: 'adjective', def: 'Done naturally, without planning or forcing.',                                          ex: '"The goal is to speak in English in a spontaneous and natural way."' },
+      { word: 'acquire',      pos: 'verb',       def: 'To gain a skill, habit, or language through experience.',                               ex: '"Children acquire language effortlessly through listening."' },
+      { word: 'persistence',  pos: 'noun',       def: 'Continuing to work toward a goal despite obstacles.',                                   ex: '"Persistence separates successful learners from those who give up."' },
+      { word: 'nuance',       pos: 'noun',       def: 'A subtle difference in meaning, expression, or sound.',                                 ex: '"Understanding nuance takes time but makes your English sound native."' },
+      { word: 'clarity',      pos: 'noun',       def: 'The quality of being clear and easy to understand.',                                    ex: '"Speak with clarity so your listener can follow easily."' },
+      { word: 'apply',        pos: 'verb',       def: 'To put knowledge or a skill into practical use.',                                       ex: '"Try to apply new vocabulary in your daily conversations."' },
+      { word: 'confident',    pos: 'adjective', def: 'Having a strong belief in your own abilities.',                                         ex: '"A confident speaker is not afraid to make mistakes."' },
+      { word: 'evaluate',     pos: 'verb',       def: 'To judge or assess the quality of something.',                                          ex: '"Evaluate your own speaking by recording yourself."' },
+      { word: 'navigate',     pos: 'verb',       def: 'To find a way through something complex or unfamiliar.',                                ex: '"Good vocabulary helps you navigate any conversation."' },
+      { word: 'stimulate',    pos: 'verb',       def: 'To encourage interest, activity, or excitement.',                                       ex: '"Interesting topics stimulate real conversation."' },
+      { word: 'rhythm',       pos: 'noun',       def: 'A strong, regular, repeated pattern of sound in speech.',                               ex: '"English has a natural rhythm — listen and copy it."' },
+    ];
+
+    function renderWordOfTheDay() {
+      var dayIndex = Math.floor(Date.now() / 86400000) % WOTD_LIST.length;
+      var entry = WOTD_LIST[dayIndex];
+
+      var dateEl  = document.getElementById('wotdDate');
+      var wordEl  = document.getElementById('wotdWord');
+      var posEl   = document.getElementById('wotdPos');
+      var defEl   = document.getElementById('wotdDef');
+      var exEl    = document.getElementById('wotdExample');
+
+      if (!wordEl) return;
+
+      var now = new Date();
+      var opts = { weekday: 'long', month: 'long', day: 'numeric' };
+      if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', opts);
+
+      wordEl.textContent = entry.word;
+      if (posEl)  posEl.textContent  = entry.pos;
+      if (defEl)  defEl.textContent  = entry.def;
+      if (exEl)   exEl.textContent   = entry.ex;
+    }
+
+    // Render on load
+    renderWordOfTheDay();
+
+    // TEXT-TO-SPEECH (TTS)
+    // ============================================
+    var _ttsCurrentBtn = null;
+
+    function _ttsReset(btn) {
+      if (btn) {
+        btn.classList.remove('tts-speaking');
+        var icon = btn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-volume-high';
+      }
+      _ttsCurrentBtn = null;
+    }
+
+    function speakText(text, btn) {
+      if (!('speechSynthesis' in window)) return;
+
+      // Toggle off if same button clicked while speaking
+      if (_ttsCurrentBtn) {
+        window.speechSynthesis.cancel();
+        var prev = _ttsCurrentBtn;
+        _ttsCurrentBtn = null;
+        _ttsReset(prev);
+        if (prev === btn) return; // same btn — just stop
+      }
+
+      var utter = new SpeechSynthesisUtterance(text);
+      utter.lang  = 'en-US';
+      utter.rate  = 0.88;
+      utter.pitch = 1;
+
+      utter.onstart = function() {
+        _ttsCurrentBtn = btn;
+        if (btn) {
+          btn.classList.add('tts-speaking');
+          var icon = btn.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-stop';
+        }
+      };
+
+      utter.onend = utter.onerror = function() {
+        _ttsReset(btn);
+      };
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakReadingText(btn) {
+      var text = (document.getElementById('readingContent') || {}).innerText || '';
+      speakText(text.trim(), btn);
+    }
+
+    function speakVocabWord(btn, word) {
+      speakText(word, btn);
+    }
 
     // ============================================
     // QUESTIONS SUBMISSION
@@ -2844,6 +3474,7 @@
                 <div class="vocab-card-header">
                   <span class="vocab-number">${i + 1}</span>
                   <span class="vocab-word">${word}</span>
+                  <button class="vocab-speak-btn" onclick="speakVocabWord(this,'${word}')" title="Hear pronunciation"><i class="fa-solid fa-volume-high"></i></button>
                 </div>
                 <div class="vocab-card-body">
                   ${def ? `<div class="vocab-definition">${def}</div>` : ''}
@@ -3147,6 +3778,7 @@
         console.log('✅ Code correct!');
         document.getElementById('lessonContent').classList.remove('hidden');
         document.getElementById('lessonCodeSection').style.display = 'none';
+        activateMood(1);
         showTask(1);
         input.value = '';
       } else {
@@ -3157,19 +3789,15 @@
       }
     }
 
-    function showTask(taskNum) {
-      for (let i = 1; i <= totalTasks; i++) {
-        const taskEl = document.getElementById(`task${i}`);
-        if (taskEl) {
-          taskEl.classList.toggle('hidden-task', i !== taskNum);
-        }
-      }
-      const progressPercent = (taskNum / totalTasks) * 100;
-      document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    function showTask(taskNum, fromTaskNum, direction) {
+      direction = direction || 'forward';
 
-      const nextBtn = document.getElementById('nextBtn');
-      const prevBtn = document.getElementById('prevBtn');
+      // ── Progress bar & button labels (always immediate) ──
+      var progressPercent = (taskNum / totalTasks) * 100;
+      document.getElementById('progressFill').style.width = progressPercent + '%';
 
+      var nextBtn = document.getElementById('nextBtn');
+      var prevBtn = document.getElementById('prevBtn');
       if (taskNum === 1) {
         nextBtn.innerText = 'Next';
         prevBtn.style.visibility = 'hidden';
@@ -3180,21 +3808,68 @@
         nextBtn.innerText = 'Next';
         prevBtn.style.visibility = 'visible';
       }
+
+      // ── Activate mood background (instant-cross-fades via CSS opacity) ──
+      activateMood(taskNum);
+
+      // ── No animation path: initial load or reduced-motion ──
+      if (!fromTaskNum || prefersReducedMotion) {
+        for (var i = 1; i <= totalTasks; i++) {
+          var el = document.getElementById('task' + i);
+          if (el) el.classList.toggle('hidden-task', i !== taskNum);
+        }
+        return;
+      }
+
+      // ── Animated transition path ──
+      var fromEl = document.getElementById('task' + fromTaskNum);
+      var toEl   = document.getElementById('task' + taskNum);
+      if (!fromEl || !toEl) return;
+
+      var fromCfg = TASK_CONFIG[fromTaskNum] || { exitMs: 300 };
+      var toCfg   = TASK_CONFIG[taskNum]     || { enterMs: 360 };
+
+      var exitClass  = direction === 'forward' ? 'task-exiting'      : 'task-exiting-back';
+      var enterClass = direction === 'forward' ? 'task-entering'     : 'task-entering-back';
+
+      // Set per-task durations as CSS custom properties
+      fromEl.style.setProperty('--exit-dur',  fromCfg.exitMs  + 'ms');
+      toEl.style.setProperty(  '--enter-dur', toCfg.enterMs   + 'ms');
+
+      // Phase 1 – exit the outgoing card
+      fromEl.classList.add(exitClass);
+
+      setTimeout(function() {
+        fromEl.classList.remove(exitClass);
+        fromEl.classList.add('hidden-task');
+
+        // Phase 2 – enter the incoming card
+        toEl.classList.remove('hidden-task');
+        toEl.classList.add(enterClass);
+
+        // Auto-cleanup: remove enter class when animation finishes
+        toEl.addEventListener('animationend', function cleanup() {
+          toEl.classList.remove(enterClass);
+          toEl.removeEventListener('animationend', cleanup);
+        });
+      }, fromCfg.exitMs);
     }
 
     function nextTask() {
       if (currentTask === totalTasks) {
         document.getElementById('completionPopup').classList.remove('hidden');
       } else {
+        var from = currentTask;
         currentTask++;
-        showTask(currentTask);
+        showTask(currentTask, from, 'forward');
       }
     }
 
     function prevTask() {
       if (currentTask > 1) {
+        var from = currentTask;
         currentTask--;
-        showTask(currentTask);
+        showTask(currentTask, from, 'backward');
       }
     }
 
@@ -5249,7 +5924,10 @@
           // Hide code section → show name section
           document.getElementById('lessonCodeSection').style.display = 'none';
           document.getElementById('lessonNameSection').style.display = 'block';
-          document.getElementById('nameInput').value = '';
+
+          // Pre-fill saved name if available
+          const savedName = localStorage.getItem('fluencyStudentName') || '';
+          document.getElementById('nameInput').value = savedName;
           document.getElementById('nameError').style.display = 'none';
           document.getElementById('nameInput').classList.remove('input-error');
           document.getElementById('nameInput').focus();
@@ -5307,8 +5985,9 @@
         return;
       }
 
-      // Name is valid — store it globally
+      // Name is valid — store it globally and persist
       studentEnteredName = name;
+      localStorage.setItem('fluencyStudentName', name);
 
       // Pre-fill the studentName field inside task 6 (question box)
       const studentNameField = document.getElementById('studentName');
@@ -5319,7 +5998,10 @@
       // Hide name section → show email section
       document.getElementById('lessonNameSection').style.display = 'none';
       document.getElementById('lessonEmailSection').style.display = 'block';
-      document.getElementById('emailInput').value = '';
+
+      // Pre-fill saved email if available
+      const savedEmail = localStorage.getItem('fluencyStudentEmail') || '';
+      document.getElementById('emailInput').value = savedEmail;
       document.getElementById('emailError').style.display = 'none';
       document.getElementById('emailInput').focus();
     }
@@ -5342,14 +6024,16 @@
         return;
       }
 
-      // Email is valid — store it globally
+      // Email is valid — store it globally and persist
       studentEnteredEmail = email;
+      localStorage.setItem('fluencyStudentEmail', email);
 
       // Hide email section → show lesson content
       document.getElementById('lessonEmailSection').style.display = 'none';
       document.getElementById('lessonContent').classList.remove('hidden');
 
       // Start from task 1
+      if (typeof activateMood === 'function') activateMood(1);
       if (typeof showTask === 'function') showTask(1);
     }
 
