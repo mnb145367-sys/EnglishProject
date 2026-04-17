@@ -2648,7 +2648,7 @@
                 <div class="vd-shape vd-shape-3"></div>
                 <div class="vd-shape vd-shape-4"></div>
                 <div class="video-wrapper" style="position:relative; z-index:1;">
-                  <iframe src="https://www.youtube.com/embed/D3mNn0btW6s" allowfullscreen></iframe>
+                  <iframe src="https://www.youtube.com/embed/D3mNn0btW6s?enablejsapi=1" allowfullscreen></iframe>
                 </div>
               </div>
               <p style="text-align:center; margin-top:0.8rem; color:#3a6d94;">Listen actively. You may use subtitles the first time.</p>
@@ -3146,48 +3146,61 @@
 
     // TEXT-TO-SPEECH (TTS)
     // ============================================
-    var _ttsCurrentBtn = null;
+    var _ttsBtn   = null;   // currently active button
+    var _ttsUtter = null;   // currently active utterance
 
-    function _ttsReset(btn) {
-      if (btn) {
-        btn.classList.remove('tts-speaking');
-        var icon = btn.querySelector('i');
+    // Stop all TTS and reset button state immediately
+    function ttsStop() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      if (_ttsBtn) {
+        _ttsBtn.classList.remove('tts-speaking');
+        var icon = _ttsBtn.querySelector('i');
         if (icon) icon.className = 'fa-solid fa-volume-high';
       }
-      _ttsCurrentBtn = null;
+      _ttsBtn   = null;
+      _ttsUtter = null;
     }
 
     function speakText(text, btn) {
       if (!('speechSynthesis' in window)) return;
 
-      // Toggle off if same button clicked while speaking
-      if (_ttsCurrentBtn) {
-        window.speechSynthesis.cancel();
-        var prev = _ttsCurrentBtn;
-        _ttsCurrentBtn = null;
-        _ttsReset(prev);
-        if (prev === btn) return; // same btn — just stop
-      }
+      // Same button clicked again → just stop (toggle off)
+      if (_ttsBtn === btn) { ttsStop(); return; }
+
+      // Different button or new click → stop current, start new
+      ttsStop();
 
       var utter = new SpeechSynthesisUtterance(text);
       utter.lang  = 'en-US';
       utter.rate  = 0.88;
       utter.pitch = 1;
 
-      utter.onstart = function() {
-        _ttsCurrentBtn = btn;
-        if (btn) {
-          btn.classList.add('tts-speaking');
-          var icon = btn.querySelector('i');
-          if (icon) icon.className = 'fa-solid fa-stop';
-        }
-      };
+      // Set active state BEFORE speak() so toggle works on any browser
+      _ttsBtn   = btn;
+      _ttsUtter = utter;
+      if (btn) {
+        btn.classList.add('tts-speaking');
+        var icon = btn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-stop';
+      }
 
       utter.onend = utter.onerror = function() {
-        _ttsReset(btn);
+        // Only reset if this utterance is still the active one
+        if (_ttsUtter === utter) ttsStop();
       };
 
       window.speechSynthesis.speak(utter);
+    }
+
+    // Pause all YouTube iframes via postMessage (requires enablejsapi=1)
+    function stopYouTubeVideos() {
+      document.querySelectorAll('iframe').forEach(function(iframe) {
+        try {
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*'
+          );
+        } catch(e) {}
+      });
     }
 
     function speakReadingText(btn) {
@@ -3419,7 +3432,14 @@
       // تحديث الفيديو
       if (data.videoUrl) {
         const videoFrame = document.querySelector('#task1 iframe');
-        if (videoFrame) videoFrame.src = data.videoUrl;
+        if (videoFrame) {
+          // Ensure YouTube JS API is enabled so we can pause remotely
+          var vUrl = data.videoUrl;
+          if (vUrl && !vUrl.includes('enablejsapi')) {
+            vUrl += (vUrl.includes('?') ? '&' : '?') + 'enablejsapi=1';
+          }
+          videoFrame.src = vUrl;
+        }
       }
 
       // تحديث الأسئلة
@@ -3429,9 +3449,18 @@
           const qLines = Array.isArray(data.questions) ? data.questions : String(data.questions).split('\n');
           const questionsHtml = qLines.filter(q => String(q).trim()).map(q => `<p>${q}</p>`).join('');
           task2.innerHTML = `
-                        <div class="task-title"><i class="fa-regular fa-pen-to-square"></i> Reflect</div>
-                        ${questionsHtml}
-                    `;
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-brain"></i></div>
+              <span class="task-banner-title">Reflect</span>
+              <span class="task-banner-badge">Task 2</span>
+            </div>
+            <div class="task-body" style="text-align: center;">
+              ${questionsHtml}
+            </div>
+          `;
         }
       }
 
@@ -3489,9 +3518,18 @@
           }).join('');
 
           task4.innerHTML = `
-            <div class="task-title"><i class="fa-regular fa-lightbulb"></i> Vocabulary</div>
-            ${instructionHtml}
-            <div class="vocabulary-grid">${cards}</div>
+            <div class="task-banner">
+              <div class="tb-shape tb-shape-1"></div>
+              <div class="tb-shape tb-shape-2"></div>
+              <div class="tb-shape tb-shape-3"></div>
+              <div class="task-banner-icon"><i class="fa-solid fa-spell-check"></i></div>
+              <span class="task-banner-title">Vocabulary</span>
+              <span class="task-banner-badge">Task 4</span>
+            </div>
+            <div class="task-body">
+              ${instructionHtml}
+              <div class="vocabulary-grid">${cards}</div>
+            </div>
           `;
         }
       }
@@ -3792,6 +3830,9 @@
     function showTask(taskNum, fromTaskNum, direction) {
       direction = direction || 'forward';
 
+      // ── Always stop any TTS when switching tasks ──
+      if (typeof ttsStop === 'function') ttsStop();
+
       // ── Progress bar & button labels (always immediate) ──
       var progressPercent = (taskNum / totalTasks) * 100;
       document.getElementById('progressFill').style.width = progressPercent + '%';
@@ -3970,8 +4011,13 @@
     const _orig = window.showTask;
     if (!_orig || window.__showTaskPatched) return;
     window.__showTaskPatched = true;
-    window.showTask = function(taskNum) {
-      _orig(taskNum);
+    window.showTask = function(taskNum, fromTaskNum, direction) {
+      // Stop any active TTS immediately on every task switch
+      if (typeof ttsStop === 'function') ttsStop();
+      // Pause any playing YouTube video
+      if (typeof stopYouTubeVideos === 'function') stopYouTubeVideos();
+      // Pass ALL arguments so animations + mood backgrounds keep working
+      _orig(taskNum, fromTaskNum, direction);
       const upload = document.getElementById('lessonImageUpload');
       if (!upload) return;
       // Last task = when Finish button appears (nextBtn text becomes 'Finish')
