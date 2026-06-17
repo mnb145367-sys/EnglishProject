@@ -556,6 +556,83 @@
                 justify-content: center;
             }
         }
+
+        /* ===== TEAM LEADERBOARD ADMIN ===== */
+        .team-admin-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .team-admin-row {
+            background: linear-gradient(135deg, #ffffff 0%, #f6fbff 100%);
+            border: 1px solid #d5e3f0;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr 100px 90px;
+            gap: 0.8rem;
+            align-items: end;
+        }
+
+        .team-admin-row .form-group {
+            min-width: 0;
+            margin: 0;
+        }
+
+        .team-admin-row .form-group label {
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+            color: #2b6f9e;
+        }
+
+        .team-admin-row .form-group input {
+            padding: 0.55rem 0.85rem;
+            font-size: 0.95rem;
+            border-radius: 12px;
+        }
+
+        .team-admin-row .delete-btn {
+            background: linear-gradient(135deg, #d94a4a, #b53636);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            height: fit-content;
+            align-self: end;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .team-admin-row .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(180, 50, 50, 0.25);
+        }
+
+        .team-admin-empty {
+            text-align: center;
+            color: #5f7d9c;
+            padding: 1.5rem;
+            border: 2px dashed #c7ddef;
+            border-radius: 1rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .team-admin-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .team-admin-row .delete-btn {
+                grid-column: 1 / -1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -598,6 +675,9 @@
             </button>
             <button class="tab-btn" onclick="switchTab('tools')">
                 <i class="fa-regular fa-wrench"></i> Tools
+            </button>
+            <button class="tab-btn" onclick="switchTab('teamLeaderboard')">
+                <i class="fa-solid fa-trophy"></i> Team Leaderboard
             </button>
         </div>
 
@@ -810,6 +890,44 @@ discipline – controlled behaviour to achieve a goal</textarea>
             </div>
         </div>
 
+        <!-- TAB 5: TEAM LEADERBOARD -->
+        <div id="tab-teamLeaderboard" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-solid fa-trophy" style="color:#367bb5;"></i> Team Leaderboard Management</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    This section is <strong>completely independent</strong> from the Individual Top Performer. Edits here only affect the Team Leaderboard shown at the top of the Statistics page. Changes are saved to localStorage and synced to Google Sheets.
+                </div>
+
+                <div id="teamAdminList" class="team-admin-list">
+                    <!-- Rendered by renderTeamAdminList() -->
+                </div>
+
+                <div class="btn-group" style="margin-top: 1rem;">
+                    <button class="btn" onclick="addTeam()">
+                        <i class="fa-regular fa-plus"></i> Add New Team
+                    </button>
+                    <button class="btn" onclick="sortTeamsByPoints()">
+                        <i class="fa-regular fa-arrow-down-1-9"></i> Sort by Points
+                    </button>
+                </div>
+
+                <div class="btn-group" style="margin-top: 1.5rem; border-top: 1px solid #c7ddef; padding-top: 1.2rem;">
+                    <button class="btn btn-primary" onclick="saveTeamLeaderboard()">
+                        <i class="fa-regular fa-cloud-arrow-up"></i> Save & Sync to Cloud
+                    </button>
+                    <button class="btn" onclick="resetTeamLeaderboard()">
+                        <i class="fa-regular fa-arrow-rotate-left"></i> Reset to Defaults
+                    </button>
+                </div>
+
+                <div class="sync-status" id="teamSyncStatus" style="display: none;">
+                    <i class="fa-regular fa-check-circle"></i>
+                    <span>Synced to cloud</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer Actions -->
         <div class="footer-actions">
             <button class="btn btn-success" onclick="saveAllChanges()">
@@ -837,7 +955,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // ============================================
         // API URL - UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL
         // ============================================
-        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbz3QuPL0mzs2MYdPMSoS05Rq98ZtPWItbEzyQOnH2N1iwZPpLX65k9GljFg9d5_2yftUg/exec';
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbwNDP2EN82H3I4tmPwbndhUWQnUGnJiSFHAssN2kN3XBzKytFDhSU4WoH_5t9nCTo2s/exec';
 
         // ============================================
         // TAB FUNCTIONS
@@ -867,6 +985,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 document.getElementById('adminPanel').style.display = 'block';
                 loadCurrentData();
                 loadTopPerformer();
+                loadTeamLeaderboardAdmin();
                 updateTimestamp();
                 showNotification('Welcome, Admin!');
             } else {
@@ -1176,6 +1295,21 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 }
             }
 
+            const savedTeams = localStorage.getItem('fluencyTeamLeaderboard');
+            if (savedTeams) {
+                try {
+                    const tl = JSON.parse(savedTeams);
+                    message += '\n\nTeam Leaderboard:\n';
+                    (tl.teams || []).forEach(t => {
+                        message += `#${t.rank} ${t.name} — Captain: ${t.captain} (${t.points} pts)\n`;
+                    });
+                } catch (e) {
+                    message += '\nError parsing Team Leaderboard data';
+                }
+            } else {
+                message += '\n\nNo Team Leaderboard data saved (using defaults).';
+            }
+
             alert(message);
         }
 
@@ -1207,12 +1341,14 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // RESET FUNCTION
         // ============================================
         function resetToDefaults() {
-            if (confirm('Reset ALL data to default values? This cannot be undone.')) {
+            if (confirm('Reset ALL data to default values? This cannot be undone.\n\nThis will reset: Lesson data, Top Performer, AND Team Leaderboard.')) {
                 localStorage.removeItem('fluencyLessonData');
                 localStorage.removeItem('fluencyLessonCode');
                 localStorage.removeItem('fluencyTopPerformer');
+                localStorage.removeItem(TEAM_LB_KEY);
                 loadCurrentData();
                 loadTopPerformer();
+                loadTeamLeaderboardAdmin();
                 showNotification('Reset to defaults');
             }
         }
@@ -1246,6 +1382,165 @@ discipline – controlled behaviour to achieve a goal</textarea>
                         document.getElementById('liveTimestamp').textContent = date.toLocaleTimeString();
                     }
                 } catch (e) {}
+            }
+        }
+
+        // ============================================
+        // TEAM LEADERBOARD (independent from Top Performer)
+        // ============================================
+        const TEAM_LB_KEY = 'fluencyTeamLeaderboard';
+        const DEFAULT_TEAMS = {
+            teams: [
+                { id: 't1', name: 'Team Alpha',    captain: 'Hatem',     points: 145, rank: 1 },
+                { id: 't2', name: 'Team Velocity', captain: 'Abdulaziz', points: 132, rank: 2 },
+                { id: 't3', name: 'Team Nexus',    captain: 'Zubair',    points: 120, rank: 3 }
+            ],
+            lastUpdated: null
+        };
+        let teamState = { teams: [], lastUpdated: null };
+
+        // HTML escape for safe inline rendering
+        function escHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = String(s == null ? '' : s);
+            return d.innerHTML;
+        }
+
+        async function loadTeamLeaderboardAdmin() {
+            // 1) try cloud (same LESSON_API_URL as Top Performer / Lesson data)
+            try {
+                const r = await fetch(LESSON_API_URL + '?action=getTeamLeaderboard');
+                const j = await r.json();
+                if (j && j.success && j.data && Array.isArray(j.data.teams) && j.data.teams.length) {
+                    teamState = j.data;
+                    localStorage.setItem(TEAM_LB_KEY, JSON.stringify(teamState));
+                    renderTeamAdminList();
+                    return;
+                }
+            } catch (e) { /* fall through */ }
+            // 2) try localStorage
+            const raw = localStorage.getItem(TEAM_LB_KEY);
+            if (raw) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.teams) && parsed.teams.length) {
+                        teamState = parsed;
+                        renderTeamAdminList();
+                        return;
+                    }
+                } catch (e) {}
+            }
+            // 3) defaults (clone so we don't mutate the constant)
+            teamState = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+            renderTeamAdminList();
+        }
+
+        function renderTeamAdminList() {
+            const list = document.getElementById('teamAdminList');
+            if (!list) return;
+            if (!teamState.teams || !teamState.teams.length) {
+                list.innerHTML = '<div class="team-admin-empty">No teams yet. Click "Add New Team" to create one.</div>';
+                return;
+            }
+            const sorted = [...teamState.teams].sort((a, b) => (a.rank || 99) - (b.rank || 99));
+            list.innerHTML = sorted.map(t => `
+                <div class="team-admin-row" data-id="${escHtml(t.id)}">
+                    <div class="form-group">
+                        <label>Rank</label>
+                        <input type="number" min="1" value="${Number(t.rank) || 1}" onchange="updateTeamField('${escHtml(t.id)}', 'rank', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Team Name</label>
+                        <input type="text" value="${escHtml(t.name)}" placeholder="e.g., Team Alpha" onchange="updateTeamField('${escHtml(t.id)}', 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Captain</label>
+                        <input type="text" value="${escHtml(t.captain)}" placeholder="Captain name" onchange="updateTeamField('${escHtml(t.id)}', 'captain', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Points</label>
+                        <input type="number" min="0" value="${Number(t.points) || 0}" onchange="updateTeamField('${escHtml(t.id)}', 'points', this.value)">
+                    </div>
+                    <button class="delete-btn" onclick="deleteTeam('${escHtml(t.id)}')">
+                        <i class="fa-regular fa-trash-can"></i> Delete
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function updateTeamField(id, field, value) {
+            const t = teamState.teams.find(x => x.id === id);
+            if (!t) return;
+            if (field === 'rank' || field === 'points') {
+                t[field] = parseInt(value, 10) || 0;
+            } else {
+                t[field] = value;
+            }
+        }
+
+        function addTeam() {
+            const nextRank = (teamState.teams.reduce((m, t) => Math.max(m, t.rank || 0), 0)) + 1;
+            teamState.teams.push({
+                id: 't' + Date.now(),
+                name: '',
+                captain: '',
+                points: 0,
+                rank: nextRank
+            });
+            renderTeamAdminList();
+        }
+
+        function deleteTeam(id) {
+            const t = teamState.teams.find(x => x.id === id);
+            const label = t && t.name ? `"${t.name}"` : 'this team';
+            if (confirm(`Delete ${label}? This cannot be undone.`)) {
+                teamState.teams = teamState.teams.filter(x => x.id !== id);
+                renderTeamAdminList();
+            }
+        }
+
+        function sortTeamsByPoints() {
+            teamState.teams.sort((a, b) => (Number(b.points) || 0) - (Number(a.points) || 0));
+            teamState.teams.forEach((t, i) => { t.rank = i + 1; });
+            renderTeamAdminList();
+            showNotification('Teams sorted by points');
+        }
+
+        async function saveTeamLeaderboard() {
+            teamState.lastUpdated = new Date().toISOString();
+            localStorage.setItem(TEAM_LB_KEY, JSON.stringify(teamState));
+
+            const syncStatus = document.getElementById('teamSyncStatus');
+            syncStatus.className = 'sync-status syncing';
+            syncStatus.innerHTML = '<i class="fa-regular fa-spinner fa-spin"></i> Syncing...';
+            syncStatus.style.display = 'flex';
+
+            try {
+                await fetch(LESSON_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'saveTeamLeaderboard', ...teamState })
+                });
+                syncStatus.className = 'sync-status';
+                syncStatus.innerHTML = '<i class="fa-regular fa-check-circle"></i> <span>Synced to cloud</span>';
+                showNotification('Team Leaderboard saved and synced to cloud!');
+            } catch (error) {
+                console.error('Error syncing team leaderboard:', error);
+                syncStatus.className = 'sync-status error';
+                syncStatus.innerHTML = '<i class="fa-regular fa-exclamation-circle"></i> <span>Saved locally only</span>';
+                showNotification('Saved locally - cloud sync failed');
+            }
+
+            setTimeout(() => { syncStatus.style.display = 'none'; }, 3000);
+        }
+
+        function resetTeamLeaderboard() {
+            if (confirm('Reset Team Leaderboard to default teams? Your current edits will be lost.')) {
+                localStorage.removeItem(TEAM_LB_KEY);
+                teamState = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+                renderTeamAdminList();
+                showNotification('Team Leaderboard reset to defaults');
             }
         }
 
