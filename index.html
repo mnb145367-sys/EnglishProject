@@ -676,6 +676,245 @@
       font-weight: 500;
     }
 
+    /* ===== TEAM LEADERBOARD ===== */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes premiumGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 2px rgba(212,160,23,0.35),
+                    0 20px 40px -8px rgba(212,160,23,0.40);
+      }
+      50% {
+        box-shadow: 0 0 0 3px rgba(212,160,23,0.60),
+                    0 24px 48px -8px rgba(212,160,23,0.60);
+      }
+    }
+
+    .team-leaderboard-section {
+      animation: fadeSlideUp 0.7s ease-out;
+    }
+
+    .team-leaderboard-title {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      justify-content: center;
+    }
+
+    .team-leaderboard-title i {
+      color: #367bb5;
+      font-size: 1.8rem;
+      filter: drop-shadow(0 2px 4px rgba(54, 123, 181, 0.25));
+    }
+
+    .team-leaderboard-subtitle {
+      text-align: center;
+      color: #2b6f9e;
+      font-size: 1.05rem;
+      margin-top: -0.3rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .team-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f3faff 100%);
+      border-radius: 1.5rem;
+      padding: 1.6rem 1.4rem;
+      text-align: center;
+      box-shadow: 0 10px 20px -5px rgba(40, 100, 150, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: fadeSlideUp 0.6s ease-out both;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .team-card:nth-child(1) { animation-delay: 0.05s; }
+    .team-card:nth-child(2) { animation-delay: 0.15s; }
+    .team-card:nth-child(3) { animation-delay: 0.25s; }
+    .team-card:nth-child(4) { animation-delay: 0.35s; }
+    .team-card:nth-child(5) { animation-delay: 0.45s; }
+    .team-card:nth-child(n+6) { animation-delay: 0.55s; }
+
+    .team-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 32px -8px rgba(40, 100, 150, 0.25);
+    }
+
+    .team-card .rank-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .team-card .rank-icon-1 {
+      color: #1e5a88;
+      filter: drop-shadow(0 3px 8px rgba(30, 90, 136, 0.35));
+    }
+
+    .team-card .rank-icon-2 {
+      color: #367bb5;
+      filter: drop-shadow(0 2px 5px rgba(54, 123, 181, 0.25));
+    }
+
+    .team-card .rank-icon-3 {
+      color: #5e9fcf;
+      filter: drop-shadow(0 2px 5px rgba(94, 159, 207, 0.25));
+    }
+
+    .team-card .rank-icon-other {
+      color: #84b3d9;
+    }
+
+    .team-card .rank-text {
+      color: #5e9fcf;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+    }
+
+    .team-card .team-name {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #175277;
+      margin-top: 0.2rem;
+    }
+
+    .team-card .team-captain {
+      color: #2b6f9e;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .team-card .team-captain i {
+      color: #5e9fcf;
+    }
+
+    .team-card .team-points {
+      background: #d4e9fc;
+      color: #0f3d60;
+      border-radius: 50px;
+      padding: 0.4rem 1.1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 0.3rem;
+    }
+
+    .team-card.rank-1 {
+      background: linear-gradient(135deg, #fffaeb 0%, #fff2c9 100%);
+      border: 1.5px solid #f0c862;
+      animation: fadeSlideUp 0.6s ease-out both, premiumGlow 2.6s ease-in-out infinite 0.7s;
+    }
+
+    .team-card.rank-1 .team-name {
+      color: #8a6310;
+    }
+
+    .team-card.rank-1 .team-points {
+      background: linear-gradient(135deg, #ffe49a, #f0c862);
+      color: #5a3f08;
+    }
+
+    .team-card.rank-2 {
+      background: linear-gradient(135deg, #ffffff 0%, #eef2f6 100%);
+      border: 1.5px solid #c4ccd4;
+    }
+
+    .team-card.rank-3 {
+      background: linear-gradient(135deg, #fff8f1 0%, #f5e6d6 100%);
+      border: 1.5px solid #d9b18a;
+    }
+
+    .team-leaderboard-footnote {
+      text-align: center;
+      color: #2b6f9e;
+      font-style: italic;
+      margin-top: 2rem;
+      font-size: 1rem;
+    }
+
+    body.dark-mode .team-card {
+      background: linear-gradient(135deg, #1a2735 0%, #182230 100%) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      color: #e0e9f5;
+    }
+
+    body.dark-mode .team-card .team-name {
+      color: #d6e7f5;
+    }
+
+    body.dark-mode .team-card .team-captain,
+    body.dark-mode .team-card .rank-text {
+      color: #aac8e0;
+    }
+
+    body.dark-mode .team-card .team-points {
+      background: rgba(94, 159, 207, 0.2);
+      color: #d4e9fc;
+    }
+
+    body.dark-mode .team-card.rank-1 {
+      background: linear-gradient(135deg, #2a2010 0%, #1f1808 100%) !important;
+      border-color: #d4a017 !important;
+    }
+
+    body.dark-mode .team-card.rank-1 .team-name {
+      color: #f0c862;
+    }
+
+    body.dark-mode .team-card.rank-1 .team-points {
+      background: linear-gradient(135deg, #d4a017, #b8860b);
+      color: #1a1407;
+    }
+
+    body.dark-mode .team-card.rank-2 {
+      background: linear-gradient(135deg, #1d2530 0%, #161c25 100%) !important;
+      border-color: rgba(196, 204, 212, 0.4) !important;
+    }
+
+    body.dark-mode .team-card.rank-3 {
+      background: linear-gradient(135deg, #261c12 0%, #1e160d 100%) !important;
+      border-color: rgba(217, 177, 138, 0.4) !important;
+    }
+
+    body.dark-mode .team-leaderboard-subtitle,
+    body.dark-mode .team-leaderboard-footnote {
+      color: #aac8e0;
+    }
+
+    body.dark-mode .team-leaderboard-title i {
+      color: #84b3d9;
+      filter: drop-shadow(0 2px 4px rgba(132, 179, 217, 0.35));
+    }
+
+    body.dark-mode .team-card .rank-icon-1 {
+      color: #b3d6f0;
+      filter: drop-shadow(0 3px 8px rgba(179, 214, 240, 0.4));
+    }
+
+    body.dark-mode .team-card .rank-icon-2 {
+      color: #84b3d9;
+    }
+
+    body.dark-mode .team-card .rank-icon-3 {
+      color: #5e9fcf;
+    }
+
     /* ===== BUTTONS ===== */
     .btn {
       background: white;
@@ -1808,6 +2047,22 @@
       .questions-box {
         padding: 1.5rem;
       }
+
+      .team-card {
+        padding: 1.2rem 1rem;
+      }
+
+      .team-card .rank-icon {
+        font-size: 2rem;
+      }
+
+      .team-card .team-name {
+        font-size: 1.2rem;
+      }
+
+      .team-leaderboard-title {
+        font-size: 1.8rem;
+      }
     }
 
     /* ===== IMAGE UPLOAD ADDITIONS ===== */
@@ -2426,6 +2681,14 @@
       body { font-size: 1rem; }
       .vocabulary-grid { grid-template-columns: 1fr; }
       .reading-controls { flex-wrap: wrap; }
+      .team-grid { gap: 1rem; }
+      .team-card { padding: 1rem 0.9rem; }
+      .team-card .rank-icon { font-size: 1.9rem; }
+      .team-card .team-name { font-size: 1.1rem; }
+      .team-leaderboard-title { font-size: 1.6rem; }
+      .team-leaderboard-title i { font-size: 1.4rem; }
+      .team-leaderboard-subtitle,
+      .team-leaderboard-footnote { font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -2953,6 +3216,20 @@
 
     <!-- STATISTICS PAGE -->
     <div id="statistics" class="hidden">
+      <!-- TEAM LEADERBOARD (top of Statistics) -->
+      <div class="section team-leaderboard-section" id="teamLeaderboardSection">
+        <h2 class="team-leaderboard-title">
+          <i class="fa-solid fa-trophy"></i> Team Leaderboard
+        </h2>
+        <p class="team-leaderboard-subtitle">
+          Teams compete through consistency, participation, and homework completion.
+        </p>
+        <div class="team-grid" id="teamGrid"></div>
+        <p class="team-leaderboard-footnote">
+          Every member matters. One homework can change the rankings.
+        </p>
+      </div>
+
       <div class="section">
         <h2>Student Statistics</h2>
         <p>Real performance data from your classmates. All numbers are based on actual assignments and quizzes.</p>
@@ -2967,23 +3244,23 @@
         <div class="stats-grid" id="statsCards" style="display: none;"></div>
 
         <!-- Top 5 Students Table -->
-        <h3 style="margin-top: 3rem;" id="top5Heading" style="display: none;">Top 5 Students by Total Points</h3>
+        <h3 id="top5Heading" style="margin-top: 3rem; display: none;">Top 5 Students by Total Points</h3>
         <table class="student-table" id="top5Table" style="display: none;"></table>
 
         <!-- Category Performance Chart -->
-        <h3 style="margin-top: 3rem;" id="categoryHeading" style="display: none;">Category Performance</h3>
+        <h3 id="categoryHeading" style="margin-top: 3rem; display: none;">Category Performance</h3>
         <div class="chart-container category-chart-container" id="categoryChartContainer" style="display: none;">
           <canvas id="categoryChart"></canvas>
         </div>
 
         <!-- Grade Distribution Chart -->
-        <h3 style="margin-top: 2rem;" id="distributionHeading" style="display: none;">Grade Distribution</h3>
+        <h3 id="distributionHeading" style="margin-top: 2rem; display: none;">Grade Distribution</h3>
         <div class="chart-container" id="distributionChartContainer" style="display: none;">
           <canvas id="distributionChart"></canvas>
         </div>
 
         <!-- Full Student Table -->
-        <h3 style="margin-top: 3rem;" id="fullTableHeading" style="display: none;">All Students - Detailed Scores</h3>
+        <h3 id="fullTableHeading" style="margin-top: 3rem; display: none;">All Students - Detailed Scores</h3>
         <table class="student-table" id="fullStudentTable" style="display: none;"></table>
       </div>
     </div>
@@ -3049,7 +3326,7 @@
     // STUDENTS_API_URL - For Statistics page (DO NOT CHANGE)
     const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbwXavfCoGfyCA0moBn4OwmbjGGBk-gHFlYtr9gTSZRdznXD8fHjRqz82MwSFkyYRDIWdw/exec';
     // LESSON_API_URL - For Lesson data & Top Performer (Your new Apps Script)
-    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbw5QVWa9w2pusqjTjAUUDGLViIK2sggrhiAL507eNpcU166w13J07TstSj8YEsg3L1n/exec';
+    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbwNDP2EN82H3I4tmPwbndhUWQnUGnJiSFHAssN2kN3XBzKytFDhSU4WoH_5t9nCTo2s/exec';
     // QUESTIONS_API_URL - For Questions submission (Your new Apps Script)
     const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
     // Global variables
@@ -3558,19 +3835,42 @@
     // ============================================
     // تحميل بيانات الطلاب من API الطلاب
     // ============================================
-    async function fetchStudentData() {
-      try {
-        const response = await fetch(STUDENTS_API_URL);
-        const data = await response.json();
-        if (!data.success) {
-          console.error('API Error:', data.error);
+    // In-memory cache + in-flight promise to dedupe concurrent calls and
+    // make the first Statistics click feel instant when prefetched.
+    let _studentDataCache = null;
+    let _studentDataInflight = null;
+
+    async function fetchStudentData(forceRefresh = false) {
+      if (!forceRefresh && _studentDataCache) return _studentDataCache;
+      if (_studentDataInflight) return _studentDataInflight;
+      _studentDataInflight = (async () => {
+        try {
+          const response = await fetch(STUDENTS_API_URL);
+          const data = await response.json();
+          if (!data.success) {
+            console.error('API Error:', data.error);
+            _studentDataCache = [];
+            return [];
+          }
+          _studentDataCache = data.data || [];
+          return _studentDataCache;
+        } catch (error) {
+          console.error('Failed to fetch student data:', error);
+          _studentDataCache = [];
           return [];
+        } finally {
+          _studentDataInflight = null;
         }
-        return data.data || [];
-      } catch (error) {
-        console.error('Failed to fetch student data:', error);
-        return [];
-      }
+      })();
+      return _studentDataInflight;
+    }
+
+    // Kick off the student-data fetch in the background as soon as the page
+    // is interactive, so by the time the user clicks Statistics it's warm.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => { fetchStudentData(); });
+    } else {
+      setTimeout(() => fetchStudentData(), 0);
     }
 
     function calculateStatistics(students) {
@@ -3626,10 +3926,97 @@
     }
 
     // ============================================
+    // TEAM LEADERBOARD (independent from Top Performer)
+    // ============================================
+    const TEAM_LB_KEY = 'fluencyTeamLeaderboard';
+    const DEFAULT_TEAMS = {
+      teams: [
+        { id: 't1', name: 'Team Alpha',    captain: 'Hatem',     points: 145, rank: 1 },
+        { id: 't2', name: 'Team Velocity', captain: 'Abdulaziz', points: 132, rank: 2 },
+        { id: 't3', name: 'Team Nexus',    captain: 'Zubair',    points: 120, rank: 3 }
+      ],
+      lastUpdated: null
+    };
+
+    function escTeamHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = String(s == null ? '' : s);
+      return d.innerHTML;
+    }
+
+    // Synchronous: returns localStorage value or defaults immediately so the UI
+    // never has to wait on the network before the first paint.
+    function loadTeamLeaderboardSync() {
+      try {
+        const raw = localStorage.getItem(TEAM_LB_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.teams) && parsed.teams.length) return parsed;
+        }
+      } catch (e) {}
+      return DEFAULT_TEAMS;
+    }
+
+    // Background cloud refresh — re-renders only if the cloud copy differs.
+    async function refreshTeamLeaderboardFromCloud() {
+      try {
+        const r = await fetch(LESSON_API_URL + '?action=getTeamLeaderboard');
+        const j = await r.json();
+        if (j && j.success && j.data && Array.isArray(j.data.teams) && j.data.teams.length) {
+          const prev = localStorage.getItem(TEAM_LB_KEY);
+          const next = JSON.stringify(j.data);
+          if (prev !== next) {
+            try { localStorage.setItem(TEAM_LB_KEY, next); } catch (e) {}
+            if (document.getElementById('teamGrid')) renderTeamLeaderboard(j.data);
+          }
+        }
+      } catch (e) { /* offline / endpoint missing — silent */ }
+    }
+
+    // Back-compat wrapper used elsewhere (returns a Promise resolving to current data).
+    async function loadTeamLeaderboard() {
+      return loadTeamLeaderboardSync();
+    }
+
+    function renderTeamLeaderboard(data) {
+      const grid = document.getElementById('teamGrid');
+      if (!grid) return;
+      const teams = [...(data && data.teams ? data.teams : [])]
+        .sort((a, b) => (a.rank || 99) - (b.rank || 99));
+      const rankIcon = (r) =>
+        r === 1 ? '<i class="fa-solid fa-crown rank-icon-1"></i>' :
+        r === 2 ? '<i class="fa-solid fa-trophy rank-icon-2"></i>' :
+        r === 3 ? '<i class="fa-solid fa-medal rank-icon-3"></i>' :
+                  '<i class="fa-solid fa-award rank-icon-other"></i>';
+      grid.innerHTML = teams.map(t => `
+        <div class="team-card rank-${t.rank}">
+          <div class="rank-icon">${rankIcon(t.rank)}</div>
+          <div class="rank-text">#${t.rank}</div>
+          <div class="team-name">${escTeamHtml(t.name)}</div>
+          <div class="team-captain"><i class="fa-solid fa-user-tie"></i> Captain: ${escTeamHtml(t.captain)}</div>
+          <div class="team-points">${Number(t.points) || 0} pts</div>
+        </div>
+      `).join('');
+    }
+
+    // ============================================
     // RENDER STATISTICS PAGE
     // ============================================
     async function renderStatisticsPage() {
-      document.getElementById('statsLoading').style.display = 'block';
+      // Team Leaderboard: render IMMEDIATELY from localStorage/defaults (no network wait),
+      // then quietly refresh from cloud in the background.
+      try {
+        renderTeamLeaderboard(loadTeamLeaderboardSync());
+      } catch (e) {
+        console.error('Team Leaderboard render failed:', e);
+        renderTeamLeaderboard(DEFAULT_TEAMS);
+      }
+      refreshTeamLeaderboardFromCloud();  // fire-and-forget
+
+      // Only show the spinner if student data isn't already cached.
+      // If prefetched on page load, skip the spinner flash entirely.
+      const hasCached = !!_studentDataCache;
+      document.getElementById('statsLoading').style.display = hasCached ? 'none' : 'block';
       document.getElementById('statsCards').style.display = 'none';
       document.getElementById('top5Heading').style.display = 'none';
       document.getElementById('top5Table').style.display = 'none';
@@ -6107,7 +6494,7 @@
     // ============================================
 
     // IMPORTANT: Replace this with your actual Apps Script URL after deploying
-    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
+    const IMAGE_UPLOAD_API_URL = 'https://script.google.com/macros/s/AKfycbwNDP2EN82H3I4tmPwbndhUWQnUGnJiSFHAssN2kN3XBzKytFDhSU4WoH_5t9nCTo2s/exec';
 
     // Track upload state
     let lessonImageUploaded = false;
