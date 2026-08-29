@@ -633,7 +633,637 @@
                 grid-column: 1 / -1;
             }
         }
+
+        /* ═══════════════════════════════════════════════════════════
+           STUDENT MANAGEMENT & MESSAGES
+           ═══════════════════════════════════════════════════════════ */
+
+        .sm-toolbar {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sm-search {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .sm-search i {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8fb0cc;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .sm-search input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.6rem;
+            border-radius: 50px;
+            border: 1px solid #c7ddef;
+            font-size: 0.95rem;
+            font-family: 'Calibri', sans-serif;
+            outline: none;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .sm-search input:focus {
+            border-color: #1e5a88;
+            box-shadow: 0 0 0 3px rgba(30, 90, 136, 0.1);
+        }
+
+        .sm-filters {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .sm-chip {
+            padding: 0.45rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #c7ddef;
+            background: white;
+            color: #5f7d9c;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: 'Calibri', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sm-chip:hover {
+            background: #f0f7ff;
+            color: #1e5a88;
+        }
+
+        .sm-chip.active {
+            background: #1e5a88;
+            border-color: #1e5a88;
+            color: white;
+        }
+
+        .sm-count {
+            font-size: 0.85rem;
+            color: #5f7d9c;
+            margin-bottom: 0.8rem;
+        }
+
+        /* ── Table ── */
+        .sm-table-wrap {
+            border: 1px solid #c7ddef;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            background: white;
+        }
+
+        .sm-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+
+        .sm-table th {
+            background: #f0f7ff;
+            color: #175277;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #c7ddef;
+            white-space: nowrap;
+        }
+
+        .sm-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid #e6f0fa;
+            color: #1e4f7a;
+            vertical-align: middle;
+        }
+
+        .sm-table tbody tr {
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+
+        .sm-table tbody tr:hover {
+            background: #f6fbff;
+        }
+
+        .sm-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sm-name {
+            font-weight: 700;
+            color: #175277;
+        }
+
+        .sm-email {
+            font-size: 0.85rem;
+            color: #5f7d9c;
+            word-break: break-word;
+        }
+
+        .sm-check {
+            width: 18px;
+            height: 18px;
+            accent-color: #1e5a88;
+            cursor: pointer;
+        }
+
+        .sm-badge {
+            display: inline-block;
+            padding: 0.25rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: #e8f2fc;
+            color: #1e5a88;
+            border: 1px solid #c7ddef;
+        }
+
+        .sm-badge.sm-muted {
+            background: #f4f7fa;
+            color: #8fa8bd;
+            border-color: #dde7f0;
+            font-weight: 600;
+        }
+
+        .sm-badge.sm-active {
+            background: #e6f7ec;
+            color: #1d7a43;
+            border-color: #bfe6cf;
+        }
+
+        .sm-badge.sm-inactive {
+            background: #f4f7fa;
+            color: #7c93a8;
+            border-color: #dde7f0;
+        }
+
+        .sm-badge.sm-failed {
+            background: #fdeaf0;
+            color: #b02a56;
+            border-color: #f5c6d5;
+        }
+
+        .sm-row-btn {
+            padding: 0.45rem 0.95rem;
+            font-size: 0.85rem;
+            border-radius: 50px;
+            border: 1px solid #c7ddef;
+            background: white;
+            color: #1e5a88;
+            font-weight: 600;
+            font-family: 'Calibri', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .sm-row-btn:hover {
+            background: #1e5a88;
+            color: white;
+            border-color: #1e5a88;
+        }
+
+        /* ── Bulk selection bar ── */
+        .sm-bulkbar {
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            background: linear-gradient(115deg, #1e5a88, #367bb5);
+            color: white;
+            border-radius: 1rem;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1rem;
+            animation: smFadeIn 0.25s ease;
+        }
+
+        .sm-bulkbar.show {
+            display: flex;
+        }
+
+        .sm-bulkbar strong {
+            font-size: 0.95rem;
+        }
+
+        .sm-bulkbar .sm-row-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: white;
+        }
+
+        .sm-bulkbar .sm-row-btn:hover {
+            background: white;
+            color: #1e5a88;
+        }
+
+        /* ── Empty / skeleton ── */
+        .sm-empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: #5f7d9c;
+        }
+
+        .sm-empty i {
+            font-size: 2.4rem;
+            color: #b6d0e6;
+            margin-bottom: 0.9rem;
+            display: block;
+        }
+
+        .sm-empty h4 {
+            color: #175277;
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .sm-empty p {
+            font-size: 0.9rem;
+            max-width: 340px;
+            margin: 0 auto;
+        }
+
+        .sm-skel-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #e6f0fa;
+        }
+
+        .sm-skel {
+            height: 12px;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #eaf3fb 25%, #f7fbff 50%, #eaf3fb 75%);
+            background-size: 200% 100%;
+            animation: smShimmer 1.3s infinite;
+        }
+
+        @keyframes smShimmer {
+            from { background-position: 200% 0; }
+            to   { background-position: -200% 0; }
+        }
+
+        @keyframes smFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Modal ── */
+        .sm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(12, 35, 58, 0.55);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 10000;
+            animation: smFadeIn 0.2s ease;
+        }
+
+        .sm-overlay.show {
+            display: flex;
+        }
+
+        .sm-modal {
+            background: white;
+            border-radius: 1.75rem;
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 60px -15px rgba(0, 40, 80, 0.45);
+            animation: smModalIn 0.28s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+
+        @keyframes smModalIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .sm-modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem 1.75rem 1rem;
+            border-bottom: 1px solid #e6f0fa;
+        }
+
+        .sm-modal-head h3 {
+            color: #175277;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .sm-modal-head h3 i {
+            color: #1e5a88;
+        }
+
+        .sm-close {
+            background: #f0f7ff;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            color: #5f7d9c;
+            cursor: pointer;
+            font-size: 1rem;
+            flex: 0 0 auto;
+            transition: 0.2s;
+        }
+
+        .sm-close:hover {
+            background: #dceaf7;
+            color: #1e5a88;
+        }
+
+        .sm-modal-body {
+            padding: 1.5rem 1.75rem;
+        }
+
+        .sm-modal-foot {
+            padding: 0 1.75rem 1.5rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* ── Recipient banner (who gets this email) ── */
+        .sm-recipient {
+            background: #f0f7ff;
+            border: 1px solid #c7ddef;
+            border-radius: 1rem;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .sm-recipient-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #5f7d9c;
+            margin-bottom: 0.3rem;
+        }
+
+        .sm-recipient-name {
+            font-weight: 700;
+            color: #175277;
+            font-size: 1rem;
+        }
+
+        .sm-recipient-email {
+            font-size: 0.88rem;
+            color: #1e5a88;
+            word-break: break-all;
+        }
+
+        /* ── Detail rows ── */
+        .sm-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .sm-detail {
+            background: #f6fbff;
+            border: 1px solid #e6f0fa;
+            border-radius: 0.9rem;
+            padding: 0.75rem 0.9rem;
+        }
+
+        .sm-detail-key {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #8fa8bd;
+            margin-bottom: 0.25rem;
+        }
+
+        .sm-detail-val {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #175277;
+            word-break: break-word;
+        }
+
+        .sm-subhead {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #5f7d9c;
+            margin: 1.2rem 0 0.7rem;
+        }
+
+        .sm-modal-body .sm-field {
+            margin-bottom: 1rem;
+        }
+
+        .sm-field label {
+            display: block;
+            font-weight: 600;
+            color: #1e4f7a;
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+        }
+
+        .sm-field input,
+        .sm-field select,
+        .sm-field textarea {
+            width: 100%;
+            padding: 0.8rem 1.1rem;
+            border: 1px solid #c7ddef;
+            font-size: 0.95rem;
+            font-family: 'Calibri', sans-serif;
+            outline: none;
+            transition: 0.2s;
+            border-radius: 50px;
+            background: white;
+            color: #1e4f7a;
+        }
+
+        .sm-field textarea {
+            border-radius: 1rem;
+            min-height: 160px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .sm-field select {
+            cursor: pointer;
+        }
+
+        .sm-field input:focus,
+        .sm-field select:focus,
+        .sm-field textarea:focus {
+            border-color: #1e5a88;
+            box-shadow: 0 0 0 3px rgba(30, 90, 136, 0.1);
+        }
+
+        .sm-templates {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .sm-msg-body {
+            background: #f6fbff;
+            border: 1px solid #e6f0fa;
+            border-radius: 1rem;
+            padding: 1rem 1.1rem;
+            color: #1e4f7a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .sm-notice {
+            background: #fff8e6;
+            border: 1px solid #f0d9a0;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            color: #7a5b12;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .sm-notice strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #5a3f08;
+        }
+
+        .sm-notice code {
+            background: rgba(0, 0, 0, 0.06);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .notification.error {
+            background: #cc3366;
+        }
+
+        /* ── Mobile: table becomes cards ── */
+        @media (max-width: 768px) {
+            .sm-table-wrap {
+                border: none;
+                background: transparent;
+            }
+            .sm-table thead {
+                display: none;
+            }
+            .sm-table,
+            .sm-table tbody,
+            .sm-table tr,
+            .sm-table td {
+                display: block;
+                width: 100%;
+            }
+            .sm-table tr {
+                background: white;
+                border: 1px solid #c7ddef;
+                border-radius: 1.25rem;
+                padding: 1rem 1.1rem;
+                margin-bottom: 0.9rem;
+                position: relative;
+            }
+            .sm-table td {
+                border: none;
+                padding: 0.3rem 0;
+            }
+            .sm-table td[data-label]::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                color: #8fa8bd;
+                margin-bottom: 0.15rem;
+            }
+            .sm-table td.sm-td-check {
+                position: absolute;
+                top: 1rem;
+                right: 1.1rem;
+                width: auto;
+                padding: 0;
+            }
+            .sm-table td.sm-td-action {
+                padding-top: 0.8rem;
+            }
+            .sm-row-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 1rem;
+            }
+            .sm-modal {
+                border-radius: 1.25rem;
+                max-height: 94vh;
+            }
+            .sm-modal-head,
+            .sm-modal-body {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+            .sm-modal-foot {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+                flex-direction: column;
+            }
+            .sm-modal-foot .btn {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sm-overlay,
+            .sm-modal,
+            .sm-bulkbar {
+                animation: none !important;
+            }
+            .sm-skel {
+                animation: none !important;
+            }
+            .sm-table tbody tr,
+            .sm-row-btn,
+            .sm-chip,
+            .sm-close {
+                transition: none !important;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="lessons-view.css">
+    <link rel="stylesheet" href="lessons-admin.css">
+    <link rel="stylesheet" href="student-record.css">
+    <link rel="stylesheet" href="admin-shell.css">
 </head>
 <body>
     <!-- Login Page -->
@@ -651,38 +1281,194 @@
 
     <!-- Admin Panel (Hidden initially) -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
-        <div class="admin-header">
-            <h2>
-                <i class="fa-regular fa-gear"></i>
-                Control Panel
-            </h2>
-            <div class="live-time">
-                <i class="fa-regular fa-clock"></i>
-                <span id="liveTimestamp">--:--</span>
+        <!-- ═══ SIDEBAR ═══ -->
+        <!-- Every item maps to an existing #tab-* panel, plus the two new
+             data-backed views (Dashboard, Submissions). No decorative links. -->
+        <aside class="ash-sidebar" id="ashSidebar" aria-label="Admin navigation">
+            <div class="ash-brand">
+                <div class="ash-brand-mark" aria-hidden="true">F</div>
+                <div>
+                    <div class="ash-brand-text">Fluency</div>
+                    <div class="ash-brand-sub">Admin</div>
+                </div>
             </div>
-        </div>
 
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('performer')">
-                <i class="fa-regular fa-crown"></i> Top Performer
-            </button>
-            <button class="tab-btn" onclick="switchTab('lesson')">
-                <i class="fa-regular fa-book"></i> Lesson Settings
-            </button>
-            <button class="tab-btn" onclick="switchTab('content')">
-                <i class="fa-regular fa-pen-to-square"></i> Content
-            </button>
-            <button class="tab-btn" onclick="switchTab('tools')">
-                <i class="fa-regular fa-wrench"></i> Tools
-            </button>
-            <button class="tab-btn" onclick="switchTab('teamLeaderboard')">
-                <i class="fa-solid fa-trophy"></i> Team Leaderboard
-            </button>
-        </div>
+            <nav class="ash-nav">
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">Main</div>
+                    <button class="ash-nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">
+                        <i class="fa-solid fa-gauge-high"></i> Dashboard
+                    </button>
+                </div>
+
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">Students</div>
+                    <button class="ash-nav-item" data-tab="students" onclick="switchTab('students')">
+                        <i class="fa-regular fa-user"></i> Students
+                    </button>
+                    <button class="ash-nav-item" data-tab="submissions" onclick="switchTab('submissions')">
+                        <i class="fa-regular fa-file-lines"></i> Submissions
+                    </button>
+                </div>
+
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">Learning</div>
+                    <button class="ash-nav-item" data-tab="lessons" onclick="switchTab('lessons')">
+                        <i class="fa-regular fa-rectangle-list"></i> Lessons
+                    </button>
+                    <button class="ash-nav-item" data-tab="lesson" onclick="switchTab('lesson')">
+                        <i class="fa-regular fa-book"></i> Weekly Assignment
+                    </button>
+                    <button class="ash-nav-item" data-tab="content" onclick="switchTab('content')">
+                        <i class="fa-regular fa-pen-to-square"></i> Site Content
+                    </button>
+                </div>
+
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">Community</div>
+                    <button class="ash-nav-item" data-tab="performer" onclick="switchTab('performer')">
+                        <i class="fa-regular fa-star"></i> Top Performer
+                    </button>
+                    <button class="ash-nav-item" data-tab="teamLeaderboard" onclick="switchTab('teamLeaderboard')">
+                        <i class="fa-solid fa-trophy"></i> Team Leaderboard
+                    </button>
+                </div>
+
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">Communication</div>
+                    <button class="ash-nav-item" data-tab="messages" onclick="switchTab('messages')">
+                        <i class="fa-regular fa-envelope"></i> Messages
+                    </button>
+                </div>
+
+                <div class="ash-nav-group">
+                    <div class="ash-nav-label">System</div>
+                    <button class="ash-nav-item" data-tab="tools" onclick="switchTab('tools')">
+                        <i class="fa-regular fa-wrench"></i> Tools
+                    </button>
+                </div>
+            </nav>
+
+            <div class="ash-sidebar-foot">
+                <button class="ash-nav-item" onclick="logout()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+                </button>
+            </div>
+        </aside>
+
+        <div class="ash-backdrop" id="ashBackdrop" onclick="ashCloseSidebar()"></div>
+
+        <div class="ash-main">
+            <!-- ═══ TOPBAR ═══ -->
+            <header class="ash-topbar">
+                <button class="ash-burger" onclick="ashToggleSidebar()" aria-label="Open navigation"
+                        aria-controls="ashSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="ash-page-title" id="ashPageTitle">Dashboard</div>
+                <div class="ash-topbar-spacer"></div>
+
+                <div class="ash-search">
+                    <i class="fa-regular fa-magnifying-glass"></i>
+                    <label for="ashGlobalSearch" class="sr-only-label">Search students and lessons</label>
+                    <input type="text" id="ashGlobalSearch" placeholder="Search students, lessons..."
+                           autocomplete="off" oninput="ashGlobalSearch(this.value)"
+                           onfocus="ashGlobalSearch(this.value)">
+                    <div class="ash-search-results" id="ashSearchResults"></div>
+                </div>
+
+                <div class="ash-clock">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="liveTimestamp">--:--</span>
+                </div>
+
+                <div class="ash-profile">
+                    <div class="ash-avatar" aria-hidden="true">AD</div>
+                    <div class="ash-profile-text">
+                        <div class="ash-profile-name">Administrator</div>
+                        <div class="ash-profile-role" id="ashAccessLevel">Signed in</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="ash-content">
+
+            <!-- TAB: DASHBOARD (new — built from existing data only) -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="ash-page-head">
+                    <h1 id="ashGreeting">Dashboard</h1>
+                    <p>Here's what's happening with Fluency today.</p>
+                </div>
+
+                <div class="ash-kpis" id="ashKpis"></div>
+
+                <div class="ash-grid-2">
+                    <div>
+                        <div class="ash-panel">
+                            <div class="ash-panel-head">
+                                <span class="ash-panel-title">Submission Activity</span>
+                                <div class="ash-seg" id="ashRangeSeg">
+                                    <button type="button" onclick="ashSetRange(7)">7 days</button>
+                                    <button type="button" class="active" onclick="ashSetRange(30)">30 days</button>
+                                    <button type="button" onclick="ashSetRange(90)">90 days</button>
+                                </div>
+                            </div>
+                            <div class="ash-panel-body" id="ashChart"></div>
+                        </div>
+
+                        <div class="ash-panel">
+                            <div class="ash-panel-head">
+                                <span class="ash-panel-title">Recent Submissions</span>
+                                <button class="btn" onclick="switchTab('submissions')">View all</button>
+                            </div>
+                            <div class="ash-panel-body ash-flush" id="ashRecentTable"></div>
+                        </div>
+                    </div>
+
+                    <div class="ash-panel">
+                        <div class="ash-panel-head">
+                            <span class="ash-panel-title">Recent Activity</span>
+                        </div>
+                        <div class="ash-panel-body ash-flush" id="ashActivity"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: SUBMISSIONS (new — reads the existing Submissions sheet) -->
+            <div id="tab-submissions" class="tab-content">
+                <div class="ash-page-head">
+                    <h1>Submissions</h1>
+                    <p>Review student work and AI feedback.</p>
+                </div>
+
+                <div class="section-box">
+                    <div class="sm-toolbar">
+                        <div class="sm-search">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                            <label for="subSearch" class="sr-only-label">Search submissions</label>
+                            <input type="text" id="subSearch" placeholder="Search student, email or lesson..."
+                                   oninput="renderSubmissions()" autocomplete="off">
+                        </div>
+                        <button class="btn" onclick="loadSubmissions(true)">
+                            <i class="fa-regular fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="al-filter-group" id="subStatusFilters">
+                        <span class="al-filter-label">Feedback</span>
+                        <button class="sm-chip active" onclick="setSubFilter('all')">All</button>
+                        <button class="sm-chip" onclick="setSubFilter('reviewed')">Reviewed</button>
+                        <button class="sm-chip" onclick="setSubFilter('pending')">Pending</button>
+                        <button class="sm-chip" onclick="setSubFilter('none')">No feedback</button>
+                    </div>
+
+                    <div class="sm-count" id="subCount"></div>
+                    <div id="subTableWrap" aria-live="polite"></div>
+                </div>
+            </div>
 
         <!-- TAB 1: TOP PERFORMER -->
-        <div id="tab-performer" class="tab-content active">
+        <div id="tab-performer" class="tab-content">
             <div class="section-box">
                 <h3><i class="fa-regular fa-crown"></i> Top Performer Settings</h3>
                 <div class="help-text">
@@ -928,6 +1714,392 @@ discipline – controlled behaviour to achieve a goal</textarea>
             </div>
         </div>
 
+        <!-- TAB: STUDENTS -->
+        <div id="tab-students" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-regular fa-user"></i> Students</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    Built from existing lesson submissions. Each student appears once, matched by email address.
+                </div>
+
+                <div id="studentsSetupNotice" class="sm-notice" style="display:none; margin-bottom:1rem;">
+                    <strong>Backend setup required</strong>
+                    Student data and email sending need an admin token. In the Apps Script editor open
+                    <code>Project Settings → Script Properties</code> and add a property named
+                    <code>ADMIN_TOKEN</code>, then sign in here using that value as the password.
+                </div>
+
+                <div id="studentsMain">
+                    <div class="sm-toolbar">
+                        <div class="sm-search">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                            <input type="text" id="studentSearch" placeholder="Search name, email or lesson..."
+                                   oninput="renderStudents()" autocomplete="off">
+                        </div>
+                        <label for="studentSortSelect" class="sr-only-label">Sort students</label>
+                        <select id="studentSortSelect" class="al-select" style="width:auto;min-width:190px;"
+                                onchange="setStudentSort(this.value)">
+                            <option value="recent">Most recent submission</option>
+                            <option value="oldest">Oldest submission</option>
+                            <option value="name">Student name (A–Z)</option>
+                            <option value="level">Level</option>
+                        </select>
+                        <button class="btn" onclick="loadStudents(true)">
+                            <i class="fa-regular fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="sm-filters" id="studentFilters">
+                        <button class="sm-chip active" data-filter="all" onclick="setStudentFilter('all')">All Students</button>
+                        <button class="sm-chip" data-filter="active" onclick="setStudentFilter('active')">Active</button>
+                        <button class="sm-chip" data-filter="inactive" onclick="setStudentFilter('inactive')">Inactive</button>
+                        <button class="sm-chip" data-filter="A1" onclick="setStudentFilter('A1')">A1</button>
+                        <button class="sm-chip" data-filter="A2" onclick="setStudentFilter('A2')">A2</button>
+                        <button class="sm-chip" data-filter="B1" onclick="setStudentFilter('B1')">B1</button>
+                        <button class="sm-chip" data-filter="B2" onclick="setStudentFilter('B2')">B2</button>
+                        <button class="sm-chip" data-filter="C1" onclick="setStudentFilter('C1')">C1</button>
+                    </div>
+
+                    <div class="sm-bulkbar" id="studentBulkBar">
+                        <strong id="bulkCount">0 selected</strong>
+                        <button class="sm-row-btn" onclick="sendToSelected()">
+                            <i class="fa-regular fa-paper-plane"></i> Send to Selected
+                        </button>
+                        <button class="sm-row-btn" onclick="selectAllStudents()">Select All</button>
+                        <button class="sm-row-btn" onclick="clearStudentSelection()">Clear Selection</button>
+                    </div>
+
+                    <div class="sm-count" id="studentCount"></div>
+                    <div id="studentsContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: MESSAGES -->
+        <div id="tab-messages" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-regular fa-envelope"></i> Messages</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    Every email sent from this dashboard is recorded here.
+                </div>
+
+                <div id="messagesSetupNotice" class="sm-notice" style="display:none; margin-bottom:1rem;">
+                    <strong>Backend setup required</strong>
+                    Email history needs an admin token. Add <code>ADMIN_TOKEN</code> in the Apps Script
+                    <code>Script Properties</code>, then sign in using that value.
+                </div>
+
+                <div id="messagesMain">
+                    <div class="sm-toolbar">
+                        <div class="sm-search">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                            <input type="text" id="messageSearch" placeholder="Search messages..."
+                                   oninput="renderMessages()" autocomplete="off">
+                        </div>
+                        <button class="btn" onclick="loadMessages(true)">
+                            <i class="fa-regular fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="sm-count" id="messageCount"></div>
+                    <div id="messagesContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ TAB: LESSONS (Lessons CMS) ═══ -->
+        <div id="tab-lessons" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-regular fa-rectangle-list"></i> Lessons Management</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    Lessons published here appear on the website's Lessons page automatically.
+                    Drafts and archived lessons are never visible to students.
+                </div>
+
+                <div id="lessonsSetupNotice" class="sm-notice" style="display:none; margin-bottom:1rem;">
+                    <strong>Backend setup required</strong>
+                    Managing lessons needs an admin token. In the Apps Script editor open
+                    <code>Project Settings → Script Properties</code> and add a property named
+                    <code>ADMIN_TOKEN</code>, then sign in here using that value as the password.
+                </div>
+
+                <div id="lessonsMain">
+
+                    <!-- ── LIST VIEW ── -->
+                    <div id="alListView">
+                        <div class="al-toolbar-row">
+                            <button class="btn btn-primary" onclick="openLessonEditor(null)">
+                                <i class="fa-solid fa-plus"></i> Add New Lesson
+                            </button>
+                            <button class="btn" onclick="openLessonReorder()">
+                                <i class="fa-solid fa-arrow-down-a-z"></i> Reorder
+                            </button>
+                            <button class="btn" onclick="loadAdminLessons(true)">
+                                <i class="fa-regular fa-arrows-rotate"></i> Refresh
+                            </button>
+                            <span class="al-spacer"></span>
+                            <div class="sm-search">
+                                <i class="fa-regular fa-magnifying-glass"></i>
+                                <label for="alSearch" class="sr-only-label">Search lessons</label>
+                                <input type="text" id="alSearch" placeholder="Search lessons..."
+                                       oninput="renderAdminLessons()" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="al-filter-group" id="alStatusFilters">
+                            <span class="al-filter-label">Status</span>
+                            <button class="sm-chip active" onclick="setLessonStatusFilter('all')">All</button>
+                            <button class="sm-chip" onclick="setLessonStatusFilter('published')">Published</button>
+                            <button class="sm-chip" onclick="setLessonStatusFilter('draft')">Draft</button>
+                            <button class="sm-chip" onclick="setLessonStatusFilter('archived')">Archived</button>
+                        </div>
+
+                        <div class="al-filter-group" id="alLevelFilters">
+                            <span class="al-filter-label">Level</span>
+                            <button class="sm-chip active" onclick="setLessonLevelFilter('all')">All</button>
+                            <button class="sm-chip" onclick="setLessonLevelFilter('A1')">A1</button>
+                            <button class="sm-chip" onclick="setLessonLevelFilter('A2')">A2</button>
+                            <button class="sm-chip" onclick="setLessonLevelFilter('B1')">B1</button>
+                            <button class="sm-chip" onclick="setLessonLevelFilter('B2')">B2</button>
+                            <button class="sm-chip" onclick="setLessonLevelFilter('C1')">C1</button>
+                        </div>
+
+                        <div class="sm-count" id="alCount"></div>
+                        <div id="alTableWrap" aria-live="polite"></div>
+                    </div>
+
+                    <!-- ── REORDER VIEW ── -->
+                    <div id="alReorderView" style="display:none;">
+                        <div class="al-editor-head">
+                            <div>
+                                <h3 style="margin:0;">Reorder Lessons</h3>
+                                <p class="al-editor-sub">Drag a lesson, or use the arrows, then save.
+                                    This sets the order students see.</p>
+                            </div>
+                            <button class="btn" onclick="closeLessonReorder()">
+                                <i class="fa-solid fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                        <ul class="al-reorder-list" id="alReorderList"></ul>
+                        <div class="al-sticky-actions">
+                            <button class="btn btn-primary" id="alSaveOrderBtn" onclick="saveLessonOrder()">
+                                <i class="fa-regular fa-floppy-disk"></i> Save Order
+                            </button>
+                            <button class="btn" onclick="closeLessonReorder()">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- ── EDITOR VIEW ── -->
+                    <div id="alEditorView" style="display:none;">
+                        <div class="al-editor-head">
+                            <div>
+                                <h3 id="alEditorTitle" style="margin:0;">New Lesson</h3>
+                                <p class="al-editor-sub" id="alEditorSub">Fill in the details below.</p>
+                            </div>
+                            <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+                                <button class="btn" onclick="openLessonImport()">
+                                    <i class="fa-solid fa-file-import"></i> Import JSON
+                                </button>
+                                <button class="btn" onclick="closeLessonEditor()">
+                                    <i class="fa-solid fa-arrow-left"></i> Back to Lessons
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 1. BASIC INFORMATION -->
+                        <details class="al-section" open>
+                            <summary><i class="fa-regular fa-circle-info"></i> 1. Basic Information</summary>
+                            <div class="al-section-body">
+                                <div class="al-row">
+                                    <div class="form-group" id="alGroupNumber">
+                                        <label for="alFieldNumber">Lesson Number *</label>
+                                        <input type="number" id="alFieldNumber" min="1" step="1" placeholder="1">
+                                        <span class="al-err" id="alErrNumber"></span>
+                                    </div>
+                                    <div class="form-group" id="alGroupLevel">
+                                        <label for="alFieldLevel">Level *</label>
+                                        <select class="al-select" id="alFieldLevel">
+                                            <option value="A1">A1</option>
+                                            <option value="A2">A2</option>
+                                            <option value="B1">B1</option>
+                                            <option value="B2">B2</option>
+                                            <option value="C1">C1</option>
+                                        </select>
+                                        <span class="al-err" id="alErrLevel"></span>
+                                    </div>
+                                    <div class="form-group" id="alGroupDuration">
+                                        <label for="alFieldDuration">Duration (minutes)</label>
+                                        <input type="number" id="alFieldDuration" min="0" step="1" placeholder="20">
+                                        <span class="al-err" id="alErrDuration"></span>
+                                    </div>
+                                </div>
+
+                                <div class="al-row">
+                                    <div class="form-group full-width" id="alGroupTitle">
+                                        <label for="alFieldTitle">Title *</label>
+                                        <input type="text" id="alFieldTitle" placeholder="Present Simple" maxlength="200">
+                                        <span class="al-err" id="alErrTitle"></span>
+                                    </div>
+                                </div>
+
+                                <div class="al-row">
+                                    <div class="form-group full-width">
+                                        <label for="alFieldShortDesc">Short Description</label>
+                                        <textarea id="alFieldShortDesc" maxlength="300"
+                                                  placeholder="One line shown on the lesson card."></textarea>
+                                        <p class="al-hint">Appears on the lesson card in the lessons list.</p>
+                                    </div>
+                                </div>
+
+                                <div class="al-row">
+                                    <div class="form-group full-width">
+                                        <label for="alFieldDescription">Introduction</label>
+                                        <textarea id="alFieldDescription" maxlength="2000"
+                                                  placeholder="A short introduction shown at the top of the lesson."></textarea>
+                                        <p class="al-hint">Leave a blank line between paragraphs.</p>
+                                    </div>
+                                </div>
+
+                                <div class="al-row">
+                                    <div class="form-group full-width" id="alGroupThumbnail">
+                                        <label for="alFieldThumbnail">Thumbnail Image URL</label>
+                                        <input type="url" id="alFieldThumbnail" placeholder="https://...">
+                                        <p class="al-hint">Optional. Must start with https://</p>
+                                        <span class="al-err" id="alErrThumbnail"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- 2. LEARNING OBJECTIVES -->
+                        <details class="al-section">
+                            <summary><i class="fa-regular fa-circle-check"></i> 2. Learning Objectives</summary>
+                            <div class="al-section-body">
+                                <div id="alObjectivesList"></div>
+                                <button class="btn" type="button" onclick="alAddObjective()">
+                                    <i class="fa-solid fa-plus"></i> Add Objective
+                                </button>
+                            </div>
+                        </details>
+
+                        <!-- 3. LESSON CONTENT -->
+                        <details class="al-section" open>
+                            <summary><i class="fa-regular fa-file-lines"></i> 3. Lesson Content *</summary>
+                            <div class="al-section-body">
+                                <p class="al-hint" style="margin-bottom:0.8rem;">
+                                    Build the lesson from blocks. Use the arrows to reorder them.
+                                </p>
+                                <div id="alBlocksList"></div>
+                                <span class="al-err" id="alErrContent"></span>
+                                <div class="al-add-blocks">
+                                    <button class="btn" type="button" onclick="alAddBlock('heading')">
+                                        <i class="fa-solid fa-heading"></i> Heading
+                                    </button>
+                                    <button class="btn" type="button" onclick="alAddBlock('text')">
+                                        <i class="fa-solid fa-align-left"></i> Text
+                                    </button>
+                                    <button class="btn" type="button" onclick="alAddBlock('note')">
+                                        <i class="fa-regular fa-lightbulb"></i> Note
+                                    </button>
+                                    <button class="btn" type="button" onclick="alAddBlock('quote')">
+                                        <i class="fa-solid fa-quote-left"></i> Quote
+                                    </button>
+                                    <button class="btn" type="button" onclick="alAddBlock('image')">
+                                        <i class="fa-regular fa-image"></i> Image
+                                    </button>
+                                    <button class="btn" type="button" onclick="alAddBlock('divider')">
+                                        <i class="fa-solid fa-minus"></i> Divider
+                                    </button>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- 4. VOCABULARY -->
+                        <details class="al-section">
+                            <summary><i class="fa-regular fa-bookmark"></i> 4. Vocabulary</summary>
+                            <div class="al-section-body">
+                                <div id="alVocabList"></div>
+                                <button class="btn" type="button" onclick="alAddVocab()">
+                                    <i class="fa-solid fa-plus"></i> Add Word
+                                </button>
+                            </div>
+                        </details>
+
+                        <!-- 5. EXAMPLES -->
+                        <details class="al-section">
+                            <summary><i class="fa-regular fa-comments"></i> 5. Examples</summary>
+                            <div class="al-section-body">
+                                <div id="alExamplesList"></div>
+                                <button class="btn" type="button" onclick="alAddExample()">
+                                    <i class="fa-solid fa-plus"></i> Add Example
+                                </button>
+                            </div>
+                        </details>
+
+                        <!-- 6. EXERCISES -->
+                        <details class="al-section">
+                            <summary><i class="fa-regular fa-pen-to-square"></i> 6. Exercises</summary>
+                            <div class="al-section-body">
+                                <div id="alExercisesList"></div>
+                                <button class="btn" type="button" onclick="alAddExercise()">
+                                    <i class="fa-solid fa-plus"></i> Add Exercise
+                                </button>
+                            </div>
+                        </details>
+
+                        <!-- 7. ADDITIONAL RESOURCES -->
+                        <details class="al-section">
+                            <summary><i class="fa-solid fa-link"></i> 7. Additional Resources</summary>
+                            <div class="al-section-body">
+                                <div class="al-row">
+                                    <div class="form-group full-width" id="alGroupYoutube">
+                                        <label for="alFieldYoutube">YouTube URL</label>
+                                        <input type="url" id="alFieldYoutube"
+                                               placeholder="https://www.youtube.com/watch?v=...">
+                                        <p class="al-hint">
+                                            Optional. Leave empty and no video section is shown to students.
+                                        </p>
+                                        <span class="al-err" id="alErrYoutube"></span>
+                                    </div>
+                                </div>
+                                <div id="alResourcesList"></div>
+                                <button class="btn" type="button" onclick="alAddResource()">
+                                    <i class="fa-solid fa-plus"></i> Add Link
+                                </button>
+                            </div>
+                        </details>
+
+                        <!-- 8. PUBLISHING -->
+                        <details class="al-section" open>
+                            <summary><i class="fa-solid fa-tower-broadcast"></i> 8. Publishing</summary>
+                            <div class="al-section-body">
+                                <div class="al-row">
+                                    <div class="form-group">
+                                        <label for="alFieldStatus">Status</label>
+                                        <select class="al-select" id="alFieldStatus">
+                                            <option value="draft">Draft</option>
+                                            <option value="published">Published</option>
+                                            <option value="archived">Archived</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="alGroupOrder">
+                                        <label for="alFieldOrder">Display Order</label>
+                                        <input type="number" id="alFieldOrder" min="0" step="1" placeholder="1">
+                                        <p class="al-hint">Lower numbers appear first.</p>
+                                        <span class="al-err" id="alErrOrder"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="al-sticky-actions" id="alEditorActions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer Actions -->
         <div class="footer-actions">
             <button class="btn btn-success" onclick="saveAllChanges()">
@@ -945,59 +2117,322 @@ discipline – controlled behaviour to achieve a goal</textarea>
         <div class="timestamp" id="lastUpdated">
             Last saved: Never
         </div>
+            </div><!-- /.ash-content -->
+        </div><!-- /.ash-main -->
+    </div>
+
+
+    <!-- ═══ LESSON PREVIEW MODAL ═══ -->
+    <!-- Renders the real student component (FluencyLessonView) so the preview
+         cannot drift from what students actually see. -->
+    <div class="sm-overlay" id="alPreviewModal" onclick="if(event.target===this) closeLessonPreview()">
+        <div class="sm-modal al-preview-modal" role="dialog" aria-modal="true"
+             aria-labelledby="alPreviewTitle">
+            <div class="sm-modal-head">
+                <h3 id="alPreviewTitle"><i class="fa-regular fa-eye"></i> Lesson Preview</h3>
+                <button class="sm-close" onclick="closeLessonPreview()" aria-label="Close preview">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="al-preview-body">
+                <p class="al-preview-note">
+                    <i class="fa-regular fa-circle-info"></i>
+                    This is exactly how the lesson will look to students.
+                </p>
+                <div id="alPreviewContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ LESSON CONFIRM DIALOG ═══ -->
+    <!-- ═══ LESSON IMPORT MODAL ═══ -->
+    <!-- Loads a lesson JSON file into the editor form. Nothing is saved until
+         the admin reviews it and presses Save or Publish, so the normal
+         validation and preview steps still apply. -->
+    <div class="sm-overlay" id="alImportModal" onclick="if(event.target===this) closeLessonImport()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="alImportTitle">
+            <div class="sm-modal-head">
+                <h3 id="alImportTitle"><i class="fa-solid fa-file-import"></i> Import Lesson</h3>
+                <button class="sm-close" onclick="closeLessonImport()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="al-confirm-body">
+                <p>Paste a lesson JSON file below. It will fill in the editor so you can
+                   review, preview and then publish it yourself.</p>
+                <div class="form-group full-width">
+                    <label for="alImportText">Lesson JSON</label>
+                    <textarea id="alImportText" style="min-height:220px;font-family:monospace;font-size:.82rem;"
+                              placeholder='{ "title": "...", "level": "A1", ... }'></textarea>
+                    <span class="al-err" id="alErrImport"></span>
+                </div>
+                <div class="al-confirm-actions">
+                    <button class="btn" onclick="closeLessonImport()">Cancel</button>
+                    <button class="btn btn-primary" onclick="applyLessonImport()">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Load into editor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sm-overlay" id="alConfirmModal" onclick="if(event.target===this) closeLessonConfirm()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="alConfirmTitle">
+            <div class="sm-modal-head">
+                <h3 id="alConfirmTitle"><i class="fa-solid fa-triangle-exclamation"></i> Confirm</h3>
+                <button class="sm-close" onclick="closeLessonConfirm()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="al-confirm-body">
+                <p id="alConfirmMessage"></p>
+                <div class="al-confirm-actions">
+                    <button class="btn" onclick="closeLessonConfirm()">Cancel</button>
+                    <button class="btn btn-danger" id="alConfirmOk">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ═══ STUDENT DETAILS MODAL ═══ -->
+    <div class="sm-overlay" id="studentModal" onclick="if(event.target===this) closeStudentModal()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="studentModalTitle">
+            <div class="sm-modal-head">
+                <h3 id="studentModalTitle"><i class="fa-regular fa-user"></i> Student</h3>
+                <button class="sm-close" onclick="closeStudentModal()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="sm-modal-body" id="studentModalBody"></div>
+            <div class="sm-modal-foot">
+                <button class="btn" onclick="closeStudentModal()">Close</button>
+                <button class="btn btn-primary" id="studentModalSendBtn">
+                    <i class="fa-regular fa-paper-plane"></i> Send Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ EMAIL COMPOSER MODAL ═══ -->
+    <div class="sm-overlay" id="composerModal" onclick="if(event.target===this) closeComposer()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
+            <div class="sm-modal-head">
+                <h3 id="composerTitle"><i class="fa-regular fa-pen-to-square"></i> New Message</h3>
+                <button class="sm-close" onclick="closeComposer()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="sm-modal-body">
+                <div class="sm-recipient">
+                    <div class="sm-recipient-label">To</div>
+                    <div class="sm-recipient-name" id="composerToName"></div>
+                    <div class="sm-recipient-email" id="composerToEmail"></div>
+                </div>
+
+                <div class="sm-field">
+                    <label for="composerType">Email Type</label>
+                    <select id="composerType" onchange="applyTemplate(this.value)">
+                        <option value="General">General</option>
+                        <option value="Announcement">Announcement</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Assignment Review">Assignment Review</option>
+                        <option value="Reminder">Reminder</option>
+                        <option value="Personal">Personal</option>
+                    </select>
+                </div>
+
+                <div class="sm-field">
+                    <label for="composerSubject">Subject</label>
+                    <input type="text" id="composerSubject" placeholder="Subject" autocomplete="off">
+                </div>
+
+                <div class="sm-field">
+                    <label for="composerBody">Message</label>
+                    <textarea id="composerBody" placeholder="Write your message..."></textarea>
+                </div>
+            </div>
+            <div class="sm-modal-foot">
+                <button class="btn" onclick="closeComposer()">Cancel</button>
+                <button class="btn btn-primary" id="composerSendBtn" onclick="submitComposer()">
+                    <i class="fa-regular fa-paper-plane"></i> Send Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MESSAGE VIEW MODAL ═══ -->
+    <div class="sm-overlay" id="messageModal" onclick="if(event.target===this) closeMessageModal()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="messageModalTitle">
+            <div class="sm-modal-head">
+                <h3 id="messageModalTitle"><i class="fa-regular fa-envelope-open"></i> Message</h3>
+                <button class="sm-close" onclick="closeMessageModal()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="sm-modal-body" id="messageModalBody"></div>
+            <div class="sm-modal-foot">
+                <button class="btn" onclick="closeMessageModal()">Close</button>
+            </div>
+        </div>
     </div>
 
     <script>
         // ============================================
         // CONFIGURATION
         // ============================================
-        const ADMIN_PASSWORD = 'fluency2026'; // ⚠️ Change this to a strong password
+        // ⚠️ LEGACY FALLBACK ONLY — this value is publicly visible in page source,
+        // so treat it as a convenience lock, not a credential. It opens the original
+        // tabs (Top Performer / Lesson / Content / Tools / Team Leaderboard) so nobody
+        // is locked out, but it does NOT unlock Students, Messages or email sending.
+        // Those require the real ADMIN_TOKEN, which lives only in Apps Script
+        // Script Properties and is verified server-side. Once ADMIN_TOKEN is set,
+        // sign in with it and you can delete this constant.
+        const ADMIN_PASSWORD = 'fluency2026';
         // ============================================
         // API URL - UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT URL
         // ============================================
-        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbwNDP2EN82H3I4tmPwbndhUWQnUGnJiSFHAssN2kN3XBzKytFDhSU4WoH_5t9nCTo2s/exec';
+        const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbylT1zdc3sRfm4a6dpP3S_9mJg0xnWdyIbsEAD4VsfI0iUoWPXfpt4pkdSJ7c-yiUC4Gw/exec';
 
         // ============================================
         // TAB FUNCTIONS
         // ============================================
+        // Page titles for the topbar, keyed by the existing tab ids.
+        const ASH_PAGE_TITLES = {
+            dashboard: 'Dashboard',
+            students: 'Students',
+            submissions: 'Submissions',
+            lessons: 'Lessons',
+            lesson: 'Weekly Assignment',
+            content: 'Site Content',
+            performer: 'Top Performer',
+            teamLeaderboard: 'Team Leaderboard',
+            messages: 'Messages',
+            tools: 'Tools'
+        };
+
+        // The legacy Save / Preview / Reset bar only acts on these panels.
+        const ASH_FOOTER_TABS = ['performer', 'lesson', 'content', 'tools'];
+
+        // Rewritten to drive the sidebar and to no longer depend on the implicit
+        // global `event`, so it can be called programmatically as well as from
+        // the existing inline onclick handlers.
         function switchTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
+            const panel = document.getElementById(`tab-${tabName}`);
+            if (!panel) return;
+
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            panel.classList.add('active');
+
+            // Sidebar items (and any legacy .tab-btn still in the page).
+            document.querySelectorAll('.ash-nav-item[data-tab], .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset && btn.dataset.tab === tabName);
             });
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Show selected tab content
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            // Activate clicked tab button
-            event.target.closest('.tab-btn').classList.add('active');
+
+            const title = document.getElementById('ashPageTitle');
+            if (title) title.textContent = ASH_PAGE_TITLES[tabName] || 'Admin';
+
+            ashCloseSidebar();
+            window.scrollTo(0, 0);
+
+            // Lazy-load the data-backed tabs the first time they are opened
+            if (tabName === 'students') loadStudents();
+            if (tabName === 'messages') loadMessages();
+            if (tabName === 'lessons' && typeof loadAdminLessons === 'function') loadAdminLessons();
+            if (tabName === 'submissions' && typeof loadSubmissions === 'function') loadSubmissions();
+            if (tabName === 'dashboard' && typeof loadDashboard === 'function') loadDashboard();
+
+            const footerActions = document.querySelector('.footer-actions');
+            if (footerActions) {
+                footerActions.style.display = ASH_FOOTER_TABS.indexOf(tabName) !== -1 ? '' : 'none';
+            }
+            const stamp = document.getElementById('lastUpdated');
+            if (stamp) {
+                stamp.style.display = ASH_FOOTER_TABS.indexOf(tabName) !== -1 ? '' : 'none';
+            }
         }
 
         // ============================================
         // LOGIN FUNCTION
         // ============================================
-        function checkPassword() {
-            const pass = document.getElementById('adminPassword').value;
-            if (pass === ADMIN_PASSWORD) {
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                loadCurrentData();
-                loadTopPerformer();
-                loadTeamLeaderboardAdmin();
-                updateTimestamp();
-                showNotification('Welcome, Admin!');
+        // The admin token is never hardcoded. It is whatever the administrator
+        // types at login, verified by the backend against Script Properties, and
+        // held only for the lifetime of this tab.
+        let ADMIN_TOKEN = null;
+
+        async function checkPassword() {
+            const input = document.getElementById('adminPassword');
+            const errEl = document.getElementById('loginError');
+            const pass = input.value;
+            if (!pass) { errEl.innerText = 'Enter your password'; return; }
+
+            errEl.innerText = 'Checking...';
+
+            // Ask the backend whether this is the real admin token.
+            let verified = false;
+            try {
+                const res = await adminFetch({ action: 'verifyAdmin', adminToken: pass }, pass);
+                verified = !!(res && res.success);
+            } catch (e) {
+                console.warn('Admin verification unavailable:', e);
+            }
+
+            if (verified) {
+                ADMIN_TOKEN = pass;
+                enterDashboard(true);
+            } else if (pass === ADMIN_PASSWORD) {
+                // Legacy password still opens the existing tabs so the admin is
+                // never locked out, but student data and email stay unavailable
+                // until ADMIN_TOKEN is configured in Script Properties.
+                ADMIN_TOKEN = null;
+                enterDashboard(false);
             } else {
-                document.getElementById('loginError').innerText = 'Incorrect password';
+                errEl.innerText = 'Incorrect password';
             }
         }
 
+        function enterDashboard(fullAccess) {
+            document.getElementById('loginError').innerText = '';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            // Switches the page from the old centred card to the shell layout.
+            document.body.classList.add('ash-active');
+
+            const access = document.getElementById('ashAccessLevel');
+            if (access) access.textContent = fullAccess ? 'Full access' : 'Limited access';
+
+            applyAdminAccessState();
+            loadCurrentData();
+            loadTopPerformer();
+            loadTeamLeaderboardAdmin();
+            updateTimestamp();
+            // Land on the Dashboard, which loads its own data.
+            switchTab('dashboard');
+            showNotification(fullAccess ? 'Welcome, Admin!' : 'Signed in — student tools need setup');
+        }
+
+        /** Shows or hides the setup notice on the tabs that need a real admin token. */
+        function applyAdminAccessState() {
+            const ok = !!ADMIN_TOKEN;
+            [['studentsSetupNotice', 'studentsMain'], ['messagesSetupNotice', 'messagesMain'],
+             ['lessonsSetupNotice', 'lessonsMain']]
+                .forEach(([noticeId, mainId]) => {
+                    document.getElementById(noticeId).style.display = ok ? 'none' : 'block';
+                    document.getElementById(mainId).style.display = ok ? 'block' : 'none';
+                });
+        }
+
         function logout() {
+            ADMIN_TOKEN = null;
+            studentsCache = [];
+            messagesCache = [];
+            selectedStudents.clear();
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPassword').value = '';
             document.getElementById('loginError').innerText = '';
+            // Restore the login page's own centred layout.
+            document.body.classList.remove('ash-active');
+            if (typeof ashCloseSidebar === 'function') ashCloseSidebar();
         }
 
         // ============================================
@@ -1560,6 +2995,524 @@ discipline – controlled behaviour to achieve a goal</textarea>
 
         // Auto-refresh timestamp every minute
         setInterval(updateTimestamp, 60000);
+
+        // ═══════════════════════════════════════════════════════════
+        // STUDENT MANAGEMENT & EMAIL
+        // All admin calls go over POST so the token never lands in a URL.
+        // ═══════════════════════════════════════════════════════════
+
+        let studentsCache = [];
+        let messagesCache = [];
+        let studentsLoaded = false;
+        let messagesLoaded = false;
+        let currentFilter = 'all';
+        let selectedStudents = new Set();
+        let composerTarget = null;   // { mode:'single'|'bulk', name, email, emails[] }
+
+        /**
+         * text/plain keeps this a CORS "simple request", so the browser skips the
+         * preflight that Apps Script cannot answer. The body is still JSON.
+         */
+        async function adminFetch(payload, tokenOverride) {
+            const token = tokenOverride !== undefined ? tokenOverride : ADMIN_TOKEN;
+            const res = await fetch(LESSON_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(Object.assign({}, payload, { adminToken: token })),
+                redirect: 'follow'
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        }
+
+        function showError(message) {
+            const n = document.createElement('div');
+            n.className = 'notification error';
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 4000);
+        }
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function relativeDate(iso) {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            if (isNaN(d.getTime())) return '—';
+            const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+            if (days <= 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return days + ' days ago';
+            return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function skeleton(rows) {
+            let h = '<div class="sm-table-wrap">';
+            for (let i = 0; i < rows; i++) {
+                h += '<div class="sm-skel-row">' +
+                     '<div class="sm-skel" style="width:34%"></div>' +
+                     '<div class="sm-skel" style="width:22%"></div>' +
+                     '<div class="sm-skel" style="width:14%"></div>' +
+                     '<div class="sm-skel" style="width:18%"></div></div>';
+            }
+            return h + '</div>';
+        }
+
+        // ── Students ────────────────────────────────────────────────
+
+        async function loadStudents(force) {
+            if (!ADMIN_TOKEN) { applyAdminAccessState(); return; }
+            if (studentsLoaded && !force) return;
+
+            const box = document.getElementById('studentsContainer');
+            box.innerHTML = skeleton(5);
+            document.getElementById('studentCount').textContent = '';
+
+            try {
+                const res = await adminFetch({ action: 'getStudents' });
+                if (!res || !res.success) throw new Error(res && res.error ? res.error : 'failed');
+                studentsCache = res.students || [];
+                studentsLoaded = true;
+                selectedStudents.clear();
+                renderStudents();
+                if (force) showNotification('Students refreshed');
+            } catch (err) {
+                console.error('loadStudents:', err);
+                studentsCache = [];
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-circle-exclamation"></i>' +
+                    '<h4>Unable to load students</h4><p>Please check your connection and try again.</p></div>';
+            }
+        }
+
+        function setStudentFilter(f) {
+            currentFilter = f;
+            document.querySelectorAll('#studentFilters .sm-chip').forEach(c => {
+                c.classList.toggle('active', c.dataset.filter === f);
+            });
+            renderStudents();
+        }
+
+        function filteredStudents() {
+            const q = (document.getElementById('studentSearch').value || '').trim().toLowerCase();
+            const list = studentsCache.filter(s => {
+                // Search now also covers the most recent lesson code.
+                if (q) {
+                    const haystack = [s.name, s.email, s.lastLesson]
+                        .map(v => String(v || '').toLowerCase());
+                    if (!haystack.some(v => v.indexOf(q) !== -1)) return false;
+                }
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'active') return s.status === 'Active';
+                if (currentFilter === 'inactive') return s.status === 'Inactive';
+                return s.level === currentFilter;
+            });
+            return sortStudents(list);
+        }
+
+        // Default order is newest activity first, matching the backend's own order.
+        let studentSort = 'recent';
+
+        function setStudentSort(value) {
+            studentSort = value;
+            renderStudents();
+        }
+
+        function sortStudents(list) {
+            const byDateDesc = (a, b) => String(b.lastActivity || '').localeCompare(String(a.lastActivity || ''));
+            const sorted = list.slice();
+            if (studentSort === 'oldest') sorted.sort((a, b) => -byDateDesc(a, b));
+            else if (studentSort === 'name') sorted.sort((a, b) =>
+                String(a.name || '').localeCompare(String(b.name || ''), undefined, { sensitivity: 'base' }));
+            else if (studentSort === 'level') sorted.sort((a, b) => {
+                // Unassigned levels sort last rather than first.
+                const rank = v => (v ? ['A1', 'A2', 'B1', 'B2', 'C1'].indexOf(v) : 99);
+                return rank(a.level) - rank(b.level) || byDateDesc(a, b);
+            });
+            else sorted.sort(byDateDesc);
+            return sorted;
+        }
+
+        function renderStudents() {
+            const box = document.getElementById('studentsContainer');
+            const countEl = document.getElementById('studentCount');
+
+            if (!studentsCache.length) {
+                countEl.textContent = '';
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-user"></i>' +
+                    '<h4>No Students Yet</h4>' +
+                    '<p>Student emails will appear here once students submit their lessons.</p></div>';
+                updateBulkBar();
+                return;
+            }
+
+            const list = filteredStudents();
+            countEl.textContent = list.length === studentsCache.length
+                ? list.length + (list.length === 1 ? ' student' : ' students')
+                : list.length + ' of ' + studentsCache.length + ' students';
+
+            if (!list.length) {
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-magnifying-glass"></i>' +
+                    '<h4>No matches</h4><p>No students match your search or filter.</p></div>';
+                updateBulkBar();
+                return;
+            }
+
+            let rows = '';
+            list.forEach(s => {
+                const checked = selectedStudents.has(s.email) ? 'checked' : '';
+                const level = s.level
+                    ? '<span class="sm-badge">' + esc(s.level) + '</span>'
+                    : '<span class="sm-badge sm-muted">Unassigned</span>';
+                const status = '<span class="sm-badge sm-' + s.status.toLowerCase() + '">' + esc(s.status) + '</span>';
+                rows +=
+                    '<tr onclick="openStudent(\'' + esc(s.email) + '\')">' +
+                      '<td class="sm-td-check" onclick="event.stopPropagation()">' +
+                        '<input type="checkbox" class="sm-check" ' + checked +
+                        ' onchange="toggleStudent(\'' + esc(s.email) + '\', this.checked)"' +
+                        ' aria-label="Select ' + esc(s.name) + '"></td>' +
+                      '<td data-label="Student"><div class="sm-name">' + esc(s.name) + '</div>' +
+                        '<div class="sm-email">' + esc(s.email) + '</div></td>' +
+                      '<td data-label="Level">' + level + '</td>' +
+                      '<td data-label="Submissions">' + s.submissions + '</td>' +
+                      '<td data-label="Last Activity">' + esc(relativeDate(s.lastActivity)) + '</td>' +
+                      '<td data-label="Status">' + status + '</td>' +
+                      '<td class="sm-td-action" onclick="event.stopPropagation()">' +
+                        '<button class="sm-row-btn" onclick="composeTo(\'' + esc(s.email) + '\')">' +
+                        '<i class="fa-regular fa-paper-plane"></i> Send Email</button></td>' +
+                    '</tr>';
+            });
+
+            box.innerHTML =
+                '<div class="sm-table-wrap"><table class="sm-table"><thead><tr>' +
+                '<th></th><th>Student</th><th>Level</th><th>Submissions</th>' +
+                '<th>Last Activity</th><th>Status</th><th></th>' +
+                '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+            updateBulkBar();
+        }
+
+        function toggleStudent(email, on) {
+            if (on) selectedStudents.add(email); else selectedStudents.delete(email);
+            updateBulkBar();
+        }
+
+        function selectAllStudents() {
+            filteredStudents().forEach(s => selectedStudents.add(s.email));
+            renderStudents();
+        }
+
+        function clearStudentSelection() {
+            selectedStudents.clear();
+            renderStudents();
+        }
+
+        function updateBulkBar() {
+            const bar = document.getElementById('studentBulkBar');
+            const n = selectedStudents.size;
+            bar.classList.toggle('show', n > 0);
+            document.getElementById('bulkCount').textContent =
+                n + (n === 1 ? ' student selected' : ' students selected');
+        }
+
+        // ── Student details ─────────────────────────────────────────
+
+        function findStudent(email) {
+            return studentsCache.find(s => s.email === email) || null;
+        }
+
+        // Opens the full student record. The modal, its Send Email button and the
+        // level control are the existing ones — only the body is now the richer
+        // record rendered by student-record.js from the existing
+        // getStudentDetails action.
+        async function openStudent(email) {
+            const s = findStudent(email);
+            if (!s) return;
+
+            const modal = document.getElementById('studentModal');
+            const body = document.getElementById('studentModalBody');
+
+            document.getElementById('studentModalTitle').innerHTML =
+                '<i class="fa-regular fa-user"></i> Student Record';
+            document.getElementById('studentModalSendBtn').onclick = function () {
+                closeStudentModal();
+                composeTo(email);          // existing email flow, unchanged
+            };
+
+            // The record needs more room than the default student dialog.
+            modal.querySelector('.sm-modal').classList.add('sr-modal-wide');
+            modal.classList.add('show');
+
+            if (!window.FluencyStudentRecord) {
+                body.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-circle-exclamation"></i>' +
+                    '<h4>Student record unavailable</h4><p>student-record.js did not load.</p></div>';
+                return;
+            }
+
+            FluencyStudentRecord.showLoading(body);
+
+            try {
+                const res = await adminFetch({ action: 'getStudentDetails', email: email });
+                if (!res || !res.success) throw new Error(res && res.error ? res.error : 'Request failed');
+                // res.student is the authoritative record; fall back to the cached
+                // row so the panel still renders if the backend omits it.
+                FluencyStudentRecord.render(body, res.student || s, res.recent || [], {
+                    onLevelChange: saveStudentLevel
+                });
+            } catch (err) {
+                console.warn('getStudentDetails:', err);
+                FluencyStudentRecord.showError(
+                    body,
+                    'Please check your connection and try again.',
+                    function () { openStudent(email); }
+                );
+            }
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModal').classList.remove('show');
+        }
+
+        async function saveStudentLevel(email, level) {
+            try {
+                const res = await adminFetch({ action: 'setStudentLevel', email: email, level: level });
+                if (!res || !res.success) throw new Error('failed');
+                const s = findStudent(email);
+                if (s) s.level = res.level || '';
+                renderStudents();
+                showNotification('Level updated');
+            } catch (err) {
+                console.error('setStudentLevel:', err);
+                showError('Unable to update the level. Please try again.');
+            }
+        }
+
+        // ── Composer ────────────────────────────────────────────────
+
+        const EMAIL_TEMPLATES = {
+            'General':           { subject: 'Message from Fluency',              body: 'Hello,\n\n\n\nBest regards,\nFluency' },
+            'Announcement':      { subject: 'Important Announcement from Fluency', body: 'Hello,\n\nWe have an important update to share with you.\n\n\n\nBest regards,\nFluency' },
+            'Feedback':          { subject: 'Your Assignment Feedback — Fluency',  body: 'Hello,\n\nHere is the feedback on your recent work:\n\n\n\nKeep up the good work.\n\nBest regards,\nFluency' },
+            'Assignment Review': { subject: 'Your Assignment Feedback — Fluency',  body: 'Hello,\n\nI have reviewed your latest assignment:\n\n\n\nBest regards,\nFluency' },
+            'Reminder':          { subject: 'A Quick Reminder from Fluency',       body: 'Hello,\n\nThis is a quick reminder:\n\n\n\nBest regards,\nFluency' },
+            'Personal':          { subject: 'Message from Fluency',                body: 'Hello,\n\n\n\nBest regards,\nFluency' }
+        };
+
+        /** Fills subject/message from a template. Everything stays editable. */
+        function applyTemplate(type) {
+            const t = EMAIL_TEMPLATES[type];
+            if (!t) return;
+            const subjectEl = document.getElementById('composerSubject');
+            const bodyEl = document.getElementById('composerBody');
+            const untouched = Object.keys(EMAIL_TEMPLATES).some(k =>
+                EMAIL_TEMPLATES[k].body === bodyEl.value || EMAIL_TEMPLATES[k].subject === subjectEl.value);
+            if (!bodyEl.value.trim() || untouched) {
+                subjectEl.value = t.subject;
+                bodyEl.value = t.body;
+            } else {
+                subjectEl.value = t.subject;
+            }
+        }
+
+        function openComposer(target) {
+            composerTarget = target;
+            document.getElementById('composerToName').textContent = target.name;
+            document.getElementById('composerToEmail').textContent = target.emailLabel;
+            document.getElementById('composerType').value = 'General';
+            document.getElementById('composerSubject').value = EMAIL_TEMPLATES.General.subject;
+            document.getElementById('composerBody').value = EMAIL_TEMPLATES.General.body;
+            resetSendButton();
+            document.getElementById('composerModal').classList.add('show');
+            setTimeout(() => document.getElementById('composerSubject').focus(), 120);
+        }
+
+        function composeTo(email) {
+            const s = findStudent(email);
+            if (!s) return;
+            openComposer({ mode: 'single', name: s.name, emailLabel: s.email, email: s.email });
+        }
+
+        function sendToSelected() {
+            const emails = Array.from(selectedStudents);
+            if (!emails.length) return;
+            openComposer({
+                mode: 'bulk',
+                name: emails.length + (emails.length === 1 ? ' student' : ' students') + ' selected',
+                emailLabel: 'Each student receives their own copy — recipients are never shown to each other.',
+                emails: emails
+            });
+        }
+
+        function closeComposer() {
+            document.getElementById('composerModal').classList.remove('show');
+            composerTarget = null;
+        }
+
+        function resetSendButton() {
+            const btn = document.getElementById('composerSendBtn');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Send Email';
+        }
+
+        async function submitComposer() {
+            if (!composerTarget) return;
+            const subject = document.getElementById('composerSubject').value.trim();
+            const body = document.getElementById('composerBody').value.trim();
+            const type = document.getElementById('composerType').value;
+
+            if (!subject) { showError('Please enter a subject.'); return; }
+            if (!body) { showError('Please enter a message.'); return; }
+
+            const btn = document.getElementById('composerSendBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-regular fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const payload = composerTarget.mode === 'bulk'
+                    ? { action: 'sendBulkEmail', recipients: composerTarget.emails, subject, body, type }
+                    : { action: 'sendStudentEmail', email: composerTarget.email,
+                        name: composerTarget.name, subject, body, type };
+
+                const res = await adminFetch(payload);
+
+                if (res && res.success) {
+                    btn.innerHTML = '<i class="fa-regular fa-circle-check"></i> Sent';
+                    showNotification('Email sent successfully.');
+                    messagesLoaded = false;                 // history is now stale
+                    selectedStudents.clear();
+                    renderStudents();
+                    setTimeout(() => { closeComposer(); resetSendButton(); }, 900);
+                } else {
+                    showError((res && res.error) || 'Unable to send the email. Please try again.');
+                    resetSendButton();
+                }
+            } catch (err) {
+                console.error('sendEmail:', err);
+                showError('Unable to send the email. Please try again.');
+                resetSendButton();
+            }
+        }
+
+        // ── Messages / history ──────────────────────────────────────
+
+        async function loadMessages(force) {
+            if (!ADMIN_TOKEN) { applyAdminAccessState(); return; }
+            if (messagesLoaded && !force) return;
+
+            const box = document.getElementById('messagesContainer');
+            box.innerHTML = skeleton(4);
+            document.getElementById('messageCount').textContent = '';
+
+            try {
+                const res = await adminFetch({ action: 'getEmailHistory' });
+                if (!res || !res.success) throw new Error('failed');
+                messagesCache = res.messages || [];
+                messagesLoaded = true;
+                renderMessages();
+                if (force) showNotification('Messages refreshed');
+            } catch (err) {
+                console.error('loadMessages:', err);
+                messagesCache = [];
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-circle-exclamation"></i>' +
+                    '<h4>Unable to load messages</h4><p>Please check your connection and try again.</p></div>';
+            }
+        }
+
+        function renderMessages() {
+            const box = document.getElementById('messagesContainer');
+            const countEl = document.getElementById('messageCount');
+
+            if (!messagesCache.length) {
+                countEl.textContent = '';
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-envelope"></i>' +
+                    '<h4>No Messages Yet</h4>' +
+                    '<p>Emails you send from the Admin Dashboard will appear here.</p></div>';
+                return;
+            }
+
+            const q = (document.getElementById('messageSearch').value || '').trim().toLowerCase();
+            const list = messagesCache.filter(m => !q ||
+                m.recipient.toLowerCase().indexOf(q) !== -1 ||
+                m.recipientEmail.toLowerCase().indexOf(q) !== -1 ||
+                m.subject.toLowerCase().indexOf(q) !== -1);
+
+            countEl.textContent = list.length === messagesCache.length
+                ? list.length + (list.length === 1 ? ' message' : ' messages')
+                : list.length + ' of ' + messagesCache.length + ' messages';
+
+            if (!list.length) {
+                box.innerHTML = '<div class="sm-empty"><i class="fa-regular fa-magnifying-glass"></i>' +
+                    '<h4>No matches</h4><p>No messages match your search.</p></div>';
+                return;
+            }
+
+            let rows = '';
+            list.forEach(m => {
+                const failed = (m.status || '').toLowerCase() === 'failed';
+                rows +=
+                    '<tr onclick="openMessage(\'' + esc(m.id) + '\')">' +
+                      '<td data-label="Recipient"><div class="sm-name">' + esc(m.recipient) + '</div>' +
+                        '<div class="sm-email">' + esc(m.recipientEmail) + '</div></td>' +
+                      '<td data-label="Subject">' + esc(m.subject) + '</td>' +
+                      '<td data-label="Type"><span class="sm-badge">' + esc(m.type) + '</span></td>' +
+                      '<td data-label="Date">' + esc(relativeDate(m.sentAt)) + '</td>' +
+                      '<td data-label="Status"><span class="sm-badge ' +
+                        (failed ? 'sm-failed' : 'sm-active') + '">' + esc(m.status) + '</span></td>' +
+                    '</tr>';
+            });
+
+            box.innerHTML =
+                '<div class="sm-table-wrap"><table class="sm-table"><thead><tr>' +
+                '<th>Recipient</th><th>Subject</th><th>Type</th><th>Date</th><th>Status</th>' +
+                '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+        }
+
+        function openMessage(id) {
+            const m = messagesCache.find(x => x.id === id);
+            if (!m) return;
+            const failed = (m.status || '').toLowerCase() === 'failed';
+            document.getElementById('messageModalBody').innerHTML =
+                '<div class="sm-recipient">' +
+                  '<div class="sm-recipient-label">To</div>' +
+                  '<div class="sm-recipient-name">' + esc(m.recipient) + '</div>' +
+                  '<div class="sm-recipient-email">' + esc(m.recipientEmail) + '</div>' +
+                '</div>' +
+                '<div class="sm-detail-grid">' +
+                  '<div class="sm-detail"><div class="sm-detail-key">Type</div>' +
+                    '<div class="sm-detail-val">' + esc(m.type) + '</div></div>' +
+                  '<div class="sm-detail"><div class="sm-detail-key">Date</div>' +
+                    '<div class="sm-detail-val">' + esc(relativeDate(m.sentAt)) + '</div></div>' +
+                  '<div class="sm-detail"><div class="sm-detail-key">Status</div>' +
+                    '<div class="sm-detail-val" style="color:' + (failed ? '#b02a56' : '#1d7a43') + '">' +
+                    esc(m.status) + '</div></div>' +
+                '</div>' +
+                '<div class="sm-subhead">Subject</div>' +
+                '<div class="sm-detail-val">' + esc(m.subject) + '</div>' +
+                '<div class="sm-subhead">Message</div>' +
+                '<div class="sm-msg-body">' + esc(m.message) + '</div>';
+            document.getElementById('messageModal').classList.add('show');
+        }
+
+        function closeMessageModal() {
+            document.getElementById('messageModal').classList.remove('show');
+        }
+
+        // Escape closes whichever modal is open
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            closeStudentModal();
+            closeComposer();
+            closeMessageModal();
+        });
     </script>
+
+    <!-- LESSONS CMS: shared student renderer + admin controller.
+         Loaded after the admin script so ADMIN_TOKEN and adminFetch are in scope. -->
+    <script src="lessons-view.js"></script>
+    <script src="lessons-admin.js"></script>
+    <script src="student-record.js"></script>
+    <script src="admin-shell.js"></script>
 </body>
 </html>
