@@ -26,7 +26,7 @@
 
   // Shown when the endpoint replies but does not understand the lessons
   // actions — almost always a deployment that predates the Lessons CMS.
-  var OUTDATED_ENDPOINT = 'The lessons service needs updating.';
+  var OUTDATED_ENDPOINT = 'The assignments service needs updating.';
 
   var PROGRESS_KEY = 'fluency_lesson_progress';
   var LIST_CACHE_MS = 5 * 60 * 1000;      // don't refetch the list on every visit
@@ -100,7 +100,7 @@
   /** GET against the Apps Script endpoint with a timeout and a uniform shape. */
   function apiGet(params) {
     if (!API_URL) {
-      return Promise.reject(new Error('The lessons service is not configured yet.'));
+      return Promise.reject(new Error('The assignments service is not configured yet.'));
     }
     var query = Object.keys(params).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
@@ -149,7 +149,7 @@
       card.appendChild(V.el('div', 'fl-skeleton-line w40'));
       container.appendChild(card);
     }
-    var sr = V.el('p', null, 'Loading lessons…');
+    var sr = V.el('p', null, 'Loading assignments…');
     sr.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);';
     container.appendChild(sr);
   }
@@ -225,8 +225,8 @@
       renderState(
         grid,
         'fa-regular fa-book-open',
-        'No lessons are available yet',
-        'New lessons will appear here as soon as they are published. Check back soon.'
+        'No assignments are available yet',
+        'New assignments will appear here as soon as they are published. Check back soon.'
       );
       return;
     }
@@ -250,8 +250,8 @@
     }
     wrap.hidden = false;
     text.textContent = count === 0
-      ? 'No lessons yet'
-      : count + (count === 1 ? ' Lesson Available' : ' Lessons Available');
+      ? 'No assignments yet'
+      : count + (count === 1 ? ' Assignment Available' : ' Assignments Available');
   }
 
   function handleLessonError(container, err) {
@@ -262,7 +262,7 @@
     renderState(
       container,
       'fa-solid fa-triangle-exclamation',
-      'Unable to load lessons',
+      'Unable to load assignments',
       isConfig ? message : 'Please check your connection and try again.',
       isConfig ? null : { label: 'Try Again', onClick: function () { loadLessons(true); } }
     );
@@ -272,7 +272,7 @@
 
   function openLesson(id) {
     if (!id) return;
-    setHash('lesson/' + id);
+    setHash('assignment/' + id);
     showLesson(id);
   }
 
@@ -312,15 +312,15 @@
       .catch(function (err) {
         if (token !== lessonsState.requestToken) return;
         body.setAttribute('aria-busy', 'false');
-        setCrumb('Lesson');
+        setCrumb('Assignment');
         renderState(
           body,
           'fa-solid fa-triangle-exclamation',
-          'Unable to load this lesson',
+          'Unable to load this assignment',
           (err && err.message) === 'That lesson is not available.'
-            ? 'This lesson may have been unpublished or removed.'
+            ? 'This assignment may have been unpublished or removed.'
             : 'Please check your connection and try again.',
-          { label: 'Back to Lessons', onClick: goToHub }
+          { label: 'Back to Assignments', onClick: goToHub }
         );
       });
   }
@@ -332,8 +332,8 @@
     if (!body || !V || !lesson) return;
 
     body.setAttribute('aria-busy', 'false');
-    setCrumb('Lesson ' + V.padNumber(lesson.lesson_number));
-    document.title = 'Fluency | Lesson ' + V.padNumber(lesson.lesson_number) + ' — ' + lesson.title;
+    setCrumb('Assignment ' + V.padNumber(lesson.lesson_number));
+    document.title = 'Fluency | Assignment ' + V.padNumber(lesson.lesson_number) + ' — ' + lesson.title;
 
     // Drop the loading skeleton before drawing the lesson, or it stays on the
     // page above the content.
@@ -448,11 +448,12 @@
 
   function handleHash() {
     var hash = global.location.hash.slice(1);
-    if (hash === 'lessons') {
+    if (hash === 'assignments' || hash === 'lessons') {   // 'lessons' kept so older shared links still work
       if (typeof global.openPage === 'function') global.openPage('lessonsHub');
       return true;
     }
-    var match = hash.match(/^lesson\/([A-Za-z0-9_-]+)$/);
+    // 'lesson/' is still accepted so links shared before the rename work.
+    var match = hash.match(/^(?:assignment|lesson)\/([A-Za-z0-9_-]+)$/);
     if (match) {
       showLesson(match[1]);
       return true;
@@ -464,8 +465,8 @@
   function onPageChange(page) {
     if (page === 'lessonsHub') {
       unbindScrollTracking();
-      document.title = 'Fluency | Lessons';
-      setHash('lessons');
+      document.title = 'Fluency | Assignments';
+      setHash('assignments');
       loadLessons(false);
       return;
     }
@@ -474,7 +475,7 @@
     // Left the lessons area — stop tracking and drop our hash if it is ours.
     unbindScrollTracking();
     var hash = global.location.hash.slice(1);
-    if (hash === 'lessons' || /^lesson\//.test(hash)) {
+    if (hash === 'assignments' || hash === 'lessons' || /^(?:assignment|lesson)\//.test(hash)) {
       global.history.replaceState(null, '', global.location.pathname + global.location.search);
     }
   }

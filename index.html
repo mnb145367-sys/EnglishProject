@@ -3680,7 +3680,7 @@
       <a onclick="openPage('home')">Home</a>
       <a onclick="openPage('about')">About</a>
       <a onclick="openPage('services')">Services</a>
-      <a href="#lessons" onclick="openPage('lessonsHub'); return false;">Lessons</a>
+      <a href="#assignments" onclick="openPage('lessonsHub'); return false;">Assignments</a>
       <a onclick="openPage('statistics')">Statistics</a>
       <a onclick="openPage('journey')">Journey</a>
       <a onclick="openPage('contact')">Contact</a>
@@ -3695,7 +3695,7 @@
     <span class="ticker-label"><i class="fa-solid fa-bullhorn"></i> News</span>
     <div class="ticker-track">
       <div class="ticker-content">
-        <span class="ticker-item">Our first lesson is tomorrow at 9:00 PM with Teacher Zubair — am / is / are. Don't miss it!</span>
+        <span class="ticker-item" id="flEvTickerItem"></span>
         <span class="ticker-item">New lessons are added every week — stay consistent and keep learning!</span>
         <span class="ticker-item">Practice makes permanent: record yourself speaking every day.</span>
         <span class="ticker-item">Vocabulary tip: use each new word in a sentence to remember it faster.</span>
@@ -4188,8 +4188,8 @@
     <!-- LESSONS DASHBOARD -->
     <div id="lessonsHub" class="hidden">
       <div class="section fl-lessons-head">
-        <h1>Lessons</h1>
-        <p class="fl-lessons-lede">Build your English step by step. Work through each lesson at your
+        <h1>Assignments</h1>
+        <p class="fl-lessons-lede">Build your English step by step. Work through each assignment at your
           own pace — your progress is saved automatically on this device.</p>
         <p id="flLessonsCount" class="fl-lessons-count" hidden>
           <i class="fa-regular fa-book-open" aria-hidden="true"></i>
@@ -4204,9 +4204,9 @@
     <!-- LESSON READER -->
     <div id="lessonReader" class="hidden">
       <nav class="fl-breadcrumb" aria-label="Breadcrumb">
-        <a href="#lessons" onclick="openPage('lessonsHub'); return false;">Lessons</a>
+        <a href="#assignments" onclick="openPage('lessonsHub'); return false;">Assignments</a>
         <span class="fl-crumb-sep" aria-hidden="true">/</span>
-        <span id="flCrumbCurrent" aria-current="page">Lesson</span>
+        <span id="flCrumbCurrent" aria-current="page">Assignment</span>
       </nav>
       <div id="flLessonReaderBody" aria-live="polite" aria-busy="false"></div>
     </div>
@@ -4529,7 +4529,7 @@
         <a href="#" onclick="openPage('home'); return false;">Home</a>
         <a href="#" onclick="openPage('about'); return false;">About</a>
         <a href="#" onclick="openPage('services'); return false;">Services</a>
-        <a href="#lessons" onclick="openPage('lessonsHub'); return false;">Lessons</a>
+        <a href="#assignments" onclick="openPage('lessonsHub'); return false;">Assignments</a>
         <a href="#" onclick="openPage('statistics'); return false;">Statistics</a>
         <a href="#" onclick="openPage('contact'); return false;">Contact</a>
         <a href="#" onclick="openPage('journey'); return false;">Student Journey</a>
@@ -6554,9 +6554,11 @@
   </script>
 
 
-  <!-- ===== ANNOUNCEMENT POPUP — First Lesson ===== -->
-  <!-- Reuses the existing .fl-popup-* announcement components so it matches
-       the site exactly. Edit the text below to announce a different lesson. -->
+  <!-- ===== ANNOUNCEMENT POPUP — Next Assignment =====
+       All the wording below is generated from FL_ASSIGNMENT_EVENT further down.
+       To announce a different class you only change that one config block —
+       "tonight / tomorrow / in 3 days" and the countdown are worked out from
+       the date, so the announcement can never go stale. -->
   <div class="fl-popup-overlay" id="flLessonPopup" role="dialog" aria-modal="true"
        aria-labelledby="flLessonPopupTitle" hidden>
     <div class="fl-popup-modal">
@@ -6565,39 +6567,38 @@
       </button>
       <div class="fl-popup-grid">
         <div class="fl-popup-content">
-          <span class="fl-eyebrow"><i class="fa-solid fa-bullhorn"></i> Our First Lesson</span>
+          <span class="fl-eyebrow"><i class="fa-solid fa-bullhorn"></i> <span id="flEvEyebrow">Next Assignment</span></span>
 
           <h2 class="fl-popup-headline" id="flLessonPopupTitle">
             <span class="fl-crown"><i class="fa-solid fa-graduation-cap"></i></span>
-            Class starts <span class="fl-gradient-text">tomorrow at 9:00 PM</span>
+            <span id="flEvHeadLead">Class starts</span>
+            <span class="fl-gradient-text" id="flEvWhen">soon</span>
           </h2>
 
           <div class="fl-popup-body">
-            <p>Our very first lesson goes live <strong>tomorrow evening</strong>. We begin with
-              <strong>am / is / are</strong> — the foundation of every English sentence you will
-              ever build.</p>
-            <p>Taught by <strong>Teacher Zubair</strong>. Come on time, bring a notebook, and
-              be ready to speak.</p>
+            <p id="flEvIntro"></p>
+            <p>Taught by <strong id="flEvTeacher">Teacher</strong>. Come on time, bring a notebook,
+              and be ready to speak.</p>
           </div>
 
           <div class="fl-highlight-row">
-            <span class="fl-chip"><i class="fa-regular fa-calendar"></i> Tomorrow</span>
-            <span class="fl-chip alt"><i class="fa-regular fa-clock"></i> 9:00 PM</span>
-            <span class="fl-chip alt"><i class="fa-solid fa-chalkboard-user"></i> Teacher Zubair</span>
-            <span class="fl-chip alt"><i class="fa-solid fa-signal"></i> Level A1</span>
+            <span class="fl-chip"><i class="fa-regular fa-calendar"></i> <span id="flEvDate">—</span></span>
+            <span class="fl-chip alt"><i class="fa-regular fa-clock"></i> <span id="flEvTime">—</span></span>
+            <span class="fl-chip alt"><i class="fa-solid fa-chalkboard-user"></i> <span id="flEvTeacher2">—</span></span>
+            <span class="fl-chip alt"><i class="fa-solid fa-signal"></i> <span id="flEvLevel">—</span></span>
           </div>
 
+          <!-- Live countdown, refreshed while the popup is open -->
+          <p class="fl-footnote" id="flEvCountdown" style="font-weight:700;"></p>
+
           <div class="fl-cta-row">
-            <a href="#lessons" class="fl-btn fl-btn-primary" id="flLessonPopupCta">
-              <i class="fa-solid fa-book-open"></i> View the Lesson <i class="fa-solid fa-arrow-right"></i>
+            <a href="#assignments" class="fl-btn fl-btn-primary" id="flLessonPopupCta">
+              <i class="fa-solid fa-book-open"></i> View the Assignment <i class="fa-solid fa-arrow-right"></i>
             </a>
             <button type="button" class="fl-btn fl-btn-secondary" id="flLessonPopupLater">Maybe Later</button>
           </div>
 
-          <p class="fl-footnote">
-            <i class="fa-solid fa-circle-info"></i>
-            Lesson 01 · am / is / are · about 25 minutes.
-          </p>
+          <p class="fl-footnote" id="flEvFootnote"></p>
         </div>
       </div>
     </div>
@@ -6605,26 +6606,161 @@
 
   <script>
     (function () {
+      // ─────────────────────────────────────────────────────────────
+      //  EDIT ONLY THIS BLOCK TO ANNOUNCE A CLASS
+      //  startsAt is an exact moment. +03:00 is Saudi time, so the
+      //  countdown is correct no matter where the student is.
+      // ─────────────────────────────────────────────────────────────
+      const FL_ASSIGNMENT_EVENT = {
+        startsAt: '2026-08-30T21:00:00+03:00',
+        title: 'am / is / are',
+        teacher: 'Zubair',
+        number: '01',
+        level: 'A1',
+        durationMinutes: 25,
+        isFirst: true,          // shows "Our First Assignment" as the label
+        hideWhenFinished: true  // stop announcing once the class has ended
+      };
+
+      const TZ = 'Asia/Riyadh';   // class times are always shown in Saudi time
+
       const overlay = document.getElementById('flLessonPopup');
       if (!overlay) return;
 
-      const STORAGE_KEY = 'flFirstLessonAnnouncementSeen';
+      const STORAGE_KEY = 'flAssignmentAnnouncement:' + FL_ASSIGNMENT_EVENT.startsAt;
       const OPEN_DELAY_MS = 700;
 
       const closeBtn = document.getElementById('flLessonPopupClose');
       const laterBtn = document.getElementById('flLessonPopupLater');
       const ctaBtn   = document.getElementById('flLessonPopupCta');
 
+      const startsAt = new Date(FL_ASSIGNMENT_EVENT.startsAt);
+      const endsAt   = new Date(startsAt.getTime() +
+                        (FL_ASSIGNMENT_EVENT.durationMinutes || 0) * 60000);
+      const validDate = !isNaN(startsAt.getTime());
+
+      function setText(id, text) {
+        const node = document.getElementById(id);
+        if (node) node.textContent = text;
+      }
+
+      /** Calendar date in Riyadh, so "tomorrow" means tomorrow for the class. */
+      function riyadhDay(d) {
+        return d.toLocaleDateString('en-CA', { timeZone: TZ });   // YYYY-MM-DD
+      }
+
+      function dayGap(from, to) {
+        return Math.round((Date.parse(riyadhDay(to)) - Date.parse(riyadhDay(from))) / 86400000);
+      }
+
+      function clockTime(d) {
+        return d.toLocaleTimeString('en-US',
+          { timeZone: TZ, hour: 'numeric', minute: '2-digit' });
+      }
+
+      /** "tonight at 9:00 PM", "tomorrow at 9:00 PM", "on Wednesday at 9:00 PM"… */
+      function describeWhen(now) {
+        const gap = dayGap(now, startsAt);
+        const at = ' at ' + clockTime(startsAt);
+        const hour = Number(startsAt.toLocaleString('en-US',
+          { timeZone: TZ, hour: 'numeric', hour12: false }));
+
+        if (gap < 0) return 'earlier' + at;
+        if (gap === 0) return (hour >= 17 ? 'tonight' : 'today') + at;
+        if (gap === 1) return 'tomorrow' + at;
+        if (gap < 7) {
+          return 'on ' + startsAt.toLocaleDateString('en-US', { timeZone: TZ, weekday: 'long' }) + at;
+        }
+        return 'on ' + startsAt.toLocaleDateString('en-US',
+          { timeZone: TZ, month: 'long', day: 'numeric' }) + at;
+      }
+
+      /** "in 3 days", "in 2 hours", "in 20 minutes", "starting now". */
+      function describeCountdown(now) {
+        const ms = startsAt - now;
+        if (now >= startsAt && now <= endsAt) return 'The class is live now.';
+        if (ms <= 0) return 'This class has finished.';
+
+        const mins = Math.floor(ms / 60000);
+        if (mins < 1) return 'Starting in less than a minute.';
+        if (mins < 60) return 'Starts in ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) {
+          const rem = mins % 60;
+          return 'Starts in ' + hours + (hours === 1 ? ' hour' : ' hours') +
+                 (rem ? ' ' + rem + (rem === 1 ? ' minute' : ' minutes') : '') + '.';
+        }
+        const days = dayGap(now, startsAt);
+        return 'Starts in ' + days + (days === 1 ? ' day.' : ' days.');
+      }
+
+      function dateChip() {
+        const gap = dayGap(new Date(), startsAt);
+        if (gap === 0) return 'Today';
+        if (gap === 1) return 'Tomorrow';
+        return startsAt.toLocaleDateString('en-US',
+          { timeZone: TZ, weekday: 'short', month: 'short', day: 'numeric' });
+      }
+
+      function isFinished() {
+        return validDate && new Date() > endsAt;
+      }
+
+      /** Fills every dynamic field. Called on open and once a minute after. */
+      function render() {
+        if (!validDate) return;
+        const now = new Date();
+        const ev = FL_ASSIGNMENT_EVENT;
+
+        setText('flEvEyebrow', ev.isFirst ? 'Our First Assignment' : 'Next Assignment');
+        setText('flEvHeadLead', isFinished() ? 'Class was' : 'Class starts');
+        setText('flEvWhen', describeWhen(now));
+        setText('flEvCountdown', describeCountdown(now));
+
+        const intro = document.getElementById('flEvIntro');
+        if (intro) {
+          intro.textContent = '';
+          const lead = ev.isFirst
+            ? 'Our very first assignment goes live '
+            : 'The next assignment goes live ';
+          intro.appendChild(document.createTextNode(lead));
+          const strong = document.createElement('strong');
+          strong.textContent = describeWhen(now);
+          intro.appendChild(strong);
+          intro.appendChild(document.createTextNode('. We begin with '));
+          const t = document.createElement('strong');
+          t.textContent = ev.title;
+          intro.appendChild(t);
+          intro.appendChild(document.createTextNode(
+            ' — the foundation of every English sentence you will ever build.'));
+        }
+
+        setText('flEvTeacher', 'Teacher ' + ev.teacher);
+        setText('flEvTeacher2', 'Teacher ' + ev.teacher);
+        setText('flEvDate', dateChip());
+        setText('flEvTime', clockTime(startsAt));
+        setText('flEvLevel', 'Level ' + ev.level);
+        setText('flEvFootnote',
+          'Assignment ' + ev.number + ' · ' + ev.title + ' · about ' + ev.durationMinutes + ' minutes.');
+      }
+
+      let ticker = null;
+
       function openPopup() {
+        render();
         overlay.hidden = false;
         overlay.classList.remove('fl-closing');
         document.body.style.overflow = 'hidden';
+        if (ticker) clearInterval(ticker);
+        ticker = setInterval(render, 60000);      // keep the countdown honest
         setTimeout(() => closeBtn && closeBtn.focus(), 50);
       }
 
       function closePopup() {
         overlay.classList.add('fl-closing');
         document.body.style.overflow = '';
+        if (ticker) { clearInterval(ticker); ticker = null; }
         try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
         setTimeout(() => { overlay.hidden = true; }, 260);
       }
@@ -6636,24 +6772,39 @@
         if (e.key === 'Escape' && !overlay.hidden) closePopup();
       });
 
-      // The call to action opens the Lessons page instead of leaving the site.
       ctaBtn && ctaBtn.addEventListener('click', (e) => {
         e.preventDefault();
         closePopup();
         if (typeof openPage === 'function') openPage('lessonsHub');
       });
 
-      let alreadySeen = false;
-      try { alreadySeen = sessionStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
-      if (!alreadySeen) {
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', () => setTimeout(openPopup, OPEN_DELAY_MS));
-        } else {
-          setTimeout(openPopup, OPEN_DELAY_MS);
-        }
+      // Keeps the news ticker in step with the popup.
+      function updateTicker() {
+        const item = document.getElementById('flEvTickerItem');
+        if (!item || !validDate) return;
+        const ev = FL_ASSIGNMENT_EVENT;
+        if (isFinished() && ev.hideWhenFinished) { item.remove(); return; }
+        item.textContent = (ev.isFirst ? 'Our first assignment is ' : 'The next assignment is ') +
+          describeWhen(new Date()) + ' with Teacher ' + ev.teacher +
+          ' — ' + ev.title + '. Don’t miss it!';
       }
 
-      // Lets you re-open it from the console for testing.
+      function start() {
+        updateTicker();
+        if (!validDate) return;
+        if (isFinished() && FL_ASSIGNMENT_EVENT.hideWhenFinished) return;
+
+        let alreadySeen = false;
+        try { alreadySeen = sessionStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
+        if (!alreadySeen) setTimeout(openPopup, OPEN_DELAY_MS);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+      } else {
+        start();
+      }
+
       window.flOpenLessonPopup = openPopup;
     })();
   </script>

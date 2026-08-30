@@ -1314,10 +1314,10 @@
                 <div class="ash-nav-group">
                     <div class="ash-nav-label">Learning</div>
                     <button class="ash-nav-item" data-tab="lessons" onclick="switchTab('lessons')">
-                        <i class="fa-regular fa-rectangle-list"></i> Lessons
+                        <i class="fa-regular fa-rectangle-list"></i> Assignments
                     </button>
                     <button class="ash-nav-item" data-tab="lesson" onclick="switchTab('lesson')">
-                        <i class="fa-regular fa-book"></i> Weekly Assignment
+                        <i class="fa-regular fa-book"></i> Lesson Settings
                     </button>
                     <button class="ash-nav-item" data-tab="content" onclick="switchTab('content')">
                         <i class="fa-regular fa-pen-to-square"></i> Site Content
@@ -1811,10 +1811,10 @@ discipline – controlled behaviour to achieve a goal</textarea>
         <!-- ═══ TAB: LESSONS (Lessons CMS) ═══ -->
         <div id="tab-lessons" class="tab-content">
             <div class="section-box">
-                <h3><i class="fa-regular fa-rectangle-list"></i> Lessons Management</h3>
+                <h3><i class="fa-regular fa-rectangle-list"></i> Assignments Management</h3>
                 <div class="help-text">
                     <i class="fa-regular fa-circle-info"></i>
-                    Lessons published here appear on the website's Lessons page automatically.
+                    Assignments published here appear on the website's Assignments page automatically.
                     Drafts and archived lessons are never visible to students.
                 </div>
 
@@ -1831,7 +1831,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     <div id="alListView">
                         <div class="al-toolbar-row">
                             <button class="btn btn-primary" onclick="openLessonEditor(null)">
-                                <i class="fa-solid fa-plus"></i> Add New Lesson
+                                <i class="fa-solid fa-plus"></i> Add New Assignment
                             </button>
                             <button class="btn" onclick="openLessonReorder()">
                                 <i class="fa-solid fa-arrow-down-a-z"></i> Reorder
@@ -1842,8 +1842,8 @@ discipline – controlled behaviour to achieve a goal</textarea>
                             <span class="al-spacer"></span>
                             <div class="sm-search">
                                 <i class="fa-regular fa-magnifying-glass"></i>
-                                <label for="alSearch" class="sr-only-label">Search lessons</label>
-                                <input type="text" id="alSearch" placeholder="Search lessons..."
+                                <label for="alSearch" class="sr-only-label">Search assignments</label>
+                                <input type="text" id="alSearch" placeholder="Search assignments..."
                                        oninput="renderAdminLessons()" autocomplete="off">
                             </div>
                         </div>
@@ -1874,7 +1874,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     <div id="alReorderView" style="display:none;">
                         <div class="al-editor-head">
                             <div>
-                                <h3 style="margin:0;">Reorder Lessons</h3>
+                                <h3 style="margin:0;">Reorder Assignments</h3>
                                 <p class="al-editor-sub">Drag a lesson, or use the arrows, then save.
                                     This sets the order students see.</p>
                             </div>
@@ -1895,7 +1895,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     <div id="alEditorView" style="display:none;">
                         <div class="al-editor-head">
                             <div>
-                                <h3 id="alEditorTitle" style="margin:0;">New Lesson</h3>
+                                <h3 id="alEditorTitle" style="margin:0;">New Assignment</h3>
                                 <p class="al-editor-sub" id="alEditorSub">Fill in the details below.</p>
                             </div>
                             <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
@@ -1903,7 +1903,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                                     <i class="fa-solid fa-file-import"></i> Import JSON
                                 </button>
                                 <button class="btn" onclick="closeLessonEditor()">
-                                    <i class="fa-solid fa-arrow-left"></i> Back to Lessons
+                                    <i class="fa-solid fa-arrow-left"></i> Back to Assignments
                                 </button>
                             </div>
                         </div>
@@ -1914,7 +1914,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
                             <div class="al-section-body">
                                 <div class="al-row">
                                     <div class="form-group" id="alGroupNumber">
-                                        <label for="alFieldNumber">Lesson Number *</label>
+                                        <label for="alFieldNumber">Assignment Number *</label>
                                         <input type="number" id="alFieldNumber" min="1" step="1" placeholder="1">
                                         <span class="al-err" id="alErrNumber"></span>
                                     </div>
@@ -1986,7 +1986,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
 
                         <!-- 3. LESSON CONTENT -->
                         <details class="al-section" open>
-                            <summary><i class="fa-regular fa-file-lines"></i> 3. Lesson Content *</summary>
+                            <summary><i class="fa-regular fa-file-lines"></i> 3. Assignment Content *</summary>
                             <div class="al-section-body">
                                 <p class="al-hint" style="margin-bottom:0.8rem;">
                                     Build the lesson from blocks. Use the arrows to reorder them.
@@ -2152,16 +2152,16 @@ discipline – controlled behaviour to achieve a goal</textarea>
     <div class="sm-overlay" id="alImportModal" onclick="if(event.target===this) closeLessonImport()">
         <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="alImportTitle">
             <div class="sm-modal-head">
-                <h3 id="alImportTitle"><i class="fa-solid fa-file-import"></i> Import Lesson</h3>
+                <h3 id="alImportTitle"><i class="fa-solid fa-file-import"></i> Import Assignment</h3>
                 <button class="sm-close" onclick="closeLessonImport()" aria-label="Close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="al-confirm-body">
-                <p>Paste a lesson JSON file below. It will fill in the editor so you can
+                <p>Paste an assignment JSON file below. It will fill in the editor so you can
                    review, preview and then publish it yourself.</p>
                 <div class="form-group full-width">
-                    <label for="alImportText">Lesson JSON</label>
+                    <label for="alImportText">Assignment JSON</label>
                     <textarea id="alImportText" style="min-height:220px;font-family:monospace;font-size:.82rem;"
                               placeholder='{ "title": "...", "level": "A1", ... }'></textarea>
                     <span class="al-err" id="alErrImport"></span>
@@ -2300,8 +2300,8 @@ discipline – controlled behaviour to achieve a goal</textarea>
             dashboard: 'Dashboard',
             students: 'Students',
             submissions: 'Submissions',
-            lessons: 'Lessons',
-            lesson: 'Weekly Assignment',
+            lessons: 'Assignments',
+            lesson: 'Lesson Settings',
             content: 'Site Content',
             performer: 'Top Performer',
             teamLeaderboard: 'Team Leaderboard',

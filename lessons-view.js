@@ -165,7 +165,7 @@
       card.appendChild(img);
     }
 
-    card.appendChild(el('p', 'fl-lesson-eyebrow', 'Lesson ' + padNumber(lesson.lesson_number)));
+    card.appendChild(el('p', 'fl-lesson-eyebrow', 'Assignment ' + padNumber(lesson.lesson_number)));
 
     var heading = el('h3');
     heading.appendChild(document.createTextNode(textOf(lesson.title)));
@@ -204,10 +204,10 @@
     btn.type = 'button';
     btn.appendChild(icon(done ? 'fa-solid fa-rotate-right' : 'fa-solid fa-arrow-right'));
     btn.appendChild(document.createTextNode(
-      done ? ' Review Lesson' : (pct > 0 ? ' Continue Lesson' : ' Start Lesson')
+      done ? ' Review Assignment' : (pct > 0 ? ' Continue Assignment' : ' Start Assignment')
     ));
     btn.setAttribute('aria-label',
-      (done ? 'Review' : (pct > 0 ? 'Continue' : 'Start')) + ' lesson ' +
+      (done ? 'Review' : (pct > 0 ? 'Continue' : 'Start')) + ' assignment ' +
       padNumber(lesson.lesson_number) + ': ' + textOf(lesson.title));
     btn.addEventListener('click', function () {
       if (typeof onOpen === 'function') onOpen(lesson.id);
@@ -224,7 +224,7 @@
     track.setAttribute('aria-valuemin', '0');
     track.setAttribute('aria-valuemax', '100');
     track.setAttribute('aria-valuenow', String(pct));
-    track.setAttribute('aria-label', 'Lesson progress');
+    track.setAttribute('aria-label', 'Assignment progress');
     var bar = el('span', completed ? 'fl-lesson-bar is-done' : 'fl-lesson-bar');
     track.appendChild(bar);
     row.appendChild(track);
@@ -261,7 +261,7 @@
 
     // ── header ──
     var header = el('header', 'fl-lesson-section');
-    header.appendChild(el('p', 'fl-lesson-eyebrow', 'Lesson ' + padNumber(lesson.lesson_number)));
+    header.appendChild(el('p', 'fl-lesson-eyebrow', 'Assignment ' + padNumber(lesson.lesson_number)));
     header.appendChild(el('h1', 'fl-lesson-title', textOf(lesson.title)));
 
     var subhead = el('div', 'fl-lesson-subhead');
@@ -273,7 +273,7 @@
       subhead.appendChild(d);
     }
     if (opts.position && opts.total) {
-      subhead.appendChild(el('span', null, 'Lesson ' + opts.position + ' of ' + opts.total));
+      subhead.appendChild(el('span', null, 'Assignment ' + opts.position + ' of ' + opts.total));
     }
     if (subhead.childNodes.length) header.appendChild(subhead);
 
@@ -309,7 +309,7 @@
     // ── main content blocks ──
     var blocks = Array.isArray(lesson.content) ? lesson.content : [];
     if (blocks.length) {
-      var contentSection = makeSection('Lesson Content');
+      var contentSection = makeSection('Assignment Content');
       blocks.forEach(function (b) {
         var node = buildBlock(b);
         if (node) contentSection.appendChild(node);
@@ -435,7 +435,7 @@
     // ── previous / next (published lessons only; missing ends are omitted) ──
     if (!opts.preview && (opts.prev || opts.next)) {
       var navWrap = el('nav', 'fl-lesson-nav');
-      navWrap.setAttribute('aria-label', 'Lesson navigation');
+      navWrap.setAttribute('aria-label', 'Assignment navigation');
       if (opts.prev) navWrap.appendChild(buildNavButton(opts.prev, 'prev', opts.onOpenLesson));
       if (opts.next) navWrap.appendChild(buildNavButton(opts.next, 'next', opts.onOpenLesson));
       article.appendChild(navWrap);

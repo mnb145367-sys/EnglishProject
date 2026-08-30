@@ -129,13 +129,13 @@
         } catch (e) { lessons = []; }
 
         if (lessons.length) {
-            box.appendChild(el('div', 'ash-result-group', 'Lessons'));
+            box.appendChild(el('div', 'ash-result-group', 'Assignments'));
             lessons.forEach(function (l) {
                 var btn = el('button', 'ash-result');
                 btn.type = 'button';
                 btn.appendChild(el('div', 'ash-result-title', clean(l.title)));
                 btn.appendChild(el('div', 'ash-result-sub',
-                    'Lesson ' + l.lesson_number + ' · ' + clean(l.level)));
+                    'Assignment ' + l.lesson_number + ' · ' + clean(l.level)));
                 btn.addEventListener('click', function () {
                     hideSearchResults();
                     global.switchTab('lessons');
@@ -148,7 +148,7 @@
 
         if (!results) {
             box.appendChild(el('div', 'ash-result-empty',
-                'No matches. Open Students or Lessons first so their data is available to search.'));
+                'No matches. Open Students or Assignments first so their data is available to search.'));
         }
         box.classList.add('show');
     }
@@ -275,10 +275,10 @@
 
         if (lessons) {
             var published = lessons.filter(function (l) { return l.status === 'published'; }).length;
-            wrap.appendChild(kpiCard('Lessons', String(lessons.length), 'fa-regular fa-rectangle-list',
+            wrap.appendChild(kpiCard('Assignments', String(lessons.length), 'fa-regular fa-rectangle-list',
                 published + ' published'));
         } else {
-            wrap.appendChild(kpiCard('Lessons', '—', 'fa-regular fa-rectangle-list', 'Unavailable'));
+            wrap.appendChild(kpiCard('Assignments', '—', 'fa-regular fa-rectangle-list', 'Unavailable'));
         }
     }
 

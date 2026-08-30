@@ -83,7 +83,7 @@
         if (!wrap) return;
 
         lessonsAdminState.loading = true;
-        showLoading(wrap, 'Loading lessons...');
+        showLoading(wrap, 'Loading assignments...');
 
         callApi({ action: 'adminGetLessons' })
             .then(function (res) {
@@ -92,7 +92,7 @@
                 renderAdminLessons();
             })
             .catch(function (err) {
-                renderListState(wrap, 'fa-solid fa-triangle-exclamation', 'Could not load lessons',
+                renderListState(wrap, 'fa-solid fa-triangle-exclamation', 'Could not load assignments',
                     err.message || 'Please try again.', 'Try Again', function () { loadAdminLessons(true); });
             })
             .then(function () { lessonsAdminState.loading = false; });
@@ -149,18 +149,18 @@
             countEl.textContent = lessonsAdminState.list.length === 0
                 ? ''
                 : rows.length + ' of ' + lessonsAdminState.list.length +
-                  (lessonsAdminState.list.length === 1 ? ' lesson' : ' lessons');
+                  (lessonsAdminState.list.length === 1 ? ' assignment' : ' assignments');
         }
 
         if (!lessonsAdminState.list.length) {
-            renderListState(wrap, 'fa-regular fa-rectangle-list', 'No lessons created yet',
-                'Start building your learning library by creating your first lesson.',
-                'Create First Lesson', function () { openLessonEditor(null); });
+            renderListState(wrap, 'fa-regular fa-rectangle-list', 'No assignments created yet',
+                'Start building your learning library by creating your first assignment.',
+                'Create First Assignment', function () { openLessonEditor(null); });
             return;
         }
 
         if (!rows.length) {
-            renderListState(wrap, 'fa-regular fa-magnifying-glass', 'No matching lessons',
+            renderListState(wrap, 'fa-regular fa-magnifying-glass', 'No matching assignments',
                 'Try a different search term or filter.');
             return;
         }
@@ -300,24 +300,24 @@
 
         if (!id) {
             fillEditor(blankLesson());
-            $('alEditorTitle').textContent = 'New Lesson';
+            $('alEditorTitle').textContent = 'New Assignment';
             $('alEditorSub').textContent = 'Fill in the details below, then save as a draft or publish.';
             renderEditorActions();
             return;
         }
 
-        $('alEditorTitle').textContent = 'Loading lesson...';
+        $('alEditorTitle').textContent = 'Loading assignment...';
         $('alEditorSub').textContent = '';
         callApi({ action: 'adminGetLesson', id: id })
             .then(function (res) {
                 lessonsAdminState.editingRecord = res.data;
                 fillEditor(res.data);
-                $('alEditorTitle').textContent = 'Edit Lesson ' + V().padNumber(res.data.lesson_number);
+                $('alEditorTitle').textContent = 'Edit Assignment ' + V().padNumber(res.data.lesson_number);
                 $('alEditorSub').textContent = res.data.title || '';
                 renderEditorActions();
             })
             .catch(function (err) {
-                toastError(err.message || 'Could not open that lesson.');
+                toastError(err.message || 'Could not open that assignment.');
                 closeLessonEditor();
             });
     }
@@ -401,7 +401,7 @@
 
         if (!isPublished) {
             bar.appendChild(actionButton('btn btn-success', 'fa-solid fa-tower-broadcast',
-                'Publish Lesson', function () { saveLesson('published'); }));
+                'Publish Assignment', function () { saveLesson('published'); }));
         } else {
             bar.appendChild(actionButton('btn', 'fa-regular fa-eye-slash', 'Unpublish',
                 function () { saveLesson('draft'); }));
@@ -547,7 +547,7 @@
         var host = $('alBlocksList');
         view.clearNode(host);
         if (!editorLists.blocks.length) {
-            emptyHint(host, 'No content yet. Add a block below to start writing the lesson.');
+            emptyHint(host, 'No content yet. Add a block below to start writing the assignment.');
             return;
         }
         editorLists.blocks.forEach(function (block, i) {
@@ -740,7 +740,7 @@
 
         var number = Number($('alFieldNumber').value);
         if (!$('alFieldNumber').value.trim() || !isFinite(number) || number < 1 || number % 1 !== 0) {
-            fail('Number', 'Enter a whole lesson number of 1 or more.');
+            fail('Number', 'Enter a whole assignment number of 1 or more.');
         }
 
         var title = $('alFieldTitle').value.trim();
@@ -790,7 +790,7 @@
 
         var status = intendedStatus || $('alFieldStatus').value;
         if (status === 'published' && !blocks.length) {
-            setError('Content', 'Add some lesson content before publishing.');
+            setError('Content', 'Add some assignment content before publishing.');
             errors++;
         }
 
@@ -843,7 +843,7 @@
 
         var isNew = !lessonsAdminState.editingId;
         var verb = forcedStatus === 'published' ? 'Publishing' : 'Saving';
-        setBusy(true, verb + ' lesson...');
+        setBusy(true, verb + ' assignment...');
 
         var payload = isNew
             ? { action: 'createLesson', lesson: lesson }
@@ -855,20 +855,20 @@
                 lessonsAdminState.editingRecord = res.data;
                 // Reflect the saved status back into the form.
                 $('alFieldStatus').value = res.data.status;
-                $('alEditorTitle').textContent = 'Edit Lesson ' + V().padNumber(res.data.lesson_number);
+                $('alEditorTitle').textContent = 'Edit Assignment ' + V().padNumber(res.data.lesson_number);
                 $('alEditorSub').textContent = res.data.title;
                 renderEditorActions();
 
                 lessonsAdminState.loaded = false;
                 toast(isNew
-                    ? (lesson.status === 'published' ? 'Lesson published successfully.' : 'Lesson created successfully.')
-                    : (forcedStatus === 'published' ? 'Lesson published successfully.'
-                        : forcedStatus === 'draft' ? 'Lesson unpublished.' : 'Lesson updated successfully.'));
+                    ? (lesson.status === 'published' ? 'Assignment published successfully.' : 'Assignment created successfully.')
+                    : (forcedStatus === 'published' ? 'Assignment published successfully.'
+                        : forcedStatus === 'draft' ? 'Assignment unpublished.' : 'Assignment updated successfully.'));
                 return loadListQuietly();
             })
             .catch(function (err) {
                 // The form is deliberately left untouched so nothing is retyped.
-                toastError(err.message || "We couldn't save your lesson. Please try again.");
+                toastError(err.message || "We couldn't save your assignment. Please try again.");
             })
             .then(function () { setBusy(false); });
     }
@@ -894,23 +894,23 @@
     // ── status changes from the list ──────────────────────────────────────
 
     function changeLessonStatus(lesson, status) {
-        toast(status === 'published' ? 'Publishing lesson...' : 'Updating lesson...');
+        toast(status === 'published' ? 'Publishing assignment...' : 'Updating assignment...');
         callApi({ action: 'setLessonStatus', id: lesson.id, status: status })
             .then(function () {
-                toast(status === 'published' ? 'Lesson published successfully.'
-                    : status === 'archived' ? 'Lesson archived.' : 'Lesson unpublished.');
+                toast(status === 'published' ? 'Assignment published successfully.'
+                    : status === 'archived' ? 'Assignment archived.' : 'Assignment unpublished.');
                 lessonsAdminState.loaded = false;
                 loadAdminLessons(true);
             })
             .catch(function (err) {
-                toastError(err.message || 'Could not update the lesson.');
+                toastError(err.message || 'Could not update the assignment.');
             });
     }
 
     function confirmArchive(lesson) {
         if (!lesson) return;
         askConfirm('Archive "' + lesson.title + '"? Students will no longer see it, ' +
-            'but the lesson and its content are kept.', 'Archive Lesson', function () {
+            'but the assignment and its content are kept.', 'Archive Assignment', function () {
             changeLessonStatus(lesson, 'archived');
             if (lessonsAdminState.editingId === lesson.id) closeLessonEditor();
         });
@@ -919,15 +919,15 @@
     function confirmDelete(lesson) {
         if (!lesson) return;
         askConfirm('Are you sure you want to delete "' + lesson.title + '"? ' +
-            'This action cannot be undone. Consider archiving instead.', 'Delete Lesson', function () {
+            'This action cannot be undone. Consider archiving instead.', 'Delete Assignment', function () {
             callApi({ action: 'deleteLesson', id: lesson.id })
                 .then(function () {
-                    toast('Lesson deleted.');
+                    toast('Assignment deleted.');
                     lessonsAdminState.loaded = false;
                     if (lessonsAdminState.editingId === lesson.id) closeLessonEditor();
                     loadAdminLessons(true);
                 })
-                .catch(function (err) { toastError(err.message || 'Could not delete the lesson.'); });
+                .catch(function (err) { toastError(err.message || 'Could not delete the assignment.'); });
         });
     }
 
@@ -958,7 +958,7 @@
         clearError('Import');
 
         var raw = String(box.value || '').trim();
-        if (!raw) { setError('Import', 'Paste a lesson JSON first.'); return; }
+        if (!raw) { setError('Import', 'Paste an assignment JSON first.'); return; }
 
         var parsed;
         try {
@@ -968,7 +968,7 @@
             return;
         }
         if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-            setError('Import', 'Expected a single lesson object.');
+            setError('Import', 'Expected a single assignment object.');
             return;
         }
         if (!String(parsed.title || '').trim()) {
@@ -987,12 +987,12 @@
         lessonsAdminState.editingRecord = null;
         showView('editor');
         fillEditor(base);
-        $('alEditorTitle').textContent = 'New Lesson (imported)';
+        $('alEditorTitle').textContent = 'New Assignment (imported)';
         $('alEditorSub').textContent = base.title;
         renderEditorActions();
 
         closeLessonImport();
-        toast('Lesson loaded into the editor. Review it, then publish.');
+        toast('Assignment loaded into the editor. Review it, then publish.');
         global.scrollTo(0, 0);
     }
 
@@ -1051,7 +1051,7 @@
 
     function openLessonReorder() {
         if (!lessonsAdminState.list.length) {
-            toastError('There are no lessons to reorder yet.');
+            toastError('There are no assignments to reorder yet.');
             return;
         }
         // Ordering applies to the whole library, so this view ignores filters.
@@ -1140,12 +1140,12 @@
     function saveLessonOrder() {
         var btn = $('alSaveOrderBtn');
         if (btn) btn.disabled = true;
-        toast('Saving lesson order...');
+        toast('Saving assignment order...');
 
         var order = lessonsAdminState.reorderDraft.map(function (l) { return l.id; });
         callApi({ action: 'reorderLessons', order: order })
             .then(function () {
-                toast('Lesson order updated successfully.');
+                toast('Assignment order updated successfully.');
                 lessonsAdminState.loaded = false;
                 closeLessonReorder();
                 loadAdminLessons(true);
