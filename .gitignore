@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────
+#  Fluency — files that must NOT be published
+#
+#  This repository is served by GitHub Pages, which makes every
+#  committed file publicly downloadable. Anything listed here is
+#  either too large for GitHub, or should not be public.
+# ─────────────────────────────────────────────────────────────
+
+# Screen recordings — GitHub rejects files over 100 MB
+*.mp4
+*.mov
+*.avi
+
+# Internal business documents (would be downloadable by anyone)
+*.docx
+*.pdf
+
+# Apps Script backend — lives in the Apps Script editor, not on the
+# website. It contains the master spreadsheet id and the notification
+# email, so it must not be served publicly.
+Code.gs
+
+# Node scripts used once to generate the .docx documents
+build_master_doc.js
+build_captain_recruitment.js
+generate_report.js
+package.json
+node_modules/
+
+# Local editor / OS files
+.vscode/
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini

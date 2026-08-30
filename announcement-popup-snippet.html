@@ -1,0 +1,354 @@
+<!--
+  ============================================================
+  FLUENCY — Team Captain Announcement Popup
+  Drop-in snippet for index.html
+
+  HOW TO INSTALL:
+    1. Save the leaderboard screenshot as `leaderboard.png` in the
+       same folder as index.html (or change the <img src> below).
+    2. Paste the <style> block into index.html's existing <style>
+       block (or leave it inline — Font Awesome is already loaded).
+    3. Paste the <div class="fl-popup-overlay">…</div> block just
+       before </body>.
+    4. Paste the <script> block just before </body>.
+
+  HOW TO RE-SHOW IT LATER (e.g. for a new announcement):
+    - Change FL_POPUP_CONFIG.storageKey to a new string
+      (e.g. 'flAnnouncement_2026_07_tournament'). Every user
+      will see the new popup once per session.
+
+  HOW TO TRIGGER MANUALLY:
+    - Call window.flOpenCaptainPopup() from anywhere.
+  ============================================================
+-->
+
+<!-- ============== STYLES ============== -->
+<style>
+  @keyframes fl-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fl-modal-in {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes fl-overlay-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes fl-modal-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+  }
+  @keyframes fl-crown-float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-5px) rotate(2deg); }
+  }
+  @keyframes fl-shine {
+    0%   { transform: translateX(-120%) skewX(-18deg); }
+    60%, 100% { transform: translateX(220%) skewX(-18deg); }
+  }
+  @keyframes fl-pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(240,200,98,0.55), 0 18px 40px -12px rgba(23,82,119,0.45); }
+    50%      { box-shadow: 0 0 0 14px rgba(240,200,98,0),    0 22px 52px -12px rgba(23,82,119,0.55); }
+  }
+  @keyframes fl-spark-float {
+    0%   { transform: translateY(0)   scale(1);   opacity: 0.55; }
+    50%  { transform: translateY(-8px) scale(1.1); opacity: 1; }
+    100% { transform: translateY(0)   scale(1);   opacity: 0.55; }
+  }
+
+  .fl-popup-overlay {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(94,159,207,0.35), rgba(11,37,64,0.78) 60%);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem; z-index: 9999;
+    animation: fl-overlay-in 0.35s ease-out both;
+  }
+  .fl-popup-overlay.fl-closing { animation: fl-overlay-out 0.25s ease-in both; }
+  .fl-popup-overlay.fl-closing .fl-popup-modal { animation: fl-modal-out 0.25s ease-in both; }
+
+  .fl-popup-modal {
+    position: relative;
+    width: min(900px, 100%); max-height: 92vh; overflow-y: auto;
+    background: linear-gradient(160deg, #ffffff 0%, #f3faff 100%);
+    border-radius: 1.5rem;
+    box-shadow: 0 30px 80px -20px rgba(11,37,64,0.45), 0 0 0 1px rgba(255,255,255,0.7);
+    animation: fl-modal-in 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.05) both;
+    border: 1px solid rgba(255,255,255,0.85);
+  }
+  .fl-popup-modal::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 1.5rem; padding: 1.5px;
+    background: linear-gradient(135deg, #f0c862, #5e9fcf, #f0c862);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none; opacity: 0.55;
+  }
+
+  .fl-popup-close {
+    position: absolute; top: 0.9rem; right: 0.9rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    border: none; background: rgba(11,37,64,0.08); color: #175277;
+    font-size: 1.05rem; cursor: pointer;
+    display: grid; place-items: center;
+    transition: transform 0.2s ease, background 0.2s ease; z-index: 5;
+  }
+  .fl-popup-close:hover { background: rgba(11,37,64,0.16); transform: rotate(90deg); }
+
+  .fl-popup-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 0; }
+
+  .fl-popup-visual {
+    position: relative; padding: 2rem 1.4rem 2rem 2rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fl-popup-visual::before {
+    content: ''; position: absolute; inset: 1.5rem;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(240,200,98,0.25), transparent 55%),
+      radial-gradient(circle at 80% 70%, rgba(94,159,207,0.25), transparent 55%);
+    border-radius: 1.2rem; filter: blur(10px); z-index: 0;
+  }
+
+  .fl-image-frame {
+    position: relative; border-radius: 1rem; overflow: hidden;
+    box-shadow: 0 18px 40px -12px rgba(23,82,119,0.4);
+    background: #fff; width: 100%; z-index: 1;
+  }
+  .fl-image-frame img { display: block; width: 100%; height: auto; }
+  .fl-image-frame::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: fl-shine 4.5s ease-in-out infinite; pointer-events: none;
+  }
+
+  .fl-badge-new {
+    position: absolute; top: -10px; left: -10px;
+    background: linear-gradient(135deg, #f0c862, #d4a017);
+    color: #4a3308; font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.15em; padding: 0.45rem 0.9rem; border-radius: 50px;
+    box-shadow: 0 8px 20px -6px rgba(212,160,23,0.55);
+    z-index: 2; animation: fl-pulse-glow 2.4s ease-in-out infinite;
+  }
+  .fl-badge-new i { margin-right: 0.3rem; }
+
+  .fl-spark {
+    position: absolute; color: #f0c862;
+    animation: fl-spark-float 2.6s ease-in-out infinite; z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(240,200,98,0.5));
+  }
+  .fl-spark.s1 { top: 8%;  right: 6%;  font-size: 1.2rem; animation-delay: 0s; }
+  .fl-spark.s2 { bottom: 12%; left: 6%; font-size: 0.95rem; animation-delay: 0.6s; color: #5e9fcf; }
+  .fl-spark.s3 { top: 50%; right: 2%;  font-size: 0.8rem; animation-delay: 1.2s; }
+
+  .fl-popup-content {
+    padding: 2.4rem 2.4rem 2rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .fl-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: #367bb5; background: rgba(54,123,181,0.1);
+    padding: 0.35rem 0.85rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; width: max-content; margin-bottom: 1rem;
+  }
+  .fl-eyebrow i { color: #d4a017; }
+
+  .fl-popup-headline {
+    font-size: 1.85rem; line-height: 1.2;
+    color: #0b2540; font-weight: 700;
+    margin-bottom: 0.85rem; letter-spacing: -0.01em;
+  }
+  .fl-popup-headline .fl-crown {
+    display: inline-block; color: #d4a017;
+    animation: fl-crown-float 2.6s ease-in-out infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 3px 8px rgba(212,160,23,0.45));
+    margin-right: 0.25rem;
+  }
+  .fl-popup-headline .fl-gradient-text {
+    background: linear-gradient(115deg, #367bb5, #d4a017);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .fl-popup-body { color: #175277; font-size: 1rem; line-height: 1.55; margin-bottom: 1.25rem; }
+  .fl-popup-body p + p { margin-top: 0.6rem; }
+
+  .fl-highlight-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+  .fl-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: #fff; border: 1px solid rgba(54,123,181,0.18);
+    color: #175277; font-size: 0.82rem; font-weight: 600;
+    padding: 0.4rem 0.8rem; border-radius: 50px;
+    box-shadow: 0 4px 10px -6px rgba(23,82,119,0.2);
+  }
+  .fl-chip i { color: #d4a017; }
+  .fl-chip.alt i { color: #367bb5; }
+
+  .fl-cta-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.25rem; }
+  .fl-btn {
+    font-family: inherit; font-size: 0.98rem; font-weight: 700;
+    padding: 0.9rem 1.4rem; border-radius: 50px;
+    border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-decoration: none; letter-spacing: 0.01em;
+  }
+  .fl-btn-primary {
+    position: relative;
+    background: linear-gradient(115deg, #367bb5 0%, #175277 55%, #d4a017 130%);
+    color: #fff;
+    box-shadow: 0 12px 28px -10px rgba(23,82,119,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+    overflow: hidden;
+  }
+  .fl-btn-primary::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: translateX(-150%) skewX(-18deg);
+    transition: transform 0.6s ease;
+  }
+  .fl-btn-primary:hover { transform: translateY(-2px); }
+  .fl-btn-primary:hover::after { transform: translateX(260%) skewX(-18deg); }
+  .fl-btn-secondary {
+    background: transparent; color: #175277;
+    border: 1.5px solid rgba(23,82,119,0.28);
+  }
+  .fl-btn-secondary:hover { background: rgba(23,82,119,0.06); color: #0b2540; }
+
+  .fl-footnote {
+    margin-top: 1.2rem; font-size: 0.78rem; color: #2b6f9e; opacity: 0.85;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .fl-footnote i { color: #d4a017; }
+
+  /* Dark mode (matches existing body.dark-mode in index.html) */
+  body.dark-mode .fl-popup-modal {
+    background: linear-gradient(160deg, #182230 0%, #121a24 100%);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  body.dark-mode .fl-popup-headline { color: #e6f0fa; }
+  body.dark-mode .fl-popup-body,
+  body.dark-mode .fl-footnote,
+  body.dark-mode .fl-popup-close { color: #aac8e0; }
+  body.dark-mode .fl-popup-close { background: rgba(255,255,255,0.08); }
+  body.dark-mode .fl-chip {
+    background: rgba(94,159,207,0.12); color: #d6e7f5;
+    border-color: rgba(94,159,207,0.25);
+  }
+  body.dark-mode .fl-btn-secondary { color: #cfdef5; border-color: rgba(207,222,245,0.3); }
+  body.dark-mode .fl-eyebrow { background: rgba(94,159,207,0.16); color: #aac8e0; }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    .fl-popup-grid { grid-template-columns: 1fr; }
+    .fl-popup-visual { padding: 1.4rem 1.4rem 0; }
+    .fl-popup-visual::before { inset: 1rem; }
+    .fl-popup-content { padding: 1.4rem 1.4rem 1.6rem; text-align: center; }
+    .fl-eyebrow, .fl-cta-row, .fl-highlight-row { justify-content: center; }
+    .fl-eyebrow { margin-left: auto; margin-right: auto; }
+    .fl-popup-headline { font-size: 1.5rem; }
+    .fl-popup-body { font-size: 0.95rem; }
+    .fl-cta-row .fl-btn { flex: 1 1 100%; justify-content: center; }
+    .fl-footnote { justify-content: center; }
+  }
+  @media (max-width: 380px) {
+    .fl-popup-content { padding: 1.1rem 1.1rem 1.4rem; }
+    .fl-popup-headline { font-size: 1.3rem; }
+    .fl-btn { padding: 0.8rem 1.1rem; font-size: 0.9rem; }
+  }
+</style>
+
+<!-- ============== MARKUP — place just before </body> ============== -->
+<div class="fl-popup-overlay" id="flCaptainPopup" role="dialog" aria-modal="true" aria-labelledby="flPopupTitle" hidden>
+  <div class="fl-popup-modal">
+    <button class="fl-popup-close" id="flPopupClose" aria-label="Close announcement">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="fl-popup-grid">
+      <div class="fl-popup-visual">
+        <div class="fl-image-frame">
+          <span class="fl-badge-new"><i class="fa-solid fa-bolt"></i>NEW</span>
+          <i class="fa-solid fa-star fl-spark s1"></i>
+          <i class="fa-solid fa-sparkles fl-spark s2"></i>
+          <i class="fa-solid fa-star fl-spark s3"></i>
+          <img src="leaderboard.png" alt="Team Leaderboard preview" />
+        </div>
+      </div>
+      <div class="fl-popup-content">
+        <span class="fl-eyebrow"><i class="fa-solid fa-bullhorn"></i> New Feature Live</span>
+        <h2 class="fl-popup-headline" id="flPopupTitle">
+          <span class="fl-crown"><i class="fa-solid fa-crown"></i></span>
+          New <span class="fl-gradient-text">Team Leadership</span> System is Now Live
+        </h2>
+        <div class="fl-popup-body">
+          <p>We're excited to introduce our <strong>Team Leadership</strong> feature — a new way to compete, grow, and build community together.</p>
+          <p>We're launching with <strong>3 teams</strong> and looking for <strong>3 captains</strong> to lead them. This is your chance to build, guide, and grow your team from day one.</p>
+        </div>
+        <div class="fl-highlight-row">
+          <span class="fl-chip"><i class="fa-solid fa-crown"></i> 3 Teams</span>
+          <span class="fl-chip alt"><i class="fa-solid fa-user-shield"></i> 3 Captains</span>
+          <span class="fl-chip alt"><i class="fa-solid fa-chart-line"></i> Grow Together</span>
+        </div>
+        <div class="fl-cta-row">
+          <a href="https://wa.me/966552597139?text=Hi%20Amer%2C%20I%27d%20like%20to%20apply%20for%20the%20Team%20Captain%20position." class="fl-btn fl-btn-primary" id="flPopupCta" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-whatsapp"></i> Apply for Captain Position <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <button type="button" class="fl-btn fl-btn-secondary" id="flPopupLater">Maybe Later</button>
+        </div>
+        <p class="fl-footnote">
+          <i class="fa-solid fa-circle-info"></i>
+          More teams and leadership roles open as our community grows.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== SCRIPT — place just before </body> ============== -->
+<script>
+  (function () {
+    const FL_POPUP_CONFIG = {
+      storageKey: 'flCaptainAnnouncementSeen',
+      openDelayMs: 700,
+      ctaUrl: null, // set to a URL to redirect on CTA click
+    };
+
+    const overlay = document.getElementById('flCaptainPopup');
+    if (!overlay) return;
+    const closeBtn = document.getElementById('flPopupClose');
+    const laterBtn = document.getElementById('flPopupLater');
+    const ctaBtn   = document.getElementById('flPopupCta');
+
+    function openPopup() {
+      overlay.hidden = false;
+      overlay.classList.remove('fl-closing');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn && closeBtn.focus(), 50);
+    }
+    function closePopup() {
+      overlay.classList.add('fl-closing');
+      document.body.style.overflow = '';
+      try { sessionStorage.setItem(FL_POPUP_CONFIG.storageKey, '1'); } catch (e) {}
+      setTimeout(() => { overlay.hidden = true; }, 260);
+    }
+
+    closeBtn && closeBtn.addEventListener('click', closePopup);
+    laterBtn && laterBtn.addEventListener('click', closePopup);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) closePopup(); });
+    ctaBtn && ctaBtn.addEventListener('click', (e) => {
+      try { sessionStorage.setItem(FL_POPUP_CONFIG.storageKey, '1'); } catch (err) {}
+      if (FL_POPUP_CONFIG.ctaUrl) { e.preventDefault(); window.location.href = FL_POPUP_CONFIG.ctaUrl; }
+    });
+
+    let alreadySeen = false;
+    try { alreadySeen = sessionStorage.getItem(FL_POPUP_CONFIG.storageKey) === '1'; } catch (e) {}
+    if (!alreadySeen) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(openPopup, FL_POPUP_CONFIG.openDelayMs));
+      } else {
+        setTimeout(openPopup, FL_POPUP_CONFIG.openDelayMs);
+      }
+    }
+    window.flOpenCaptainPopup = openPopup;
+  })();
+</script>

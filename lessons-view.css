@@ -1,0 +1,608 @@
+/* ============================================================
+   FLUENCY — LESSONS SYSTEM STYLES
+   Shared by index.html (student) and adimin.html (admin preview)
+   so the preview is styled by exactly the same rules students see.
+   Every selector is namespaced .fl-* and cannot reach existing
+   site components.
+   ============================================================ */
+
+    /* ══════════════════════════════════════════════════════════════════════
+       LESSONS SYSTEM
+       All selectors are namespaced .fl-lesson* / .fl-lessons* so nothing here
+       can reach existing components. Inherits the site palette and dark mode.
+       ══════════════════════════════════════════════════════════════════════ */
+
+    .fl-lessons-head { text-align: center; }
+
+    .fl-lessons-head h1 { margin-bottom: 0.5rem; }
+
+    .fl-lessons-lede {
+      max-width: 620px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .fl-lessons-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(30, 90, 136, 0.09);
+      color: #1e5a88;
+      border-radius: 50px;
+      padding: 0.45rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    body.dark-mode .fl-lessons-count {
+      background: rgba(94, 159, 207, 0.18);
+      color: #9fcbe8;
+    }
+
+    .fl-lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.75rem;
+      margin-top: 2rem;
+    }
+
+    /* ===== LESSON CARD ===== */
+    .fl-lesson-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 1.75rem;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      box-shadow: 0 18px 34px -14px rgba(0, 40, 80, 0.18);
+      transition: transform 0.28s ease, box-shadow 0.32s ease, border-color 0.28s ease;
+      text-align: left;
+    }
+
+    body.dark-mode .fl-lesson-card {
+      background: rgba(20, 35, 50, 0.9);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .fl-lesson-card:hover,
+    .fl-lesson-card:focus-within {
+      transform: translateY(-4px);
+      box-shadow: 0 26px 44px -14px rgba(25, 85, 130, 0.28);
+      border-color: #b0d1f0;
+    }
+
+    .fl-lesson-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 1.1rem;
+      background: rgba(30, 90, 136, 0.08);
+      margin-bottom: 0.3rem;
+    }
+
+    .fl-lesson-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #3d7cb0;
+    }
+
+    body.dark-mode .fl-lesson-eyebrow { color: #7fb4d9; }
+
+    .fl-lesson-card h3 {
+      font-size: 1.35rem;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .fl-lesson-desc {
+      font-size: 1rem;
+      margin: 0;
+      color: #40566f;
+      flex-grow: 1;
+    }
+
+    body.dark-mode .fl-lesson-desc { color: #b9cbe0; }
+
+    .fl-lesson-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+      color: #56718c;
+    }
+
+    body.dark-mode .fl-lesson-meta { color: #9fb5cc; }
+
+    .fl-lesson-level {
+      display: inline-block;
+      background: linear-gradient(115deg, #1e5a88, #367bb5);
+      color: #fff;
+      border-radius: 50px;
+      padding: 0.15rem 0.7rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== PROGRESS ===== */
+    .fl-lesson-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #56718c;
+    }
+
+    body.dark-mode .fl-lesson-progress { color: #9fb5cc; }
+
+    .fl-lesson-track {
+      flex-grow: 1;
+      height: 7px;
+      border-radius: 50px;
+      background: rgba(30, 90, 136, 0.14);
+      overflow: hidden;
+    }
+
+    body.dark-mode .fl-lesson-track { background: #2d4055; }
+
+    .fl-lesson-bar {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #2b6f9e, #7fb4d9);
+      transition: width 0.6s ease;
+    }
+
+    .fl-lesson-bar.is-done {
+      background: linear-gradient(90deg, #1f7a52, #46a97a);
+    }
+
+    /* Status is never carried by colour alone — each state has its own label. */
+    .fl-lesson-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .fl-lesson-status.is-done { color: #1f7a52; }
+
+    body.dark-mode .fl-lesson-status.is-done { color: #6fce9f; }
+
+    .fl-lesson-card .btn { width: 100%; margin-top: 0.4rem; }
+
+    /* ===== STATES ===== */
+    .fl-lessons-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .fl-lessons-state i {
+      font-size: 2.6rem;
+      color: #7fb4d9;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .fl-lessons-state h3 { margin-bottom: 0.5rem; }
+
+    .fl-lessons-state p {
+      max-width: 460px;
+      margin: 0 auto 1.2rem;
+    }
+
+    .fl-skeleton-card {
+      border-radius: 1.75rem;
+      padding: 1.6rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      min-height: 250px;
+    }
+
+    body.dark-mode .fl-skeleton-card {
+      background: rgba(20, 35, 50, 0.7);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .fl-skeleton-line {
+      height: 0.9rem;
+      border-radius: 50px;
+      margin-bottom: 0.85rem;
+      background: linear-gradient(90deg, rgba(30, 90, 136, 0.10) 25%, rgba(30, 90, 136, 0.20) 37%, rgba(30, 90, 136, 0.10) 63%);
+      background-size: 400% 100%;
+      animation: flShimmer 1.4s ease infinite;
+    }
+
+    body.dark-mode .fl-skeleton-line {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.06) 25%, rgba(255, 255, 255, 0.14) 37%, rgba(255, 255, 255, 0.06) 63%);
+      background-size: 400% 100%;
+    }
+
+    .fl-skeleton-line.w40 { width: 40%; }
+    .fl-skeleton-line.w70 { width: 70%; }
+    .fl-skeleton-line.w90 { width: 90%; }
+    .fl-skeleton-line.tall { height: 2rem; }
+
+    @keyframes flShimmer {
+      0% { background-position: 100% 50%; }
+      100% { background-position: 0 50%; }
+    }
+
+    /* ═══ LESSON READER ═══ */
+    .fl-breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+      color: #56718c;
+    }
+
+    body.dark-mode .fl-breadcrumb { color: #9fb5cc; }
+
+    .fl-breadcrumb a {
+      color: #1e5a88;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    body.dark-mode .fl-breadcrumb a { color: #7fb4d9; }
+
+    .fl-breadcrumb a:hover { text-decoration: underline; }
+
+    .fl-breadcrumb .fl-crumb-sep { opacity: 0.5; }
+
+    /* Comfortable reading measure, per spec: ~700-850px of running text. */
+    .fl-lesson-body { max-width: 800px; }
+
+    .fl-lesson-title { margin-bottom: 0.4rem; }
+
+    .fl-lesson-subhead {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      margin-bottom: 1.5rem;
+      color: #56718c;
+      font-size: 0.98rem;
+    }
+
+    body.dark-mode .fl-lesson-subhead { color: #9fb5cc; }
+
+    .fl-lesson-section { margin-top: 2.5rem; }
+
+    .fl-lesson-section:first-of-type { margin-top: 0; }
+
+    .fl-lesson-section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .fl-lesson-section h3 {
+      font-size: 1.3rem;
+      margin: 1.8rem 0 0.6rem;
+    }
+
+    .fl-lesson-section p { margin-bottom: 1.1rem; }
+
+    .fl-objectives {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .fl-objectives li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      line-height: 1.55;
+    }
+
+    .fl-objectives i {
+      color: #2f8a63;
+      margin-top: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    body.dark-mode .fl-objectives i { color: #6fce9f; }
+
+    .fl-block-note,
+    .fl-block-quote {
+      border-radius: 1.1rem;
+      padding: 1.1rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+
+    .fl-block-note {
+      background: rgba(30, 90, 136, 0.08);
+      border-left: 4px solid #367bb5;
+    }
+
+    body.dark-mode .fl-block-note {
+      background: rgba(94, 159, 207, 0.14);
+      border-left-color: #5e9fcf;
+    }
+
+    .fl-block-quote {
+      background: rgba(30, 90, 136, 0.05);
+      border-left: 4px solid #7fb4d9;
+      font-style: italic;
+    }
+
+    body.dark-mode .fl-block-quote { background: rgba(255, 255, 255, 0.05); }
+
+    .fl-block-divider {
+      border: none;
+      border-top: 1px solid rgba(30, 90, 136, 0.18);
+      margin: 2.2rem 0;
+    }
+
+    body.dark-mode .fl-block-divider { border-top-color: rgba(255, 255, 255, 0.12); }
+
+    .fl-block-image {
+      width: 100%;
+      border-radius: 1.2rem;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    /* ===== VOCABULARY ===== */
+    .fl-vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .fl-vocab-card {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(30, 90, 136, 0.12);
+      border-radius: 1.2rem;
+      padding: 1.1rem 1.25rem;
+    }
+
+    body.dark-mode .fl-vocab-card {
+      background: rgba(20, 35, 50, 0.9);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .fl-vocab-word {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #1e4f7a;
+      letter-spacing: 0.02em;
+    }
+
+    body.dark-mode .fl-vocab-word { color: #9fcbe8; }
+
+    .fl-vocab-pron {
+      font-size: 0.9rem;
+      color: #7089a3;
+      margin-left: 0.4rem;
+      font-weight: 500;
+    }
+
+    .fl-vocab-meaning { margin: 0.4rem 0 0; }
+
+    .fl-vocab-example {
+      margin: 0.5rem 0 0;
+      font-style: italic;
+      color: #56718c;
+      font-size: 0.97rem;
+    }
+
+    body.dark-mode .fl-vocab-example { color: #9fb5cc; }
+
+    /* ===== EXAMPLES ===== */
+    .fl-example-row {
+      background: rgba(30, 90, 136, 0.06);
+      border-radius: 1.1rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.9rem;
+    }
+
+    body.dark-mode .fl-example-row { background: rgba(255, 255, 255, 0.05); }
+
+    .fl-example-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #3d7cb0;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    body.dark-mode .fl-example-label { color: #7fb4d9; }
+
+    .fl-example-en { margin: 0; font-size: 1.08rem; }
+
+    .fl-example-tr { margin: 0.6rem 0 0; }
+
+    /* ===== EXERCISES ===== */
+    .fl-exercise {
+      border: 1px solid rgba(30, 90, 136, 0.14);
+      border-radius: 1.1rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.9rem;
+    }
+
+    body.dark-mode .fl-exercise { border-color: rgba(255, 255, 255, 0.12); }
+
+    .fl-exercise-prompt { margin: 0; }
+
+    .fl-exercise summary {
+      cursor: pointer;
+      margin-top: 0.7rem;
+      font-weight: 600;
+      color: #1e5a88;
+      font-size: 0.95rem;
+    }
+
+    body.dark-mode .fl-exercise summary { color: #7fb4d9; }
+
+    .fl-exercise-answer {
+      margin: 0.6rem 0 0;
+      padding-left: 0.9rem;
+      border-left: 3px solid #7fb4d9;
+    }
+
+    /* ===== VIDEO ===== */
+    .fl-video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      background: #0d1620;
+    }
+
+    .fl-video-frame iframe,
+    .fl-video-frame button.fl-video-play {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Click-to-load poster: the iframe is only injected on demand. */
+    .fl-video-play {
+      background: #0d1620 center / cover no-repeat;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      padding: 0;
+    }
+
+    .fl-video-play::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 20, 32, 0.35);
+      transition: background 0.25s ease;
+    }
+
+    .fl-video-play:hover::after { background: rgba(8, 20, 32, 0.15); }
+
+    .fl-video-play i {
+      position: relative;
+      z-index: 1;
+      font-size: 3.2rem;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    }
+
+    .fl-video-caption {
+      font-size: 0.9rem;
+      margin-top: 0.7rem;
+      color: #56718c;
+    }
+
+    body.dark-mode .fl-video-caption { color: #9fb5cc; }
+
+    /* ===== RESOURCE LINKS ===== */
+    .fl-resource-list { list-style: none; padding: 0; margin: 0; }
+
+    .fl-resource-list li { margin-bottom: 0.6rem; }
+
+    .fl-resource-list a {
+      color: #1e5a88;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    body.dark-mode .fl-resource-list a { color: #7fb4d9; }
+
+    /* ===== PREV / NEXT ===== */
+    .fl-lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .fl-lesson-nav .btn { flex: 1 1 220px; }
+
+    /* ===== ENTRANCE MOTION ===== */
+    .fl-fade-in { animation: flFadeIn 0.45s ease both; }
+
+    @keyframes flFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fl-fade-in { animation: none; }
+      .fl-lesson-card { transition: none; }
+      .fl-lesson-card:hover { transform: none; }
+      .fl-lesson-bar { transition: none; }
+      .fl-skeleton-line { animation: none; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .fl-lessons-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .fl-lessons-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .fl-vocab-grid { grid-template-columns: 1fr; }
+      .fl-lesson-nav { flex-direction: column; }
+      .fl-lesson-section h2 { font-size: 1.35rem; }
+      .fl-breadcrumb { font-size: 0.88rem; }
+    }
+
+/* ============================================================
+   TAG-SELECTOR ISOLATION
+
+   index.html styles the bare `header` and `nav` tags for the site
+   chrome (sticky nav bar, 2rem link row). The lesson markup uses
+   those same semantic tags, so those rules leak in and must be
+   neutralised here — otherwise the lesson header becomes a sticky
+   white bar that floats over the content while scrolling.
+   ============================================================ */
+
+.fl-lesson-body header {
+    display: block;
+    position: static;
+    top: auto;
+    z-index: auto;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border-bottom: none;
+}
+
+body.dark-mode .fl-lesson-body header { background: none; }
+
+/* The breadcrumb and prev/next rows are <nav> elements. */
+.fl-breadcrumb a::after,
+.fl-lesson-nav a::after {
+    content: none;
+}
+
+/* Lesson prose keeps the author's single line breaks. A blank line starts a
+   new paragraph; a single newline stays a line break, which grammar lessons
+   rely on for conjugation lists and example lines. `pre-line` still collapses
+   runs of spaces, so accidental indentation does not leak through. */
+.fl-prose {
+    white-space: pre-line;
+}

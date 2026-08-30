@@ -1,0 +1,343 @@
+/* ============================================================
+   FLUENCY — ADMIN STUDENT RECORD
+
+   Extends the existing admin dashboard styles. Reuses .sm-modal,
+   .sm-badge, .sm-detail, .btn and the responsive .sm-table rules
+   already defined in adimin.html. Namespace: .sr-*
+   ============================================================ */
+
+/* The record needs more room than the default 560px student modal. */
+.sm-modal.sr-modal-wide {
+    max-width: 900px;
+}
+
+/* ===== HEADER ===== */
+.sr-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.sr-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(115deg, #1e5a88, #367bb5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+    text-transform: uppercase;
+}
+
+.sr-identity-text {
+    min-width: 0;
+    flex: 1 1 200px;
+}
+
+.sr-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #175277;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.sr-email-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+}
+
+.sr-email {
+    color: #5f7d9c;
+    font-size: 0.92rem;
+    word-break: break-all;
+}
+
+.sr-copy-btn {
+    background: #f0f7ff;
+    border: 1px solid #c7ddef;
+    color: #1e5a88;
+    border-radius: 50px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: 0.2s;
+    flex: 0 0 auto;
+}
+
+.sr-copy-btn:hover { background: #dceaf7; }
+
+.sr-copy-btn.sr-copied {
+    background: #e6f7ec;
+    border-color: #bfe6cf;
+    color: #1d7a43;
+}
+
+/* ===== METADATA CARDS ===== */
+.sr-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.sr-card {
+    background: #f7fbff;
+    border: 1px solid #dbe8f4;
+    border-radius: 1rem;
+    padding: 0.8rem 0.95rem;
+    min-width: 0;
+}
+
+.sr-card-key {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8fa8bd;
+    margin-bottom: 0.3rem;
+}
+
+.sr-card-val {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #1e4f7a;
+    word-break: break-word;
+}
+
+.sr-card-val.sr-muted {
+    color: #9db3c7;
+    font-weight: 500;
+    font-style: italic;
+}
+
+/* ===== SECTIONS ===== */
+.sr-section { margin-bottom: 1.6rem; }
+
+.sr-section-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #8fa8bd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #e6f0fa;
+}
+
+.sr-section-head i { color: #b7cfe4; }
+
+/* ===== ANSWER / FEEDBACK TEXT ===== */
+.sr-prose {
+    background: #f7fbff;
+    border: 1px solid #dbe8f4;
+    border-radius: 1rem;
+    padding: 1rem 1.15rem;
+    color: #23415c;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    /* Student text is inserted with textContent; this keeps their line breaks
+       without ever letting their markup render. */
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.sr-prose.sr-feedback {
+    background: #f5fbf7;
+    border-color: #cde9d9;
+}
+
+.sr-pending {
+    background: #fff6e5;
+    border-color: #f2ddb4;
+    color: #8a5a00;
+    font-style: italic;
+    white-space: normal;
+}
+
+.sr-empty {
+    color: #9db3c7;
+    font-style: italic;
+    font-size: 0.92rem;
+    padding: 0.85rem 0;
+}
+
+/* ===== IMAGE ===== */
+.sr-image-wrap {
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid #dbe8f4;
+    background: #f7fbff;
+    max-width: 420px;
+}
+
+.sr-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+    background: #eef5fc;
+    min-height: 60px;
+}
+
+.sr-media-actions {
+    margin-top: 0.6rem;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.sr-link {
+    color: #1e5a88;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sr-link:hover { text-decoration: underline; }
+
+/* ===== AUDIO ===== */
+.sr-audio {
+    width: 100%;
+    max-width: 460px;
+    display: block;
+}
+
+/* ===== HISTORY ===== */
+.sr-history-row.sr-active {
+    background: #eaf4fd !important;
+}
+
+.sr-history-row.sr-active td { font-weight: 600; }
+
+.sr-viewing-note {
+    font-size: 0.83rem;
+    color: #7c93a8;
+    margin-bottom: 0.7rem;
+}
+
+/* ===== LOADING ===== */
+.sr-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2.5rem 1rem;
+    color: #7c93a8;
+    font-weight: 600;
+}
+
+.sr-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c7ddef;
+    border-top-color: #1e5a88;
+    border-radius: 50%;
+    animation: srSpin 0.7s linear infinite;
+}
+
+@keyframes srSpin { to { transform: rotate(360deg); } }
+
+.sr-error {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #7c93a8;
+}
+
+.sr-error i {
+    font-size: 2rem;
+    color: #b7cfe4;
+    display: block;
+    margin-bottom: 0.7rem;
+}
+
+.sr-error h4 {
+    color: #1e4f7a;
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+}
+
+.sr-error p { margin-bottom: 1rem; }
+
+/* ===== LIGHTBOX ===== */
+.sr-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 20, 32, 0.88);
+    z-index: 3000;            /* above .sm-overlay */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.sr-lightbox.show {
+    display: flex;
+    animation: srFade 0.2s ease;
+}
+
+@keyframes srFade { from { opacity: 0; } to { opacity: 1; } }
+
+.sr-lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0.9rem;
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+}
+
+.sr-lightbox-close {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.1rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1e4f7a;
+    font-size: 1.15rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sr-lightbox-close:hover { background: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sr-spinner { animation-duration: 2s; }
+    .sr-lightbox.show { animation: none; }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .sm-modal.sr-modal-wide { max-width: 100%; }
+    .sr-cards { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .sr-image-wrap { max-width: 100%; }
+    .sr-prose { max-height: 260px; font-size: 0.92rem; }
+    .sr-lightbox { padding: 1rem; }
+    .sr-name { font-size: 1.15rem; }
+    .sr-avatar { width: 46px; height: 46px; font-size: 1.15rem; }
+}

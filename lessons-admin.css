@@ -1,0 +1,449 @@
+/* ============================================================
+   FLUENCY — ADMIN LESSONS STYLES
+
+   Only covers what the existing admin stylesheet does not already
+   provide. Tables, badges, chips, modals, buttons and form groups
+   are reused from adimin.html as-is. Namespace: .al-*
+   ============================================================ */
+
+/* ===== TOOLBAR ===== */
+.al-toolbar-row {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.al-spacer { flex: 1 1 auto; }
+
+.al-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.al-filter-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8fa8bd;
+    margin-right: 0.15rem;
+}
+
+/* ===== STATUS BADGES (extends .sm-badge) ===== */
+.sm-badge.al-draft {
+    background: #fff6e5;
+    color: #8a5a00;
+    border-color: #f2ddb4;
+}
+
+.sm-badge.al-archived {
+    background: #f4f7fa;
+    color: #7c93a8;
+    border-color: #dde7f0;
+}
+
+/* ===== EDITOR ===== */
+.al-editor-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.al-editor-head h3 { margin: 0; }
+
+.al-editor-sub {
+    font-size: 0.9rem;
+    color: #7c93a8;
+    margin-top: 0.25rem;
+}
+
+.al-section {
+    border: 1px solid #dbe8f4;
+    border-radius: 1.1rem;
+    margin-bottom: 1rem;
+    background: #fbfdff;
+    overflow: hidden;
+}
+
+.al-section > summary {
+    cursor: pointer;
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    color: #1e4f7a;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    list-style: none;
+    user-select: none;
+}
+
+.al-section > summary::-webkit-details-marker { display: none; }
+
+.al-section > summary::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #8fa8bd;
+    transition: transform 0.25s ease;
+}
+
+.al-section[open] > summary::after { transform: rotate(180deg); }
+
+.al-section > summary:hover { background: #f2f8fe; }
+
+.al-section > summary:focus-visible {
+    outline: 2px solid #1e5a88;
+    outline-offset: -2px;
+}
+
+.al-section-body {
+    padding: 0 1.25rem 1.25rem;
+}
+
+.al-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.al-hint {
+    font-size: 0.83rem;
+    color: #7c93a8;
+    margin-top: 0.35rem;
+}
+
+/* Validation messages sit directly under the field they belong to. */
+.al-err {
+    display: block;
+    color: #b02a56;
+    font-size: 0.83rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+}
+
+.al-invalid input,
+.al-invalid textarea,
+.al-invalid select {
+    border-color: #cc3366 !important;
+}
+
+.al-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 50px;
+    border: 1px solid #c7ddef;
+    font-size: 0.95rem;
+    background: white;
+    color: #1e2f4d;
+    font-family: 'Calibri', sans-serif;
+    outline: none;
+}
+
+.al-select:focus {
+    border-color: #1e5a88;
+    box-shadow: 0 0 0 2px rgba(30, 90, 136, 0.1);
+}
+
+/* ===== REPEATERS (objectives, vocabulary, examples, exercises) ===== */
+.al-repeat-item {
+    border: 1px solid #dbe8f4;
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.8rem;
+    background: white;
+    position: relative;
+}
+
+.al-repeat-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+}
+
+.al-repeat-index {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #8fa8bd;
+}
+
+.al-repeat-tools {
+    margin-left: auto;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.al-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #c7ddef;
+    background: white;
+    color: #1e5a88;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    flex: 0 0 auto;
+}
+
+.al-icon-btn:hover:not(:disabled) {
+    background: #e8f2fc;
+    border-color: #1e5a88;
+}
+
+.al-icon-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.al-icon-btn.al-danger { color: #b02a56; }
+
+.al-icon-btn.al-danger:hover:not(:disabled) {
+    background: #fdeaf0;
+    border-color: #cc3366;
+}
+
+.al-empty-hint {
+    font-size: 0.9rem;
+    color: #8fa8bd;
+    padding: 0.9rem 0;
+    font-style: italic;
+}
+
+/* ===== CONTENT BLOCKS ===== */
+.al-add-blocks {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed #dbe8f4;
+}
+
+.al-block-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #1e5a88;
+    background: #e8f2fc;
+    border: 1px solid #c7ddef;
+    border-radius: 50px;
+    padding: 0.2rem 0.7rem;
+}
+
+.al-block-divider-preview {
+    border: none;
+    border-top: 2px dashed #c7ddef;
+    margin: 0.5rem 0 0;
+}
+
+/* ===== REORDER LIST ===== */
+.al-reorder-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+}
+
+.al-reorder-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: white;
+    border: 1px solid #c7ddef;
+    border-radius: 1rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+    cursor: grab;
+    transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.al-reorder-item:hover { border-color: #1e5a88; }
+
+.al-reorder-item.al-dragging {
+    opacity: 0.45;
+    box-shadow: 0 8px 18px rgba(30, 90, 136, 0.18);
+}
+
+.al-reorder-item.al-drop-target {
+    border-color: #1e5a88;
+    box-shadow: 0 0 0 2px rgba(30, 90, 136, 0.15);
+}
+
+.al-grip {
+    color: #8fa8bd;
+    font-size: 1rem;
+    flex: 0 0 auto;
+}
+
+.al-reorder-title {
+    font-weight: 600;
+    color: #1e4f7a;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.al-reorder-tools {
+    display: flex;
+    gap: 0.35rem;
+    flex: 0 0 auto;
+}
+
+/* ===== PREVIEW MODAL ===== */
+.al-preview-modal {
+    max-width: 900px;
+    width: 100%;
+}
+
+.al-preview-body {
+    padding: 1.5rem 1.75rem 2rem;
+    background: #f4f9ff;
+}
+
+/* The preview renders the real student component, so it needs the site's
+   base type and colour rather than the admin dashboard's. */
+.al-preview-body .fl-lesson-body {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #1e2f4d;
+    max-width: 100%;
+}
+
+.al-preview-body h1 { font-size: 2rem; color: #14425f; }
+.al-preview-body h2 { font-size: 1.5rem; color: #175277; }
+.al-preview-body h3 { font-size: 1.2rem; color: #175277; }
+.al-preview-body p { margin-bottom: 1rem; }
+
+.al-preview-note {
+    background: #fff6e5;
+    border: 1px solid #f2ddb4;
+    color: #8a5a00;
+    border-radius: 0.9rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+/* ===== CONFIRM DIALOG ===== */
+.al-confirm-body {
+    padding: 1.25rem 1.75rem 1.75rem;
+}
+
+.al-confirm-body p { color: #46617c; margin-bottom: 1.25rem; }
+
+.al-confirm-actions {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* ===== LOADING ===== */
+.al-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2.5rem 1rem;
+    color: #7c93a8;
+    font-weight: 600;
+}
+
+.al-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c7ddef;
+    border-top-color: #1e5a88;
+    border-radius: 50%;
+    animation: alSpin 0.7s linear infinite;
+}
+
+@keyframes alSpin { to { transform: rotate(360deg); } }
+
+.al-state {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    color: #7c93a8;
+}
+
+.al-state i {
+    font-size: 2.2rem;
+    color: #b7cfe4;
+    display: block;
+    margin-bottom: 0.8rem;
+}
+
+.al-state h4 {
+    color: #1e4f7a;
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+}
+
+.al-state p {
+    max-width: 420px;
+    margin: 0 auto 1.2rem;
+}
+
+.al-sticky-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid #e6f0fa;
+    margin-top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .al-spinner { animation-duration: 2s; }
+    .al-section > summary::after { transition: none; }
+    .al-reorder-item { transition: none; }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .al-editor-head { flex-direction: column; }
+    .al-sticky-actions .btn,
+    .al-editor-head .btn { flex: 1 1 auto; justify-content: center; }
+    .al-section-body { padding: 0 0.9rem 1rem; }
+    .al-section > summary { padding: 0.9rem; }
+    .al-preview-body { padding: 1rem 1rem 1.5rem; }
+    .al-confirm-actions .btn { flex: 1 1 100%; justify-content: center; }
+    .al-reorder-title { white-space: normal; }
+}
+
+/* Visually hidden but available to screen readers and label-for association. */
+.sr-only-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
