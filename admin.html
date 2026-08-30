@@ -1539,7 +1539,12 @@
         <!-- TAB 2: LESSON SETTINGS -->
         <div id="tab-lesson" class="tab-content">
             <div class="section-box">
-                <h3><i class="fa-regular fa-key"></i> Basic Settings</h3>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+                    <h3 style="margin:0;"><i class="fa-regular fa-key"></i> Basic Settings</h3>
+                    <button class="btn" onclick="openLessonSettingsImport()">
+                        <i class="fa-solid fa-file-import"></i> Import JSON
+                    </button>
+                </div>
                 <div class="status-row">
                     <div class="status-item">
                         <i class="fa-regular fa-clock"></i>
@@ -2145,6 +2150,36 @@ discipline – controlled behaviour to achieve a goal</textarea>
     </div>
 
     <!-- ═══ LESSON CONFIRM DIALOG ═══ -->
+    <!-- ═══ WEEKLY LESSON IMPORT MODAL ═══ -->
+    <!-- Fills the weekly lesson form from JSON. Nothing is saved until the
+         admin presses the existing Save buttons. -->
+    <div class="sm-overlay" id="lsImportModal" onclick="if(event.target===this) closeLessonSettingsImport()">
+        <div class="sm-modal" role="dialog" aria-modal="true" aria-labelledby="lsImportTitle">
+            <div class="sm-modal-head">
+                <h3 id="lsImportTitle"><i class="fa-solid fa-file-import"></i> Import Lesson Settings</h3>
+                <button class="sm-close" onclick="closeLessonSettingsImport()" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="al-confirm-body">
+                <p>Paste a weekly lesson JSON below. It fills the form on this tab and on
+                   <strong>Site Content</strong>, so you can review before saving.</p>
+                <div class="form-group full-width">
+                    <label for="lsImportText">Lesson JSON</label>
+                    <textarea id="lsImportText" style="min-height:220px;font-family:monospace;font-size:.82rem;"
+                              placeholder='{ "lessonCode": "1234", "marks": 5, "deadline": "2026-09-06", ... }'></textarea>
+                    <span class="al-err" id="lsErrImport"></span>
+                </div>
+                <div class="al-confirm-actions">
+                    <button class="btn" onclick="closeLessonSettingsImport()">Cancel</button>
+                    <button class="btn btn-primary" onclick="applyLessonSettingsImport()">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Load into form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ LESSON IMPORT MODAL ═══ -->
     <!-- Loads a lesson JSON file into the editor form. Nothing is saved until
          the admin reviews it and presses Save or Publish, so the normal
@@ -3514,5 +3549,6 @@ discipline – controlled behaviour to achieve a goal</textarea>
     <script src="lessons-admin.js"></script>
     <script src="student-record.js"></script>
     <script src="admin-shell.js"></script>
+    <script src="lesson-settings-import.js"></script>
 </body>
 </html>
