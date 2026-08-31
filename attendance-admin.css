@@ -1,0 +1,183 @@
+/* ============================================================================
+   Fluency — Attendance tab (admin, screen)
+   Follows the existing admin shell conventions: .section-box wrapper, .btn
+   buttons, .sm-* toolbar/table idioms.
+   ========================================================================== */
+
+.att-wrap{display:flex;flex-direction:column;gap:1.15rem;}
+
+/* ── session bar ─────────────────────────────────────────────────────────── */
+.att-bar{
+  display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;
+  padding:1rem 1.1rem;border:1px solid #d4e2ee;border-radius:12px;background:#f4f8fc;
+}
+.att-bar .att-grow{flex:1;min-width:190px;}
+.att-bar label{
+  display:block;font-size:.68rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:#56718c;margin-bottom:.3rem;
+}
+.att-bar input[type="text"],
+.att-bar input[type="date"],
+.att-bar select{
+  width:100%;padding:.55rem .7rem;border:1px solid #a9c4da;border-radius:8px;
+  font:inherit;font-size:.92rem;color:#123a5c;background:#fff;
+}
+.att-bar input:focus,.att-bar select:focus{outline:2px solid #7fb4d9;outline-offset:1px;}
+.att-bar .att-actions{display:flex;gap:.5rem;align-items:flex-end;flex-wrap:wrap;}
+
+.att-btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.55rem 1rem;border-radius:8px;border:1px solid #a9c4da;
+  background:#fff;color:#1e5a88;font:inherit;font-size:.88rem;font-weight:600;cursor:pointer;
+  white-space:nowrap;
+}
+.att-btn:hover{background:#e8f1f8;}
+.att-btn.primary{background:#1e5a88;border-color:#1e5a88;color:#fff;}
+.att-btn.primary:hover{background:#164c76;}
+.att-btn.danger{border-color:#e2b7b2;color:#b3453a;}
+.att-btn.danger:hover{background:#fbeceb;}
+.att-btn[disabled]{opacity:.5;cursor:not-allowed;}
+
+/* ── counters ────────────────────────────────────────────────────────────── */
+.att-counts{display:grid;grid-template-columns:repeat(6,1fr);gap:.65rem;}
+.att-count{
+  border:1px solid #d4e2ee;border-radius:10px;
+  padding:.7rem .8rem;text-align:center;background:#fff;
+}
+.att-count .v{font-size:1.5rem;font-weight:700;line-height:1;color:#1e5a88;}
+.att-count .k{
+  font-size:.66rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:#56718c;margin-top:.35rem;
+}
+.att-count.P{background:#e7f4ee;border-color:#bfe3d0;} .att-count.P .v{color:#2f8a63;}
+.att-count.A{background:#fbeceb;border-color:#eecfcc;} .att-count.A .v{color:#b3453a;}
+.att-count.L{background:#fdf4e3;border-color:#e6d3a8;} .att-count.L .v{color:#b57d1f;}
+.att-count.E{background:#e8f1f8;border-color:#c3d9ea;} .att-count.E .v{color:#3d7cb0;}
+.att-count.pct{background:#123a5c;border-color:#123a5c;}
+.att-count.pct .v{color:#fff;} .att-count.pct .k{color:#bcd9ef;}
+
+/* ── roster ──────────────────────────────────────────────────────────────── */
+.att-roster{border:1px solid #d4e2ee;border-radius:12px;overflow:hidden;}
+.att-row{
+  display:flex;align-items:center;gap:.85rem;
+  padding:.6rem .9rem;border-bottom:1px solid #e8f1f8;background:#fff;
+}
+.att-row:last-child{border-bottom:0;}
+.att-row:nth-child(even){background:#fafcfe;}
+.att-row .att-no{
+  width:1.7rem;font-size:.75rem;font-weight:700;color:#8ba2b8;text-align:center;flex:none;
+}
+.att-row .att-who{flex:1;min-width:0;}
+.att-row .att-nm{
+  font-weight:600;color:#123a5c;font-size:.94rem;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;
+}
+.att-row .att-nm:hover{color:#1e5a88;text-decoration:underline;}
+.att-row .att-em{
+  font-size:.76rem;color:#8ba2b8;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.att-row .att-pct{
+  font-size:.78rem;font-weight:700;color:#56718c;
+  min-width:5.5rem;text-align:right;flex:none;
+}
+.att-row .att-pct b{color:#1e5a88;}
+.att-row.low .att-pct b{color:#b3453a;}
+
+.att-pick{display:flex;gap:.3rem;flex:none;}
+.att-pick button{
+  width:2.2rem;height:2.2rem;border-radius:8px;border:1px solid #cfdeeb;
+  background:#fff;color:#8ba2b8;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;
+}
+.att-pick button:hover{border-color:#7fb4d9;color:#1e5a88;}
+.att-pick button.on.P{background:#2f8a63;border-color:#2f8a63;color:#fff;}
+.att-pick button.on.A{background:#b3453a;border-color:#b3453a;color:#fff;}
+.att-pick button.on.L{background:#b57d1f;border-color:#b57d1f;color:#fff;}
+.att-pick button.on.E{background:#3d7cb0;border-color:#3d7cb0;color:#fff;}
+
+/* ── overview grid ───────────────────────────────────────────────────────── */
+.att-grid-wrap{overflow-x:auto;border:1px solid #d4e2ee;border-radius:12px;}
+table.att-grid{border-collapse:collapse;width:100%;font-size:.82rem;}
+.att-grid th,.att-grid td{border:1px solid #e8f1f8;padding:.4rem .3rem;text-align:center;}
+.att-grid thead th{
+  background:#1e5a88;color:#fff;font-size:.68rem;font-weight:700;
+  letter-spacing:.05em;position:sticky;top:0;
+}
+.att-grid thead th.nm{text-align:left;padding-left:.7rem;}
+.att-grid td.nm{
+  text-align:left;padding-left:.7rem;font-weight:600;color:#123a5c;
+  white-space:nowrap;cursor:pointer;
+}
+.att-grid td.nm:hover{color:#1e5a88;text-decoration:underline;}
+.att-grid td.mk{font-weight:700;width:2.2rem;}
+.att-grid td.mk.P{color:#2f8a63;background:#f2faf6;}
+.att-grid td.mk.A{color:#b3453a;background:#fdf4f3;}
+.att-grid td.mk.L{color:#b57d1f;background:#fefaf1;}
+.att-grid td.mk.E{color:#3d7cb0;background:#f5fafd;}
+.att-grid td.mk.none{color:#cfdeeb;}
+.att-grid td.tot{background:#f4f8fc;font-weight:700;color:#1e5a88;}
+.att-grid tbody tr:hover td{background:#f4f8fc;}
+
+/* ── misc ────────────────────────────────────────────────────────────────── */
+.att-empty{
+  border:1px dashed #a9c4da;border-radius:12px;padding:2.2rem 1.25rem;
+  text-align:center;color:#56718c;background:#f4f8fc;
+}
+.att-empty i{font-size:1.8rem;color:#7fb4d9;display:block;margin-bottom:.6rem;}
+.att-empty h4{color:#123a5c;margin-bottom:.35rem;font-size:1.02rem;}
+.att-empty p{font-size:.88rem;line-height:1.5;}
+
+.att-legend{display:flex;gap:.75rem;flex-wrap:wrap;font-size:.78rem;color:#56718c;}
+.att-legend span{display:inline-flex;align-items:center;gap:.35rem;}
+.att-legend i{
+  width:1.05rem;height:1.05rem;border-radius:4px;display:inline-block;
+  font-style:normal;font-size:.66rem;font-weight:700;color:#fff;
+  text-align:center;line-height:1.05rem;
+}
+.att-legend .lg-P{background:#2f8a63;} .att-legend .lg-A{background:#b3453a;}
+.att-legend .lg-L{background:#b57d1f;} .att-legend .lg-E{background:#3d7cb0;}
+
+.att-sub{font-size:.86rem;color:#56718c;line-height:1.5;}
+.att-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;margin-bottom:.2rem;
+}
+.att-head h4{font-size:1rem;color:#123a5c;margin:0;}
+.att-dirty{
+  display:none;font-size:.76rem;font-weight:700;color:#b57d1f;
+  background:#fdf4e3;border:1px solid #e6d3a8;border-radius:999px;padding:.2rem .7rem;
+}
+.att-dirty.on{display:inline-block;}
+
+/* student-record attendance block */
+.sr-att-cells{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:.85rem;}
+.sr-att-cell{border:1px solid #d4e2ee;border-radius:10px;padding:.6rem .4rem;text-align:center;background:#fff;}
+.sr-att-cell .v{font-size:1.35rem;font-weight:700;line-height:1;color:#1e5a88;}
+.sr-att-cell .k{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#56718c;margin-top:.3rem;}
+.sr-att-cell.P{background:#e7f4ee;border-color:#bfe3d0;} .sr-att-cell.P .v{color:#2f8a63;}
+.sr-att-cell.A{background:#fbeceb;border-color:#eecfcc;} .sr-att-cell.A .v{color:#b3453a;}
+.sr-att-cell.L{background:#fdf4e3;border-color:#e6d3a8;} .sr-att-cell.L .v{color:#b57d1f;}
+.sr-att-cell.E{background:#e8f1f8;border-color:#c3d9ea;} .sr-att-cell.E .v{color:#3d7cb0;}
+.sr-att-cell.pct{background:#123a5c;border-color:#123a5c;}
+.sr-att-cell.pct .v{color:#fff;} .sr-att-cell.pct .k{color:#bcd9ef;}
+
+.sr-att-strip{display:flex;flex-wrap:wrap;gap:.35rem;}
+.sr-att-chip{
+  border:1px solid #cfdeeb;border-radius:7px;padding:.3rem .5rem;
+  text-align:center;min-width:2.9rem;background:#fff;
+}
+.sr-att-chip .n{font-size:.6rem;color:#8ba2b8;font-weight:700;}
+.sr-att-chip .s{font-size:.9rem;font-weight:700;line-height:1.2;}
+.sr-att-chip.P{background:#e7f4ee;border-color:#bfe3d0;} .sr-att-chip.P .s{color:#2f8a63;}
+.sr-att-chip.A{background:#fbeceb;border-color:#eecfcc;} .sr-att-chip.A .s{color:#b3453a;}
+.sr-att-chip.L{background:#fdf4e3;border-color:#e6d3a8;} .sr-att-chip.L .s{color:#b57d1f;}
+.sr-att-chip.E{background:#e8f1f8;border-color:#c3d9ea;} .sr-att-chip.E .s{color:#3d7cb0;}
+
+@media (max-width:900px){
+  .att-counts{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:720px){
+  .att-row{flex-wrap:wrap;}
+  .att-row .att-pct{min-width:0;text-align:left;}
+  .sr-att-cells{grid-template-columns:repeat(3,1fr);}
+}

@@ -548,6 +548,73 @@
      * @param submissions  full submission rows, newest first
      * @param opts       { onLevelChange(email, level) }
      */
+    /**
+     * Attendance block + the printable one-page report.
+     *
+     * `att` comes from getStudentDetails and is null when the Attendance sheets
+     * have not been created yet, so this section degrades to just the print
+     * button rather than disappearing.
+     */
+    function buildAttendance(att, student, submissions) {
+        var wrap = section('Attendance & Report', 'fa-regular fa-calendar-check');
+
+        if (!att || !att.sessionsHeld) {
+            wrap.appendChild(emptyNote(att
+                ? 'No sessions have been recorded yet. Create one in the Attendance tab.'
+                : 'Attendance is not set up yet. Open the Attendance tab to record the first session.'));
+        } else {
+            var cells = el('div', 'sr-att-cells');
+
+            var pct = el('div', 'sr-att-cell pct');
+            pct.appendChild(el('div', 'v', att.pct == null ? '—' : att.pct + '%'));
+            pct.appendChild(el('div', 'k', 'Attended'));
+            cells.appendChild(pct);
+
+            [['P', 'present', 'Present'], ['A', 'absent', 'Absent'],
+             ['L', 'late', 'Late'], ['E', 'excused', 'Excused']].forEach(function (row) {
+                var c = el('div', 'sr-att-cell ' + row[0]);
+                c.appendChild(el('div', 'v', String(att[row[1]] || 0)));
+                c.appendChild(el('div', 'k', row[2]));
+                cells.appendChild(c);
+            });
+            wrap.appendChild(cells);
+
+            var meta = el('p', 'sr-empty',
+                att.attended + ' of ' + att.sessionsHeld + ' sessions attended' +
+                ' — Present, Late and Excused all count as attended.');
+            wrap.appendChild(meta);
+
+            if (att.records && att.records.length) {
+                var strip = el('div', 'sr-att-strip');
+                att.records.forEach(function (r) {
+                    var chip = el('div', 'sr-att-chip ' + r.status);
+                    chip.title = (r.date || '') + (r.topic ? ' — ' + r.topic : '');
+                    chip.appendChild(el('div', 'n', 'S' + r.no));
+                    chip.appendChild(el('div', 's', r.status));
+                    strip.appendChild(chip);
+                });
+                wrap.appendChild(strip);
+            }
+        }
+
+        if (global.FluencyAttendance && typeof global.FluencyAttendance.printStudentReport === 'function') {
+            var btn = el('button', 'att-btn primary');
+            btn.style.marginTop = '.9rem';
+            btn.appendChild(icon('fa-regular fa-print'));
+            btn.appendChild(document.createTextNode(' Print progress report'));
+            btn.addEventListener('click', function () {
+                global.FluencyAttendance.printStudentReport({
+                    student: student,
+                    attendance: att,
+                    recent: submissions
+                });
+            });
+            wrap.appendChild(btn);
+        }
+
+        return wrap;
+    }
+
     function render(container, student, submissions, opts, activeIndex) {
         state.container = container;
         state.student = student || {};
@@ -569,6 +636,10 @@
         cards.appendChild(buildCard('Last Activity',
             el('div', 'sr-card-val', formatDateShort(state.student.lastActivity))));
         container.appendChild(cards);
+
+        // Attendance sits above the submissions so it renders even when the
+        // student has never submitted anything.
+        container.appendChild(buildAttendance(state.opts.attendance, state.student, state.submissions));
 
         if (!state.submissions.length) {
             var none = section('Submissions', 'fa-regular fa-folder-open');

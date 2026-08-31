@@ -1,0 +1,5 @@
+name,email,student_id,level,sessions,present,absent,late,excused,quiz,hw1,hw2,hw3,hw4,hw5,hw6,hw7,hw8,hw9,weekly,presentation,total,comment
+Sara Al-Otaibi,sara.otaibi@example.com,FL-0142,A1,16,13,1,1,1,18,5,4,5,5,3,5,4,5,,4,8,76,"Sara asks questions in class without being invited to, which is exactly what Lesson 2 was for. Homework 9 is still missing - hand it in and the total goes above 80."
+Omar Al-Harbi,omar.harbi@example.com,FL-0143,A1,16,15,0,1,0,20,5,5,5,4,5,5,5,5,5,5,9,88,"Excellent attendance and every homework in on time. Push into longer speaking turns next term."
+Layla Mansour,layla.mansour@example.com,FL-0144,A1,16,9,5,1,1,12,4,3,,4,,3,4,,,3,6,52,"Missed five sessions and it shows in the gaps. The work handed in is good - the problem is attendance, not ability."
+Yousef Al-Dosari,yousef.dosari@example.com,FL-0145,A2,16,6,8,1,1,8,3,,,2,,,3,,,2,4,38,"Below 50 and below 60% attendance. Please contact before the next deadline."

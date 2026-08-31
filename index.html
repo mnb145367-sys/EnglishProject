@@ -4556,14 +4556,20 @@
     // ============================================
     // STUDENTS_API_URL - For Statistics page (DO NOT CHANGE)
     const STUDENTS_API_URL = 'https://script.google.com/macros/s/AKfycbwXavfCoGfyCA0moBn4OwmbjGGBk-gHFlYtr9gTSZRdznXD8fHjRqz82MwSFkyYRDIWdw/exec';
-    // LESSON_API_URL - For Lesson data & Top Performer (Your new Apps Script)
-    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbz3QuPL0mzs2MYdPMSoS05Rq98ZtPWItbEzyQOnH2N1iwZPpLX65k9GljFg9d5_2yftUg/exec';
+    // LESSON_API_URL - For Lesson data & Top Performer.
+    // Same deployment as the admin panel (admin.html) and as
+    // FLUENCY_LESSONS_API_URL below — see the note there.
+    const LESSON_API_URL = 'https://script.google.com/macros/s/AKfycbylT1zdc3sRfm4a6dpP3S_9mJg0xnWdyIbsEAD4VsfI0iUoWPXfpt4pkdSJ7c-yiUC4Gw/exec';
 
     // FLUENCY_LESSONS_API_URL - For the Lessons CMS only.
     // This must be the SAME deployment the admin panel (admin.html) uses,
-    // otherwise published lessons will not appear here. The endpoint above is
-    // an older deployment kept for the existing lesson/top-performer features.
-    const FLUENCY_LESSONS_API_URL = 'https://script.google.com/macros/s/AKfycbysZSCdnoTMfRjdgJURef4e-aI1p5CEC3cFv84ogy2HFTKWybHKAVhAOINs232PEfV0jQ/exec';
+    // otherwise published lessons will not appear here.
+    //
+    // A redeploy of Code.gs mints a NEW /macros/s/<id>/exec URL. When that
+    // happens, update this, LESSON_API_URL above, and LESSON_API_URL in
+    // admin.html together — they must always be the same deployment.
+    // STUDENTS_API_URL is a different script and is deliberately left alone.
+    const FLUENCY_LESSONS_API_URL = 'https://script.google.com/macros/s/AKfycbylT1zdc3sRfm4a6dpP3S_9mJg0xnWdyIbsEAD4VsfI0iUoWPXfpt4pkdSJ7c-yiUC4Gw/exec';
     // QUESTIONS_API_URL - For Questions submission (Your new Apps Script)
     const QUESTIONS_API_URL = 'https://script.google.com/macros/s/AKfycby2UDYo82Wzu3BOB85pqk2_Q48MVyv8wgBIjYGxpI9SbKs5Jd0wgnFo5WQ8hnLhw7SH/exec';
     // Global variables

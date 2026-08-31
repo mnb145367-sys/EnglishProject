@@ -1263,6 +1263,7 @@
     <link rel="stylesheet" href="lessons-view.css">
     <link rel="stylesheet" href="lessons-admin.css">
     <link rel="stylesheet" href="student-record.css">
+    <link rel="stylesheet" href="attendance-admin.css">
     <link rel="stylesheet" href="admin-shell.css">
 </head>
 <body>
@@ -1308,6 +1309,9 @@
                     </button>
                     <button class="ash-nav-item" data-tab="submissions" onclick="switchTab('submissions')">
                         <i class="fa-regular fa-file-lines"></i> Submissions
+                    </button>
+                    <button class="ash-nav-item" data-tab="attendance" onclick="switchTab('attendance')">
+                        <i class="fa-regular fa-calendar-check"></i> Attendance
                     </button>
                 </div>
 
@@ -1778,6 +1782,22 @@ discipline – controlled behaviour to achieve a goal</textarea>
                     <div class="sm-count" id="studentCount"></div>
                     <div id="studentsContainer"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- TAB: ATTENDANCE -->
+        <div id="tab-attendance" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-regular fa-calendar-check"></i> Attendance</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    <span>Create a session for every class you teach, mark each student
+                    <strong>P</strong>&nbsp;present, <strong>A</strong>&nbsp;absent,
+                    <strong>L</strong>&nbsp;late or <strong>E</strong>&nbsp;excused, then print the
+                    register, the session log or a single student's report. Present, Late and Excused
+                    all count as attended.</span>
+                </div>
+                <div id="attRoot"></div>
             </div>
         </div>
 
@@ -2335,6 +2355,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             dashboard: 'Dashboard',
             students: 'Students',
             submissions: 'Submissions',
+            attendance: 'Attendance',
             lessons: 'Assignments',
             lesson: 'Lesson Settings',
             content: 'Site Content',
@@ -2373,6 +2394,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             if (tabName === 'messages') loadMessages();
             if (tabName === 'lessons' && typeof loadAdminLessons === 'function') loadAdminLessons();
             if (tabName === 'submissions' && typeof loadSubmissions === 'function') loadSubmissions();
+            if (tabName === 'attendance' && window.FluencyAttendance) FluencyAttendance.load();
             if (tabName === 'dashboard' && typeof loadDashboard === 'function') loadDashboard();
 
             const footerActions = document.querySelector('.footer-actions');
@@ -3263,8 +3285,10 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // record rendered by student-record.js from the existing
         // getStudentDetails action.
         async function openStudent(email) {
-            const s = findStudent(email);
-            if (!s) return;
+            // The record can be opened from the Attendance tab before the Students
+            // tab has ever loaded, so a missing cache entry is not a failure —
+            // getStudentDetails below is the authoritative source either way.
+            const s = findStudent(email) || { email: email, name: '', level: '' };
 
             const modal = document.getElementById('studentModal');
             const body = document.getElementById('studentModalBody');
@@ -3294,7 +3318,8 @@ discipline – controlled behaviour to achieve a goal</textarea>
                 // res.student is the authoritative record; fall back to the cached
                 // row so the panel still renders if the backend omits it.
                 FluencyStudentRecord.render(body, res.student || s, res.recent || [], {
-                    onLevelChange: saveStudentLevel
+                    onLevelChange: saveStudentLevel,
+                    attendance: res.attendance || null
                 });
             } catch (err) {
                 console.warn('getStudentDetails:', err);
@@ -3548,6 +3573,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
     <script src="lessons-view.js"></script>
     <script src="lessons-admin.js"></script>
     <script src="student-record.js"></script>
+    <script src="attendance-admin.js"></script>
     <script src="admin-shell.js"></script>
     <script src="lesson-settings-import.js"></script>
 </body>
