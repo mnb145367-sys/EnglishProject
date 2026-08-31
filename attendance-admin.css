@@ -95,6 +95,31 @@
 .att-pick button.on.L{background:#b57d1f;border-color:#b57d1f;color:#fff;}
 .att-pick button.on.E{background:#3d7cb0;border-color:#3d7cb0;color:#fff;}
 
+/* remove-from-roster control */
+.att-remove{
+  flex:none;width:1.9rem;height:1.9rem;margin-left:.15rem;
+  border:1px solid transparent;border-radius:7px;background:transparent;
+  color:#b9cbe0;font-size:.95rem;cursor:pointer;line-height:1;
+}
+.att-remove:hover{background:#fbeceb;border-color:#eecfcc;color:#b3453a;}
+.att-remove:focus-visible{outline:2px solid #7fb4d9;outline-offset:1px;}
+
+/* manual add form */
+.att-addform{background:#e8f1f8;border-color:#c3d9ea;}
+
+/* hidden students */
+.att-removed{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.45rem;}
+.att-removed-chip{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid #d4e2ee;border-radius:999px;padding:.28rem .4rem .28rem .8rem;
+  background:#f4f8fc;font-size:.82rem;color:#56718c;
+}
+.att-removed-chip button{
+  border:0;border-radius:999px;padding:.22rem .7rem;cursor:pointer;
+  background:#1e5a88;color:#fff;font:inherit;font-size:.74rem;font-weight:600;
+}
+.att-removed-chip button:hover{background:#164c76;}
+
 /* ── overview grid ───────────────────────────────────────────────────────── */
 .att-grid-wrap{overflow-x:auto;border:1px solid #d4e2ee;border-radius:12px;}
 table.att-grid{border-collapse:collapse;width:100%;font-size:.82rem;}

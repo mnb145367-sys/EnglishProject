@@ -1,15 +1,18 @@
 /* ============================================================================
    Fluency — Attendance (admin tab)
 
-   One screen that does three jobs:
+   One screen that does four jobs:
      1. Data entry  — pick a session, mark every student P / A / L / E, save.
-     2. Overview    — the whole term as a grid, every student × every session.
-     3. Print       — the register, the session log, the class summary and a
+     2. Roster      — add a student by hand (they normally only appear after
+                      submitting work), or hide one without losing their data.
+     3. Overview    — the whole term as a grid, every student × every session.
+     4. Print       — the register, the session log, the class summary and a
                       single student's report, all matching the PDF pack.
 
    Backend actions used (all admin-token guarded, see Code.gs):
      getAttendance · saveAttendanceSession · deleteAttendanceSession ·
-     saveAttendanceMarks · getStudents
+     saveAttendanceMarks · getStudents · addStudentManually · removeStudent ·
+     restoreStudent · getRemovedStudents
    ========================================================================== */
 (function (global) {
     'use strict';
@@ -30,7 +33,9 @@
         currentId: null,
         draft: {},                // email -> status, for the open session
         dirty: false,
-        search: ''
+        search: '',
+        addOpen: false,           // manual "add student" form
+        removed: []               // students hidden from the roster
     };
 
     // ── small helpers ────────────────────────────────────────────────────────
@@ -154,7 +159,8 @@
 
         return Promise.all([
             api({ action: 'getAttendance' }),
-            api({ action: 'getStudents' })
+            api({ action: 'getStudents' }),
+            loadRemoved()
         ]).then(function (parts) {
             var att = parts[0];
             state.sessions = att.sessions || [];
@@ -431,6 +437,12 @@
         clearBtn.addEventListener('click', function () { markAll(''); });
         acts.appendChild(clearBtn);
 
+        var addBtn = el('button', 'att-btn');
+        addBtn.appendChild(icon('fa-regular fa-user-plus'));
+        addBtn.appendChild(document.createTextNode(' Add student'));
+        addBtn.addEventListener('click', toggleAddForm);
+        acts.appendChild(addBtn);
+
         var saveMarks = el('button', 'att-btn primary');
         saveMarks.appendChild(icon('fa-regular fa-circle-check'));
         saveMarks.appendChild(document.createTextNode(' Save marks'));
@@ -439,6 +451,7 @@
 
         bar.appendChild(acts);
         box.appendChild(bar);
+        box.appendChild(buildAddForm());
 
         var legend = el('div', 'att-legend');
         legend.style.margin = '.7rem 0';
@@ -459,6 +472,152 @@
         roster.id = 'attRoster';
         box.appendChild(roster);
         paintRoster(roster);
+
+        var removedBlock = buildRemovedBlock();
+        if (removedBlock) box.appendChild(removedBlock);
+
+        return box;
+    }
+
+    /**
+     * Add-student form. Students normally appear only after they submit work,
+     * so this covers the ones who have not submitted yet.
+     */
+    function buildAddForm() {
+        var form = el('div', 'att-bar att-addform');
+        form.id = 'attAddForm';
+        form.style.display = state.addOpen ? '' : 'none';
+        form.style.marginTop = '.6rem';
+
+        var nameWrap = el('div', 'att-grow');
+        nameWrap.appendChild(el('label', null, 'Full name'));
+        var name = el('input');
+        name.type = 'text';
+        name.id = 'attNewName';
+        name.placeholder = 'Abdulaziz Al-Ansari';
+        nameWrap.appendChild(name);
+        form.appendChild(nameWrap);
+
+        var mailWrap = el('div', 'att-grow');
+        mailWrap.appendChild(el('label', null, 'Email'));
+        var mail = el('input');
+        mail.type = 'text';
+        mail.id = 'attNewEmail';
+        mail.placeholder = 'student@example.com';
+        mail.addEventListener('keydown', function (e) { if (e.key === 'Enter') addStudent(); });
+        mailWrap.appendChild(mail);
+        form.appendChild(mailWrap);
+
+        var lvlWrap = el('div');
+        lvlWrap.style.minWidth = '110px';
+        lvlWrap.appendChild(el('label', null, 'Level'));
+        var lvl = el('select');
+        lvl.id = 'attNewLevel';
+        ['', 'A1', 'A2', 'B1', 'B2', 'C1'].forEach(function (v) {
+            var o = el('option', null, v || '—');
+            o.value = v;
+            lvl.appendChild(o);
+        });
+        lvlWrap.appendChild(lvl);
+        form.appendChild(lvlWrap);
+
+        var acts = el('div', 'att-actions');
+        var save = el('button', 'att-btn primary');
+        save.appendChild(icon('fa-regular fa-check'));
+        save.appendChild(document.createTextNode(' Add'));
+        save.addEventListener('click', addStudent);
+        acts.appendChild(save);
+
+        var cancel = el('button', 'att-btn');
+        cancel.textContent = 'Cancel';
+        cancel.addEventListener('click', toggleAddForm);
+        acts.appendChild(cancel);
+        form.appendChild(acts);
+
+        return form;
+    }
+
+    function toggleAddForm() {
+        state.addOpen = !state.addOpen;
+        var f = $('attAddForm');
+        if (f) {
+            f.style.display = state.addOpen ? '' : 'none';
+            if (state.addOpen) { var n = $('attNewName'); if (n) n.focus(); }
+        }
+    }
+
+    function addStudent() {
+        var name = ($('attNewName') || {}).value || '';
+        var email = ($('attNewEmail') || {}).value || '';
+        var level = ($('attNewLevel') || {}).value || '';
+
+        if (!name.trim()) { fail('Enter the student\'s name.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { fail('Enter a valid email.'); return; }
+
+        var exists = state.students.some(function (s) {
+            return s.email.toLowerCase() === email.trim().toLowerCase();
+        });
+        if (exists) { fail('That student is already on the roster.'); return; }
+
+        api({ action: 'addStudentManually', student: { name: name, email: email, level: level } })
+            .then(function () {
+                notify('Student added');
+                state.addOpen = false;
+                return load(true);
+            })
+            .catch(function (err) { fail(err.message || 'Could not add the student.'); });
+    }
+
+    /**
+     * Removing hides the student from the roster. Their submissions and
+     * attendance marks are kept, so a restore brings everything back.
+     */
+    function removeStudent(s) {
+        var msg = 'Remove ' + (s.name || s.email) + ' from the roster?\n\n' +
+            'Their submissions and attendance marks are kept — you can restore them later.';
+        if (!global.confirm(msg)) return;
+
+        api({ action: 'removeStudent', student: { email: s.email, name: s.name } })
+            .then(function () {
+                notify('Student removed');
+                delete state.draft[s.email];
+                return load(true);
+            })
+            .catch(function (err) { fail(err.message || 'Could not remove the student.'); });
+    }
+
+    function loadRemoved() {
+        return api({ action: 'getRemovedStudents' })
+            .then(function (res) { state.removed = res.removed || []; })
+            .catch(function () { state.removed = []; });
+    }
+
+    function restoreStudent(email) {
+        api({ action: 'restoreStudent', student: { email: email } })
+            .then(function () { notify('Student restored'); return load(true); })
+            .catch(function (err) { fail(err.message || 'Could not restore the student.'); });
+    }
+
+    function buildRemovedBlock() {
+        if (!state.removed || !state.removed.length) return null;
+
+        var box = el('div');
+        box.style.marginTop = '.8rem';
+        var head = el('div', 'att-sub');
+        head.innerHTML = '<b>' + state.removed.length + '</b> student' +
+            (state.removed.length === 1 ? '' : 's') + ' hidden from the roster';
+        box.appendChild(head);
+
+        var list = el('div', 'att-removed');
+        state.removed.forEach(function (r) {
+            var chip = el('span', 'att-removed-chip');
+            chip.appendChild(document.createTextNode(r.name || r.email));
+            var btn = el('button', null, 'Restore');
+            btn.addEventListener('click', function () { restoreStudent(r.email); });
+            chip.appendChild(btn);
+            list.appendChild(chip);
+        });
+        box.appendChild(list);
         return box;
     }
 
@@ -518,6 +677,14 @@
             pick.appendChild(b);
         });
         row.appendChild(pick);
+
+        var del = el('button', 'att-remove');
+        del.title = 'Remove ' + (s.name || s.email) + ' from the roster';
+        del.setAttribute('aria-label', del.title);
+        del.appendChild(icon('fa-regular fa-xmark'));
+        del.addEventListener('click', function () { removeStudent(s); });
+        row.appendChild(del);
+
         return row;
     }
 
@@ -1045,6 +1212,7 @@
         printSessionLog: printSessionLog,
         printSummary: printSummary,
         printStudentReport: printStudentReport,
+        addStudent: addStudent,
         isDirty: function () { return state.dirty; }
     };
 })(window);
