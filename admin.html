@@ -3077,17 +3077,37 @@ discipline – controlled behaviour to achieve a goal</textarea>
         // retried - only the transport-level ones worth a second attempt.
         const ADMIN_FETCH_RETRIES = 2;
         const ADMIN_RETRY_STATUS = [404, 429, 500, 502, 503, 504];
+        const ADMIN_FETCH_TIMEOUT_MS = 25000;
+        // Retrying helps a one-off blip. When the endpoint is down it just
+        // triples the wait on every single call, so after this many failures in
+        // a row we stop retrying and fail fast until one call succeeds again.
+        const ADMIN_TRIP_AFTER = 3;
+        let adminConsecutiveFailures = 0;
 
         function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function adminFetchOnce(url, body) {
+            // Without a timeout a hung request holds the panel open indefinitely.
+            if (typeof AbortController === 'undefined') {
+                return fetch(url, body);
+            }
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ADMIN_FETCH_TIMEOUT_MS);
+            return fetch(url, Object.assign({}, body, { signal: ctrl.signal }))
+                .finally(() => clearTimeout(timer));
+        }
 
         async function adminFetch(payload, tokenOverride) {
             const token = tokenOverride !== undefined ? tokenOverride : ADMIN_TOKEN;
             let lastErr;
+            // Circuit is open: the endpoint has failed repeatedly, so make one
+            // attempt instead of three and let the caller show its error now.
+            const budget = adminConsecutiveFailures >= ADMIN_TRIP_AFTER ? 0 : ADMIN_FETCH_RETRIES;
 
-            for (let attempt = 0; attempt <= ADMIN_FETCH_RETRIES; attempt++) {
+            for (let attempt = 0; attempt <= budget; attempt++) {
                 if (attempt) await wait(400 * Math.pow(2, attempt - 1));
                 try {
-                    const res = await fetch(LESSON_API_URL, {
+                    const res = await adminFetchOnce(LESSON_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify(Object.assign({}, payload, { adminToken: token })),
@@ -3097,18 +3117,25 @@ discipline – controlled behaviour to achieve a goal</textarea>
                         const err = new Error('HTTP ' + res.status);
                         err.status = res.status;
                         if (ADMIN_RETRY_STATUS.indexOf(res.status) !== -1 &&
-                            attempt < ADMIN_FETCH_RETRIES) { lastErr = err; continue; }
+                            attempt < budget) { lastErr = err; continue; }
+                        adminConsecutiveFailures++;
                         throw err;
                     }
-                    return await res.json();
+                    const parsed = await res.json();
+                    adminConsecutiveFailures = 0;   // healthy again
+                    return parsed;
                 } catch (err) {
                     // A dropped connection is worth another try; a thrown HTTP
                     // error we already decided not to retry is not.
-                    if (err && err.status && ADMIN_RETRY_STATUS.indexOf(err.status) === -1) throw err;
+                    if (err && err.status && ADMIN_RETRY_STATUS.indexOf(err.status) === -1) {
+                        adminConsecutiveFailures++;
+                        throw err;
+                    }
                     lastErr = err;
-                    if (attempt === ADMIN_FETCH_RETRIES) throw err;
+                    if (attempt === budget) { adminConsecutiveFailures++; throw err; }
                 }
             }
+            adminConsecutiveFailures++;
             throw lastErr || new Error('Request failed');
         }
 
