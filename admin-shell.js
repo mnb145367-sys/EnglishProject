@@ -166,7 +166,14 @@
         }
         return global.adminFetch(payload).then(function (res) {
             if (!res || typeof res !== 'object') throw new Error('Unexpected response.');
-            if (!res.success) throw new Error(res.error || 'Request failed.');
+            if (!res.success) {
+                var e = new Error(res.error || 'Request failed.');
+                // The server sends the real cause in `detail`; keep it on the
+                // error so the panel catches can log something diagnosable.
+                e.detail = res.detail || '';
+                e.action = res.action || (payload && payload.action) || '';
+                throw e;
+            }
             return res;
         });
     }
@@ -182,19 +189,50 @@
 
         // Students and lessons are needed for the KPI row; submissions drive the
         // chart, the activity feed and the recent table.
-        var studentsP = callApi({ action: 'getStudents' })
-            .then(function (r) { return r.students || []; })
-            .catch(function () { return null; });
+        // A panel that cannot load degrades to an empty state rather than taking
+        // the whole dashboard down, but the reason is logged - otherwise
+        // "Activity unavailable" is all anyone ever sees.
+        function reportFailure(what) {
+            return function (err) {
+                console.error('[admin] ' + what + ' failed:',
+                    (err && err.detail) || (err && err.message) || err);
+                return null;
+            };
+        }
 
-        var lessonsP = callApi({ action: 'adminGetLessons' })
-            .then(function (r) { global.__ashLessons = r.data || []; return r.data || []; })
-            .catch(function () { return null; });
+        // One request instead of three. Apps Script runs a user's executions one
+        // at a time, so three "parallel" calls queue behind each other and pay
+        // the startup cost three times over.
+        var bundleP = callApi({
+            action: 'getAdminBundle',
+            parts: ['students', 'lessons', 'submissions']
+        }).then(function (r) {
+            if (r.errors) {
+                Object.keys(r.errors).forEach(function (k) {
+                    console.error('[admin] bundle part ' + k + ' failed:', r.errors[k]);
+                });
+            }
+            global.__ashLessons = r.lessons || [];
+            return [r.students || null, r.lessons || null, r.submissions || null];
+        }).catch(function (err) {
+            // An older deployment does not know this action. Fall back to the
+            // separate calls so the panel still works before Code.gs is updated.
+            console.warn('[admin] bundle unavailable, falling back:',
+                (err && err.detail) || (err && err.message) || err);
+            return Promise.all([
+                callApi({ action: 'getStudents' })
+                    .then(function (r) { return r.students || []; })
+                    .catch(reportFailure('getStudents')),
+                callApi({ action: 'adminGetLessons' })
+                    .then(function (r) { global.__ashLessons = r.data || []; return r.data || []; })
+                    .catch(reportFailure('adminGetLessons')),
+                callApi({ action: 'getRecentSubmissions', limit: 200 })
+                    .then(function (r) { return r.submissions || []; })
+                    .catch(reportFailure('getRecentSubmissions'))
+            ]);
+        });
 
-        var subsP = callApi({ action: 'getRecentSubmissions', limit: 200 })
-            .then(function (r) { return r.submissions || []; })
-            .catch(function () { return null; });
-
-        Promise.all([studentsP, lessonsP, subsP]).then(function (parts) {
+        bundleP.then(function (parts) {
             var students = parts[0], lessons = parts[1], subs = parts[2];
             shellState.dashboardLoaded = true;
 
@@ -546,9 +584,11 @@
                 }
             })
             .catch(function (err) {
+                console.error('[admin] getRecentSubmissions failed:',
+                    (err && err.detail) || (err && err.message) || err);
                 clearNode(host);
                 var box = emptyState('fa-regular fa-circle-exclamation', 'Unable to load submissions',
-                    (err && err.message) || 'Please try again.');
+                    (err && err.detail) || (err && err.message) || 'Please try again.');
                 var retry = el('button', 'btn btn-primary');
                 retry.type = 'button';
                 retry.textContent = 'Retry';

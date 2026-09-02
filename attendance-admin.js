@@ -157,11 +157,29 @@
         state.loading = true;
         renderLoading();
 
-        return Promise.all([
-            api({ action: 'getAttendance' }),
-            api({ action: 'getStudents' }),
-            loadRemoved()
-        ]).then(function (parts) {
+        // One request instead of three - Apps Script queues a user's executions,
+        // so the separate calls used to run back to back.
+        return api({
+            action: 'getAdminBundle',
+            parts: ['attendance', 'students', 'removed']
+        }).then(function (r) {
+            if (r.errors) {
+                Object.keys(r.errors).forEach(function (k) {
+                    console.error('[attendance] bundle part ' + k + ' failed:', r.errors[k]);
+                });
+            }
+            state.removed = r.removed || [];
+            return [r.attendance || {}, { students: r.students || [] }];
+        }).catch(function (err) {
+            // Older deployment without the bundle action - use the old calls.
+            console.warn('[attendance] bundle unavailable, falling back:',
+                (err && err.message) || err);
+            return Promise.all([
+                api({ action: 'getAttendance' }),
+                api({ action: 'getStudents' }),
+                loadRemoved()
+            ]);
+        }).then(function (parts) {
             var att = parts[0];
             state.sessions = att.sessions || [];
             state.marks = att.marks || [];
