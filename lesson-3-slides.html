@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Fluency - Lesson 3</title><style>
+:root{
+  --ink:#0d1620;
+  --navy:#123a5c;
+  --navy-2:#1e5a88;
+  --blue:#3d7cb0;
+  --sky:#7fb4d9;
+  --pale:#e8f1f8;
+  --pale-2:#f4f8fc;
+  --green:#2f8a63;
+  --green-pale:#e7f4ee;
+  --amber:#b57d1f;
+  --amber-pale:#fdf4e3;
+  --muted:#56718c;
+  --line:#d4e2ee;
+  --paper:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+@page{ size:1280px 720px; margin:0; }
+html,body{background:#7089a3;}
+body{
+  font-family:"Segoe UI","Calibri","Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:relative;
+  width:1280px; height:720px;
+  background:var(--paper);
+  overflow:hidden;
+  page-break-after:always;
+  break-after:page;
+  display:flex; flex-direction:column;
+}
+.slide:last-child{page-break-after:auto;break-after:auto;}
+
+/* ---------- chrome: header + footer ---------- */
+.hdr{
+  position:absolute; top:0; left:0; right:0; height:74px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 64px;
+  border-bottom:1px solid var(--line);
+}
+.hdr .brand{
+  font-size:17px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--navy-2);
+}
+.hdr .brand span{color:var(--sky); margin:0 8px;}
+.hdr .tag{
+  font-size:14px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted);
+}
+.ftr{
+  position:absolute; bottom:0; left:0; right:0; height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 64px;
+  font-size:13px; color:#8ba2b8; letter-spacing:.06em;
+}
+.ftr .num{font-weight:700; color:var(--blue); font-size:15px;}
+
+/* ---------- body area ---------- */
+.body{
+  flex:1; padding:110px 64px 74px 64px;
+  display:flex; flex-direction:column;
+}
+h1.title{
+  font-size:44px; line-height:1.1; font-weight:700; letter-spacing:-.02em;
+  color:var(--navy);
+}
+.title-rule{width:64px;height:5px;background:var(--sky);border-radius:3px;margin:15px 0 24px;}
+.sub{font-size:21px;color:var(--muted);line-height:1.45;max-width:900px;margin-bottom:24px;}
+.kicker{
+  font-size:14px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:12px;
+}
+
+/* ---------- cover ---------- */
+.cover{background:linear-gradient(150deg,#0d2b45 0%,#123a5c 45%,#1e5a88 100%);color:#fff;}
+.cover .glow{
+  position:absolute;width:900px;height:900px;border-radius:50%;
+  right:-320px;top:-380px;
+  background:radial-gradient(circle,rgba(127,180,217,.30) 0%,rgba(127,180,217,0) 68%);
+}
+.cover .glow2{
+  position:absolute;width:620px;height:620px;border-radius:50%;
+  left:-240px;bottom:-300px;
+  background:radial-gradient(circle,rgba(111,206,159,.20) 0%,rgba(111,206,159,0) 70%);
+}
+.cover .inner{position:relative;padding:0 84px;height:100%;display:flex;flex-direction:column;justify-content:center;}
+.cover .logo{font-size:21px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#bcd9ef;}
+.cover .logo b{color:#fff;}
+.cover h1{font-size:86px;line-height:1.02;font-weight:700;letter-spacing:-.035em;margin:32px 0 0;}
+.cover h1 em{font-style:normal;color:var(--sky);}
+.cover .lede{font-size:25px;color:#c3dbee;margin-top:26px;max-width:780px;line-height:1.5;}
+.cover .meta{display:flex;gap:14px;margin-top:44px;}
+.pill{
+  border:1px solid rgba(255,255,255,.35);border-radius:999px;
+  padding:10px 22px;font-size:15px;font-weight:600;letter-spacing:.05em;color:#dcecf8;
+}
+.pill.solid{background:var(--sky);border-color:var(--sky);color:#0d2b45;}
+
+/* ---------- section divider ---------- */
+.section{background:linear-gradient(140deg,#123a5c 0%,#1e5a88 100%);color:#fff;}
+.section .inner{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 96px;}
+.section .glow{
+  position:absolute;width:760px;height:760px;border-radius:50%;right:-280px;bottom:-340px;
+  background:radial-gradient(circle,rgba(127,180,217,.28) 0%,rgba(127,180,217,0) 70%);
+}
+.section .no{font-size:16px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--sky);}
+.section h2{font-size:72px;font-weight:700;letter-spacing:-.03em;margin-top:18px;line-height:1.05;}
+.section p{font-size:23px;color:#c3dbee;margin-top:22px;max-width:740px;line-height:1.5;}
+.section .rule{width:86px;height:5px;background:var(--sky);border-radius:3px;margin-top:32px;}
+
+/* ---------- generic blocks ---------- */
+.cols{display:flex;gap:34px;}
+.cols.fill{flex:1;}
+.col{flex:1;}
+.cols.eq{align-items:stretch;}
+.cols.eq .col{display:flex;flex-direction:column;}
+.cols.eq .card{flex:1;}
+.card{
+  background:var(--pale-2);border:1px solid var(--line);border-radius:16px;
+  padding:26px 28px;
+}
+.card.accent{background:var(--pale);border-color:#c9deee;}
+.card h3{font-size:21px;color:var(--navy);margin-bottom:12px;font-weight:700;}
+
+/* forms table (I -> am) */
+.forms{display:flex;gap:22px;}
+.form-card{
+  flex:1;background:var(--pale-2);border:1px solid var(--line);
+  border-top:5px solid var(--sky);border-radius:14px;
+  padding:28px 24px;text-align:center;
+}
+.form-card .who{font-size:23px;color:var(--muted);line-height:1.4;font-weight:600;min-height:64px;display:flex;align-items:center;justify-content:center;}
+.form-card .arrow{font-size:20px;color:var(--sky);margin:8px 0 6px;}
+.form-card .verb{font-size:54px;font-weight:700;color:var(--navy-2);letter-spacing:-.02em;}
+
+/* example sentence list */
+.ex{list-style:none;}
+.ex li{
+  font-size:26px;line-height:1.35;color:var(--ink);
+  padding:14px 0 14px 28px;border-left:4px solid var(--sky);
+  margin-bottom:13px;background:linear-gradient(90deg,var(--pale-2),rgba(255,255,255,0));
+  border-radius:0 10px 10px 0;
+}
+.ex li b{color:var(--navy-2);font-weight:700;}
+.ex.tight li{font-size:23px;padding:11px 0 11px 24px;margin-bottom:10px;}
+
+/* transformation pairs (long -> short) */
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:13px 34px;}
+.pair{
+  display:flex;align-items:center;gap:14px;
+  background:var(--pale-2);border:1px solid var(--line);border-radius:12px;
+  padding:14px 20px;
+}
+.pair .a{font-size:22px;color:var(--muted);min-width:126px;}
+.pair .to{color:var(--sky);font-size:19px;font-weight:700;}
+.pair .b{font-size:24px;font-weight:700;color:var(--navy-2);}
+
+/* callout note */
+.note{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--amber-pale);border:1px solid #efdcb4;border-left:5px solid var(--amber);
+  border-radius:12px;padding:19px 24px;
+}
+.note.push{margin-top:auto;}
+.note .ico{
+  flex:0 0 30px;height:30px;border-radius:50%;background:var(--amber);color:#fff;
+  font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+.note p{font-size:20px;line-height:1.45;color:#6b4d10;}
+.note p b{color:#4d3708;}
+
+.note.green{background:var(--green-pale);border-color:#bfe3d0;border-left-color:var(--green);}
+.note.green .ico{background:var(--green);}
+.note.green p{color:#1d5a3d;}
+.note.green p b{color:#134029;}
+
+/* objectives */
+.obj{list-style:none;display:grid;grid-template-columns:1fr;gap:15px;}
+.obj li{display:flex;gap:20px;align-items:flex-start;font-size:23px;line-height:1.4;color:#20364b;}
+.obj .n{
+  flex:0 0 42px;height:42px;border-radius:12px;background:var(--pale);
+  color:var(--navy-2);font-size:18px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* vocabulary */
+.vocab{display:grid;grid-template-columns:1fr 1fr;gap:15px 24px;}
+.v{border:1px solid var(--line);border-radius:14px;padding:16px 20px;background:var(--paper);}
+.v .w{font-size:23px;font-weight:700;color:var(--navy-2);}
+.v .p{font-size:16px;color:var(--sky);font-weight:600;margin-left:9px;}
+.v .m{font-size:17px;color:var(--muted);margin-top:3px;line-height:1.35;}
+.v .e{font-size:17px;color:#33506b;margin-top:6px;font-style:italic;}
+.vocab.dense{gap:11px 20px;}
+.vocab.dense .v{padding:11px 18px;}
+.vocab.dense .w{font-size:21px;}
+.vocab.dense .p{font-size:15px;}
+.vocab.dense .m{font-size:16px;}
+.vocab.dense .e{font-size:16px;margin-top:4px;}
+
+/* bilingual examples */
+.bi{display:grid;grid-template-columns:1fr;gap:11px;}
+.bi .row{
+  display:flex;align-items:center;justify-content:space-between;gap:30px;
+  border:1px solid var(--line);border-radius:12px;padding:14px 24px;background:var(--pale-2);
+}
+.bi .en{font-size:23px;color:var(--ink);font-weight:600;}
+.bi .ar{font-size:23px;color:var(--navy-2);direction:rtl;font-family:"Segoe UI","Tahoma",sans-serif;}
+
+/* practice */
+.q{list-style:none;counter-reset:q;}
+.q li{
+  counter-increment:q;position:relative;padding-left:54px;
+  font-size:23px;line-height:1.4;margin-bottom:16px;color:#20364b;
+}
+.q li::before{
+  content:counter(q);position:absolute;left:0;top:0;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--navy-2);color:#fff;font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.q.two{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
+.blank{color:var(--sky);letter-spacing:.06em;font-weight:700;}
+.ans{color:var(--green);font-weight:700;}
+.ans-list{list-style:none;counter-reset:a;display:grid;grid-template-columns:1fr 1fr;gap:11px 32px;}
+.ans-list li{
+  counter-increment:a;display:flex;gap:13px;font-size:20px;line-height:1.35;color:#20364b;
+  border-bottom:1px solid var(--line);padding-bottom:9px;
+}
+.ans-list li::before{
+  content:counter(a);flex:0 0 28px;height:28px;border-radius:50%;
+  background:var(--green-pale);color:var(--green);font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.ans-list.dense{gap:8px 30px;}
+.ans-list.dense li{font-size:18px;padding-bottom:7px;gap:11px;}
+.ans-list.dense li::before{flex:0 0 25px;height:25px;font-size:13px;}
+
+/* quote slide */
+.quote{background:linear-gradient(140deg,#0d2b45,#1e5a88);color:#fff;}
+.quote .inner{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 150px;text-align:center;position:relative;}
+.quote .mark{font-size:140px;line-height:.6;color:rgba(127,180,217,.45);font-family:Georgia,serif;}
+.quote blockquote{font-size:42px;line-height:1.3;font-weight:600;letter-spacing:-.02em;margin-top:30px;}
+.quote .who{margin-top:34px;font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--sky);}
+
+/* reading slide */
+.read{font-size:19px;line-height:1.6;color:#26404f;column-count:2;column-gap:52px;text-align:justify;}
+.read p{margin-bottom:14px;}
+.read p:first-child::first-letter{
+  font-size:54px;float:left;line-height:.86;padding:4px 12px 0 0;color:var(--navy-2);font-weight:700;
+}
+
+/* homework */
+.hw{display:flex;gap:30px;flex:1;}
+.hw .tasks{flex:1.4;}
+.hw .facts{flex:.6;display:flex;flex-direction:column;gap:11px;}
+.fact{
+  border:1px solid var(--line);border-radius:14px;padding:14px 20px;background:var(--pale-2);
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+}
+.fact .l{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;white-space:nowrap;}
+.fact .val{font-size:23px;font-weight:700;color:var(--navy-2);text-align:right;line-height:1.25;}
+.fact.stack{flex-direction:column;align-items:flex-start;gap:4px;}
+.fact.stack .val{text-align:left;font-size:19px;}
+.fact.hi{background:var(--green-pale);border-color:#bfe3d0;}
+.fact.hi .val{color:var(--green);}
+.task{display:flex;gap:15px;margin-bottom:14px;font-size:20px;line-height:1.42;color:#20364b;}
+.task .n{flex:0 0 32px;height:32px;border-radius:9px;background:var(--pale);color:var(--navy-2);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;}
+
+/* end slide */
+.end{background:linear-gradient(150deg,#0d2b45 0%,#123a5c 55%,#1e5a88 100%);color:#fff;}
+.end .inner{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;}
+.end h2{font-size:64px;font-weight:700;letter-spacing:-.03em;}
+.end p{font-size:24px;color:#c3dbee;margin-top:22px;max-width:680px;line-height:1.5;}
+.end .logo{margin-top:50px;font-size:16px;letter-spacing:.34em;text-transform:uppercase;color:var(--sky);}
+
+</style></head><body>
+<!-- 1 COVER -->
+<section class="slide cover">
+  <div class="glow"></div><div class="glow2"></div>
+  <div class="inner">
+    <div class="logo">Fluency <b>&bull;</b> Language Mastery</div>
+    <h1>I am doing<br><em>the present continuous</em></h1>
+    <p class="lede">Lesson 3 &mdash; how to say what is happening right now: I&rsquo;m working, it&rsquo;s raining, they&rsquo;re playing football.</p>
+    <div class="meta">
+      <span class="pill solid">Level A1 &middot; Beginner</span>
+      <span class="pill">Lesson 3</span>
+      <span class="pill">25 minutes</span>
+      <span class="pill">Student Slides</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 SECTION -->
+<section class="slide section">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="no">Lesson Three</div>
+    <h2>I am doing</h2>
+    <p>You already know am, is and are. Add one more word and you can describe everything happening around you.</p>
+    <div class="rule"></div>
+  </div>
+</section>
+
+<!-- 3 OBJECTIVES -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Present continuous</div></div>
+  <div class="body">
+    <div class="kicker">By the end of this lesson</div>
+    <h1 class="title">What you will be able to do</h1>
+    <div class="title-rule"></div>
+    <ul class="obj">
+      <li><span class="n">1</span><span>Build the present continuous with <b>am / is / are</b> + <b>-ing</b></span></li>
+      <li><span class="n">2</span><span>Use it for actions happening <b>now</b>, at the moment of speaking</span></li>
+      <li><span class="n">3</span><span>Make negatives: <b>I&rsquo;m not working</b> &middot; <b>She isn&rsquo;t eating</b> &middot; <b>They aren&rsquo;t walking</b></span></li>
+      <li><span class="n">4</span><span>Spell <b>-ing</b> forms correctly (come &rarr; coming, run &rarr; running, lie &rarr; lying)</span></li>
+      <li><span class="n">5</span><span>Describe a picture or a scene in English using <b>-ing</b> verbs</span></li>
+    </ul>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">03</span></div>
+</section>
+
+<!-- 4 THE FORM -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">The form</div></div>
+  <div class="body">
+    <h1 class="title">am / is / are + <span style="color:var(--blue)">-ing</span></h1>
+    <div class="title-rule"></div>
+    <p class="sub">Take the verb you already know &mdash; am, is or are &mdash; and add a second verb with <b>-ing</b> on the end.</p>
+    <div class="forms">
+      <div class="form-card">
+        <div class="who">I</div>
+        <div class="arrow">&darr;</div>
+        <div class="verb">am</div>
+        <div class="who" style="min-height:auto;font-size:20px;margin-top:8px;color:var(--blue)">+ working</div>
+      </div>
+      <div class="form-card">
+        <div class="who">he, she, it</div>
+        <div class="arrow">&darr;</div>
+        <div class="verb">is</div>
+        <div class="who" style="min-height:auto;font-size:20px;margin-top:8px;color:var(--blue)">+ eating</div>
+      </div>
+      <div class="form-card">
+        <div class="who">we, you, they</div>
+        <div class="arrow">&darr;</div>
+        <div class="verb">are</div>
+        <div class="who" style="min-height:auto;font-size:20px;margin-top:8px;color:var(--blue)">+ running</div>
+      </div>
+    </div>
+    <div class="note push"><div class="ico">!</div><p>The <b>-ing</b> verb never changes. Only <b>am / is / are</b> changes.</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">04</span></div>
+</section>
+
+<!-- 5 EXAMPLES -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Examples</div></div>
+  <div class="body">
+    <h1 class="title">Two words, one meaning</h1>
+    <div class="title-rule"></div>
+    <ul class="ex tight">
+      <li>I <b>am working</b>.</li>
+      <li>She <b>is eating</b>.</li>
+      <li>They <b>are running</b>.</li>
+      <li>The bus <b>is coming</b>.</li>
+      <li>Maria <b>is reading</b> a newspaper.</li>
+      <li>The children <b>are doing</b> their homework.</li>
+    </ul>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">05</span></div>
+</section>
+
+<!-- 6 WHAT IT MEANS -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Meaning</div></div>
+  <div class="body">
+    <div class="kicker">The most important idea</div>
+    <h1 class="title">It means <span style="color:var(--blue)">now</span></h1>
+    <div class="title-rule"></div>
+    <p class="sub">Something is happening at this moment &mdash; while you are speaking.</p>
+    <ul class="ex tight">
+      <li>Please be quiet. <b>I&rsquo;m working</b>. <span style="color:var(--muted);font-size:19px">(= I&rsquo;m working now)</span></li>
+      <li>Look, there&rsquo;s Sarah. <b>She&rsquo;s wearing</b> a brown coat. <span style="color:var(--muted);font-size:19px">(= she is wearing it now)</span></li>
+      <li>The weather is nice. <b>It&rsquo;s not raining</b>.</li>
+      <li>&ldquo;Where are the children?&rdquo; &ldquo;<b>They&rsquo;re playing</b> in the park.&rdquo;</li>
+    </ul>
+    <div class="note green push"><div class="ico">&#10003;</div><p>If you can point at it and it is still moving &mdash; use <b>am / is / are + -ing</b>.</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">06</span></div>
+</section>
+
+<!-- 7 ON THE PHONE -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">In real life</div></div>
+  <div class="body">
+    <h1 class="title">Where you will hear it</h1>
+    <div class="title-rule"></div>
+    <p class="sub">This is the tense of the phone call, the window and the photograph &mdash; any time the other person cannot see what you see.</p>
+    <div class="cols eq fill">
+      <div class="col">
+        <div class="card accent">
+          <h3>On the phone</h3>
+          <ul class="ex tight" style="margin-top:4px">
+            <li><b>We&rsquo;re having</b> dinner now. Can I call you later?</li>
+            <li>You can turn off the television. <b>I&rsquo;m not watching</b> it.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card accent">
+          <h3>Looking out of a window</h3>
+          <ul class="ex tight" style="margin-top:4px">
+            <li><b>It&rsquo;s raining</b>. The sun <b>isn&rsquo;t shining</b>.</li>
+            <li>Look! Somebody <b>is swimming</b> in the river.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">07</span></div>
+</section>
+
+<!-- 8 NEGATIVES -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Negatives</div></div>
+  <div class="body">
+    <h1 class="title">Saying what is <span style="color:var(--blue)">not</span> happening</h1>
+    <div class="title-rule"></div>
+    <p class="sub">Put <b>not</b> after am, is or are &mdash; exactly as you did in Lesson 1. Nothing else moves.</p>
+    <ul class="ex">
+      <li><b>I&rsquo;m not</b> watching TV.</li>
+      <li>She <b>isn&rsquo;t</b> eating. <span style="color:var(--muted);font-size:20px">(or She&rsquo;s not eating.)</span></li>
+      <li>You <b>aren&rsquo;t</b> listening to me. <span style="color:var(--muted);font-size:20px">(or You&rsquo;re not listening.)</span></li>
+      <li>They <b>aren&rsquo;t</b> walking. They&rsquo;re running.</li>
+    </ul>
+    <div class="note push"><div class="ico">!</div><p>With <b>I</b> there is only one form: <b>I&rsquo;m not</b>. There is no &ldquo;I amn&rsquo;t&rdquo;.</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">08</span></div>
+</section>
+
+<!-- 9 SPELLING -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Spelling</div></div>
+  <div class="body">
+    <h1 class="title">Spelling the -ing form</h1>
+    <div class="title-rule"></div>
+    <p class="sub">Most verbs simply take <b>-ing</b>: play &rarr; playing, eat &rarr; eating, watch &rarr; watching. There are three small changes to learn.</p>
+    <div class="cols">
+      <div class="col">
+        <div class="kicker" style="font-size:13px">1 &middot; Verbs ending in -e lose the e</div>
+        <div class="pairs" style="grid-template-columns:1fr">
+          <div class="pair"><span class="a">come</span><span class="to">&rarr;</span><span class="b">coming</span></div>
+          <div class="pair"><span class="a">write</span><span class="to">&rarr;</span><span class="b">writing</span></div>
+          <div class="pair"><span class="a">dance</span><span class="to">&rarr;</span><span class="b">dancing</span></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="kicker" style="font-size:13px">2 &middot; Short verbs double the last letter</div>
+        <div class="pairs" style="grid-template-columns:1fr">
+          <div class="pair"><span class="a">run</span><span class="to">&rarr;</span><span class="b">running</span></div>
+          <div class="pair"><span class="a">sit</span><span class="to">&rarr;</span><span class="b">sitting</span></div>
+          <div class="pair"><span class="a">swim</span><span class="to">&rarr;</span><span class="b">swimming</span></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="kicker" style="font-size:13px">3 &middot; Verbs ending in -ie become -ying</div>
+        <div class="pairs" style="grid-template-columns:1fr">
+          <div class="pair"><span class="a">lie</span><span class="to">&rarr;</span><span class="b">lying</span></div>
+          <div class="pair"><span class="a">die</span><span class="to">&rarr;</span><span class="b">dying</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note push"><div class="ico">!</div><p>Do <b>not</b> drop the e in verbs like <b>see &rarr; seeing</b> or <b>agree &rarr; agreeing</b>. Only a silent e disappears.</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">09</span></div>
+</section>
+
+<!-- 10 DESCRIBING -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Describing</div></div>
+  <div class="body">
+    <div class="kicker">Your most useful skill this week</div>
+    <h1 class="title">Describing what you see</h1>
+    <div class="title-rule"></div>
+    <p class="sub" style="margin-bottom:6px">This is the tense you use to describe a photo, a picture or a scene in front of you.</p>
+    <ul class="ex tight">
+      <li><b>She&rsquo;s eating</b> an apple.</li>
+      <li><b>He&rsquo;s waiting</b> for a bus.</li>
+      <li><b>They&rsquo;re playing</b> football.</li>
+      <li><b>He&rsquo;s lying</b> on the floor.</li>
+      <li><b>They&rsquo;re having</b> breakfast.</li>
+      <li><b>She&rsquo;s sitting</b> on the table.</li>
+    </ul>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">10</span></div>
+</section>
+
+<!-- 11 VOCAB -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Vocabulary</div></div>
+  <div class="body">
+    <div class="kicker">New words</div>
+    <h1 class="title">Vocabulary</h1>
+    <div class="title-rule"></div>
+    <div class="vocab dense">
+      <div class="v"><div class="w">wait<span class="p">/we&#618;t/</span></div><div class="m">to stay in one place until something happens</div><div class="e">He&rsquo;s waiting for a bus.</div></div>
+      <div class="v"><div class="w">lie<span class="p">/la&#618;/</span></div><div class="m">to be flat on a bed, the floor or the ground</div><div class="e">He&rsquo;s lying on the floor.</div></div>
+      <div class="v"><div class="w">shine<span class="p">/&#643;a&#618;n/</span></div><div class="m">to give light</div><div class="e">The sun isn&rsquo;t shining today.</div></div>
+      <div class="v"><div class="w">stand<span class="p">/st&aelig;nd/</span></div><div class="m">to be on your feet, not sitting</div><div class="e">You&rsquo;re standing on my foot.</div></div>
+      <div class="v"><div class="w">laugh<span class="p">/l&#593;&#720;f/</span></div><div class="m">to make a sound because something is funny</div><div class="e">She isn&rsquo;t laughing.</div></div>
+      <div class="v"><div class="w">at the moment<span class="p">/&#601;t &eth;&#601; &#712;m&#601;&#650;m&#601;nt/</span></div><div class="m">now</div><div class="e">They&rsquo;re building a new hotel at the moment.</div></div>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">11</span></div>
+</section>
+
+<!-- 12 BILINGUAL -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Examples</div></div>
+  <div class="body">
+    <div class="kicker">English &middot; &#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</div>
+    <h1 class="title">Sentences to remember</h1>
+    <div class="title-rule"></div>
+    <div class="bi" style="gap:9px">
+      <div class="row"><span class="en">Please be quiet. I&rsquo;m working.</span><span class="ar">&#1605;&#1606; &#1601;&#1590;&#1604;&#1603; &#1575;&#1607;&#1583;&#1571;. &#1571;&#1606;&#1575; &#1571;&#1593;&#1605;&#1604; &#1575;&#1604;&#1570;&#1606;.</span></div>
+      <div class="row"><span class="en">It&rsquo;s raining. The sun isn&rsquo;t shining.</span><span class="ar">&#1573;&#1606;&#1607;&#1575; &#1578;&#1605;&#1591;&#1585;. &#1575;&#1604;&#1588;&#1605;&#1587; &#1604;&#1575; &#1578;&#1588;&#1585;&#1602;.</span></div>
+      <div class="row"><span class="en">They&rsquo;re running. They aren&rsquo;t walking.</span><span class="ar">&#1607;&#1605; &#1610;&#1585;&#1603;&#1590;&#1608;&#1606;. &#1607;&#1605; &#1604;&#1575; &#1610;&#1605;&#1588;&#1608;&#1606;.</span></div>
+      <div class="row"><span class="en">Where are the children? &mdash; They&rsquo;re playing in the park.</span><span class="ar">&#1571;&#1610;&#1606; &#1575;&#1604;&#1571;&#1591;&#1601;&#1575;&#1604;&#1567; &#8212; &#1573;&#1606;&#1607;&#1605; &#1610;&#1604;&#1593;&#1576;&#1608;&#1606; &#1601;&#1610; &#1575;&#1604;&#1581;&#1583;&#1610;&#1602;&#1577;.</span></div>
+      <div class="row"><span class="en">We&rsquo;re having dinner now. Can I call you later?</span><span class="ar">&#1606;&#1581;&#1606; &#1606;&#1578;&#1606;&#1575;&#1608;&#1604; &#1575;&#1604;&#1593;&#1588;&#1575;&#1569; &#1575;&#1604;&#1570;&#1606;. &#1607;&#1604; &#1610;&#1605;&#1603;&#1606;&#1606;&#1610; &#1575;&#1604;&#1575;&#1578;&#1589;&#1575;&#1604; &#1576;&#1603; &#1604;&#1575;&#1581;&#1602;&#1611;&#1575;&#1567;</span></div>
+      <div class="row"><span class="en">Look! Somebody is swimming in the river.</span><span class="ar">&#1575;&#1606;&#1592;&#1585;! &#1588;&#1582;&#1589; &#1605;&#1575; &#1610;&#1587;&#1576;&#1581; &#1601;&#1610; &#1575;&#1604;&#1606;&#1607;&#1585;.</span></div>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">12</span></div>
+</section>
+
+<!-- 13 PRACTICE A -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Practice</div></div>
+  <div class="body">
+    <h1 class="title">Practice 1 &mdash; what are these people doing?</h1>
+    <div class="title-rule"></div>
+    <div class="card accent" style="margin-bottom:20px"><p style="font-size:22px;color:var(--navy-2);font-weight:600;letter-spacing:.04em">eat &nbsp;&middot;&nbsp; have &nbsp;&middot;&nbsp; lie &nbsp;&middot;&nbsp; play &nbsp;&middot;&nbsp; sit &nbsp;&middot;&nbsp; wait</p></div>
+    <ul class="q two">
+      <li>She <span class="blank">______</span> an apple.</li>
+      <li><span class="blank">______</span> on the floor.</li>
+      <li>He <span class="blank">______</span> for a bus.</li>
+      <li><span class="blank">______</span> breakfast.</li>
+      <li>They <span class="blank">______</span> football.</li>
+      <li><span class="blank">______</span> on the table.</li>
+    </ul>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">13</span></div>
+</section>
+
+<!-- 14 PRACTICE B -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Practice</div></div>
+  <div class="body">
+    <h1 class="title">Practice 2 &mdash; complete the sentence</h1>
+    <div class="title-rule"></div>
+    <ul class="q">
+      <li>Please be quiet. I <span class="blank">______</span> <span style="color:var(--muted);font-size:20px">(work)</span></li>
+      <li>&ldquo;Where&rsquo;s John?&rdquo; &ldquo;He&rsquo;s in the kitchen. He <span class="blank">______</span>&rdquo; <span style="color:var(--muted);font-size:20px">(cook)</span></li>
+      <li>&ldquo;You <span class="blank">______</span> on my foot.&rdquo; &ldquo;Oh, I&rsquo;m sorry.&rdquo; <span style="color:var(--muted);font-size:20px">(stand)</span></li>
+      <li>Look! Somebody <span class="blank">______</span> in the river. <span style="color:var(--muted);font-size:20px">(swim)</span></li>
+      <li>We&rsquo;re here on holiday. We <span class="blank">______</span> at the Central Hotel. <span style="color:var(--muted);font-size:20px">(stay)</span></li>
+      <li>They <span class="blank">______</span> a new hotel in the city centre at the moment. <span style="color:var(--muted);font-size:20px">(build)</span></li>
+    </ul>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">14</span></div>
+</section>
+
+<!-- 15 PRACTICE C -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Practice</div></div>
+  <div class="body">
+    <h1 class="title">Practice 3 &mdash; write about Jane</h1>
+    <div class="title-rule"></div>
+    <p class="sub">Jane is sitting on the floor in front of the television. Write <b>She&rsquo;s -ing</b> or <b>She isn&rsquo;t -ing</b>.</p>
+    <ul class="q two">
+      <li>(have dinner)</li>
+      <li>(read a book)</li>
+      <li>(watch TV)</li>
+      <li>(play the piano)</li>
+      <li>(sit on the floor)</li>
+      <li>(drink coffee)</li>
+    </ul>
+    <div class="note green push"><div class="ico">&#10003;</div><p><b>Then write true sentences about yourself right now:</b> I / wash my hair &middot; it / snow &middot; I / sit on a chair &middot; I / eat &middot; I / learn English &middot; I / listen to music &middot; I / wear shoes</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">15</span></div>
+</section>
+
+<!-- 16 ANSWERS -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Answer key</div></div>
+  <div class="body">
+    <h1 class="title">Answers</h1>
+    <div class="title-rule"></div>
+    <ul class="ans-list dense">
+      <li><span>She&rsquo;s eating an apple.</span></li>
+      <li><span>He&rsquo;s lying on the floor.</span></li>
+      <li><span>He&rsquo;s waiting for a bus.</span></li>
+      <li><span>They&rsquo;re having breakfast.</span></li>
+      <li><span>They&rsquo;re playing football.</span></li>
+      <li><span>She&rsquo;s sitting on the table.</span></li>
+      <li><span>I&rsquo;m working.</span></li>
+      <li><span>He&rsquo;s cooking.</span></li>
+      <li><span>You&rsquo;re standing</span></li>
+      <li><span>is swimming</span></li>
+      <li><span>We&rsquo;re staying</span></li>
+      <li><span>They&rsquo;re building</span></li>
+      <li><span>Jane isn&rsquo;t having dinner.</span></li>
+      <li><span>She isn&rsquo;t reading a book.</span></li>
+      <li><span>She&rsquo;s watching TV.</span></li>
+      <li><span>She isn&rsquo;t playing the piano.</span></li>
+      <li><span>She&rsquo;s sitting on the floor.</span></li>
+      <li><span>She isn&rsquo;t drinking coffee.</span></li>
+    </ul>
+    <div class="note green" style="margin-top:14px;padding:13px 22px"><div class="ico">&#10003;</div><p style="font-size:17px">For the sentences about yourself, any <b>true</b> answer is correct: <b>I&rsquo;m not washing my hair</b> &middot; <b>It isn&rsquo;t snowing</b> &middot; <b>I&rsquo;m learning English</b>.</p></div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">16</span></div>
+</section>
+
+<!-- 17 QUOTE -->
+<section class="slide quote">
+  <div class="inner">
+    <div class="mark">&ldquo;</div>
+    <blockquote>If you can say what is happening around you right now, you can talk about your whole day.</blockquote>
+    <div class="who">Fluency &middot; Lesson 3</div>
+  </div>
+</section>
+
+<!-- 18 READING -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Reading</div></div>
+  <div class="body">
+    <div class="kicker">Read before the assignment</div>
+    <h1 class="title">Talking About Now</h1>
+    <div class="title-rule"></div>
+    <div class="read">
+      <p>There is a moment every learner remembers: the first time they described something in English without translating it first. Usually it happens by accident. You look out of a window, you see rain, and the words arrive on their own &mdash; it&rsquo;s raining.</p>
+      <p>That is what the present continuous gives you. It is the tense of the window, the photograph and the phone call. You use it when the thing you are describing is in front of you and still moving. She&rsquo;s waiting for a bus. They&rsquo;re playing football. The bus is coming.</p>
+      <p>Beginners often avoid it because it looks like two verbs at once. It is not. It is the verb you already know &mdash; am, is, are &mdash; with a second word attached. Nothing new to memorise, only one small habit to build.</p>
+      <p>So practise it where it belongs: out loud, in real time. Sit somewhere with people, and quietly describe what they are doing. Nobody has to hear you. Within a week the sentences stop being grammar and start being speech.</p>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">17</span></div>
+</section>
+
+<!-- 19 READING VOCAB -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Reading</div></div>
+  <div class="body">
+    <div class="kicker">From the text</div>
+    <h1 class="title">Words from the reading</h1>
+    <div class="title-rule"></div>
+    <div class="vocab">
+      <div class="v"><div class="w">moment</div><div class="m">a very short period of time</div></div>
+      <div class="v"><div class="w">describe</div><div class="m">to say what something or someone is like</div></div>
+      <div class="v"><div class="w">translate</div><div class="m">to change words from one language into another</div></div>
+      <div class="v"><div class="w">scene</div><div class="m">everything you can see in one place</div></div>
+      <div class="v"><div class="w">habit</div><div class="m">something you do regularly, almost without thinking</div></div>
+      <div class="v"><div class="w">out loud</div><div class="m">in a voice other people could hear</div></div>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">18</span></div>
+</section>
+
+<!-- 20 HOMEWORK -->
+<section class="slide">
+  <div class="hdr"><div class="brand">Fluency <span>&bull;</span> Lesson 3</div><div class="tag">Assignment</div></div>
+  <div class="body">
+    <div class="kicker">Week 03</div>
+    <h1 class="title">Your assignment</h1>
+    <div class="title-rule"></div>
+    <div class="hw">
+      <div class="tasks">
+        <div class="task"><span class="n">1</span><span>Look around you right now. Write <b>six sentences</b> about what people or things are doing at this moment. Use a different verb each time.</span></div>
+        <div class="task"><span class="n">2</span><span>Describe this scene: a woman is sitting on the floor in front of a television. Write <b>five sentences</b> &mdash; three positive and two negative.</span></div>
+        <div class="task"><span class="n">3</span><span>Answer in full sentences: What are you doing? &middot; Is it raining where you are? &middot; Are you listening to music? &middot; What are the people near you doing?</span></div>
+        <div class="task"><span class="n">4</span><span>Write the <b>-ing form</b> of: come, run, write, swim, lie, sit, dance &mdash; and use three of them in a sentence.</span></div>
+        <div class="task"><span class="n">5</span><span><b>Record yourself</b> describing what is happening around you for thirty seconds.</span></div>
+        <div class="note green" style="margin-top:14px;"><div class="ico">&#10003;</div><p>Write <b>4&ndash;6 sentences</b> for each task.</p></div>
+      </div>
+      <div class="facts">
+        <div class="fact hi"><span class="l">Deadline</span><span class="val">13 Sep 2026</span></div>
+        <div class="fact"><span class="l">Lesson code</span><span class="val">2003</span></div>
+        <div class="fact"><span class="l">Marks</span><span class="val">5 points</span></div>
+        <div class="fact stack"><span class="l">Watch first</span><span class="val">The lesson video on your Fluency dashboard</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr"><span>Fluency &middot; Language Mastery</span><span class="num">19</span></div>
+</section>
+
+<!-- 21 END -->
+<section class="slide end">
+  <div class="inner">
+    <h2>Now describe it.</h2>
+    <p>Look up from this screen. Whatever is happening in front of you &mdash; you can already say it in English.</p>
+    <div class="logo">Fluency &middot; Language Mastery</div>
+  </div>
+</section>
+</body></html>
