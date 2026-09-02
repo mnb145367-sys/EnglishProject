@@ -569,6 +569,118 @@
     }
 
     /**
+     * Full edit of one student. Email is the key their submissions and
+     * attendance marks are stored against, so changing it moves that history
+     * across on the server rather than leaving it behind under the old address.
+     */
+    function openEditStudent(s) {
+        var existing = $('attEditWrap');
+        if (existing) existing.remove();
+
+        var wrap = el('div', 'att-editwrap');
+        wrap.id = 'attEditWrap';
+
+        var card = el('div', 'att-editcard');
+        card.appendChild(el('h3', '', 'Edit student'));
+        card.appendChild(el('p', 'sub', s.submissions
+            ? s.submissions + ' submission' + (s.submissions === 1 ? '' : 's') + ' on record'
+            : 'No submissions yet'));
+
+        function field(labelText, id, value, type) {
+            card.appendChild(el('label', '', labelText));
+            var input = document.createElement('input');
+            input.type = type || 'text';
+            input.id = id;
+            input.value = value || '';
+            card.appendChild(input);
+            return input;
+        }
+
+        var nameEl = field('Name', 'attEditName', s.name);
+        var emailEl = field('Email', 'attEditEmail', s.email, 'email');
+
+        card.appendChild(el('label', '', 'Level'));
+        var levelEl = document.createElement('select');
+        levelEl.id = 'attEditLevel';
+        ['', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(function (lv) {
+            var o = document.createElement('option');
+            o.value = lv;
+            o.textContent = lv || '— none —';
+            if ((s.level || '') === lv) o.selected = true;
+            levelEl.appendChild(o);
+        });
+        card.appendChild(levelEl);
+
+        var note = el('div', 'att-editnote');
+        note.textContent = 'Changing the email moves this student\'s submissions and ' +
+            'attendance marks onto the new address.';
+        card.appendChild(note);
+
+        var acts = el('div', 'att-editacts');
+        var cancel = el('button', '', 'Cancel');
+        cancel.addEventListener('click', function () { wrap.remove(); });
+        var save = el('button', 'primary', 'Save');
+        save.addEventListener('click', function () { saveEditStudent(s, wrap, save); });
+        acts.appendChild(cancel);
+        acts.appendChild(save);
+        card.appendChild(acts);
+
+        wrap.appendChild(card);
+        wrap.addEventListener('click', function (e) { if (e.target === wrap) wrap.remove(); });
+        document.addEventListener('keydown', function esc(e) {
+            if (e.key === 'Escape') { wrap.remove(); document.removeEventListener('keydown', esc); }
+        });
+
+        document.body.appendChild(wrap);
+        nameEl.focus();
+        nameEl.select();
+    }
+
+    function saveEditStudent(s, wrap, saveBtn) {
+        var name = ($('attEditName') || {}).value || '';
+        var email = ($('attEditEmail') || {}).value || '';
+        var level = ($('attEditLevel') || {}).value || '';
+
+        if (!name.trim()) { fail('Enter the student\'s name.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { fail('Enter a valid email.'); return; }
+
+        var changedEmail = email.trim().toLowerCase() !== s.email.toLowerCase();
+        if (changedEmail) {
+            var taken = state.students.some(function (o) {
+                return o.email.toLowerCase() === email.trim().toLowerCase();
+            });
+            if (taken) { fail('Another student already uses that email.'); return; }
+            if (!global.confirm('Move ' + (s.name || s.email) + ' to ' + email.trim() + '?\n\n' +
+                'Their submissions and attendance marks move with them.')) return;
+        }
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
+
+        api({
+            action: 'updateStudent',
+            student: { email: s.email, newEmail: email.trim(), name: name.trim(), level: level }
+        })
+            .then(function (res) {
+                wrap.remove();
+                // A mark drafted against the old address would be saved to nobody.
+                if (changedEmail && state.draft[s.email] !== undefined) {
+                    state.draft[email.trim().toLowerCase()] = state.draft[s.email];
+                    delete state.draft[s.email];
+                }
+                notify(res && res.rekeyed
+                    ? 'Student updated — ' + res.rekeyed + ' record' + (res.rekeyed === 1 ? '' : 's') + ' moved'
+                    : 'Student updated');
+                return load(true);
+            })
+            .catch(function (err) {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
+                fail(err.message || 'Could not update the student.');
+            });
+    }
+
+    /**
      * Removing hides the student from the roster. Their submissions and
      * attendance marks are kept, so a restore brings everything back.
      */
@@ -677,6 +789,13 @@
             pick.appendChild(b);
         });
         row.appendChild(pick);
+
+        var edit = el('button', 'att-edit');
+        edit.title = 'Edit ' + (s.name || s.email);
+        edit.setAttribute('aria-label', edit.title);
+        edit.appendChild(icon('fa-regular fa-pen'));
+        edit.addEventListener('click', function () { openEditStudent(s); });
+        row.appendChild(edit);
 
         var del = el('button', 'att-remove');
         del.title = 'Remove ' + (s.name || s.email) + ' from the roster';
@@ -898,6 +1017,7 @@
             '<link rel="stylesheet" href="attendance-print.css">' +
             '</head><body>' +
             '<div class="pv-bar"><b>Fluency</b> ' + esc(title) +
+            '<span class="hint">Click the blank boxes to type before printing</span>' +
             '<span class="sp"></span>' +
             '<button onclick="window.print()">Print / Save as PDF</button>' +
             '<button class="ghost" onclick="window.close()">Close</button></div>' +
@@ -920,9 +1040,17 @@
             '<span><b>' + right + '</b></span></div>';
     }
 
+    /**
+     * Blank boxes are typed into in the preview before printing, so they carry
+     * contenteditable. Filled boxes stay read-only — they are computed values.
+     */
     function fieldBox(label, value, blank) {
+        var attrs = blank
+            ? ' class="box blank" contenteditable="true" spellcheck="false"' +
+              ' data-ph="' + esc('Type ' + String(label).toLowerCase() + '…') + '"'
+            : ' class="box"';
         return '<div class="field"><div class="lab">' + esc(label) + '</div>' +
-            '<div class="box' + (blank ? ' blank' : '') + '">' + esc(value || '') + '</div></div>';
+            '<div' + attrs + '>' + esc(value || '') + '</div></div>';
     }
 
     var LEGEND_HTML =

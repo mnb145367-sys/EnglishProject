@@ -5972,8 +5972,48 @@
       });
     });
 
+    // ---- Shrink a phone photo before upload ----
+    // A raw camera photo is 3–8MB, and base64 adds another third on top of that.
+    // Sending that over one POST is what made finishing a lesson feel slow. A
+    // notebook page stays perfectly readable at 1600px, so we downscale and
+    // re-encode as JPEG first — typically 4MB -> ~400KB.
+    const UPLOAD_MAX_EDGE = 1600;
+    const UPLOAD_JPEG_QUALITY = 0.82;
+
+    function compressImageFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Could not read the file.'));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('Could not read the image.'));
+          img.onload = () => {
+            const scale = Math.min(1, UPLOAD_MAX_EDGE / Math.max(img.width, img.height));
+            // Already small enough and not a big PNG — keep the original bytes.
+            if (scale === 1 && file.size <= 900 * 1024 && file.type !== 'image/png') {
+              resolve({ dataUrl: e.target.result, bytes: file.size });
+              return;
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingQuality = 'high';
+            // White ground so a transparent PNG does not turn black as JPEG.
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg', UPLOAD_JPEG_QUALITY);
+            resolve({ dataUrl: dataUrl, bytes: Math.round(dataUrl.length * 0.75) });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     // ---- Handle file selection ----
-    function handleImageSelect(event) {
+    async function handleImageSelect(event) {
       const file = event.target.files[0];
       if (!file) return;
 
@@ -5984,24 +6024,32 @@
         return;
       }
 
-      // Validate size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        showUploadStatus('File is too large. Maximum size is 5MB.', 'error');
+      // Generous ceiling: anything under this is compressed down below, so a
+      // normal phone photo is never rejected for being a normal phone photo.
+      if (file.size > 25 * 1024 * 1024) {
+        showUploadStatus('File is too large. Maximum size is 25MB.', 'error');
         return;
       }
 
-      // Show preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        lessonImageBase64 = e.target.result; // full data URL
-        document.getElementById('previewImg').src = lessonImageBase64;
-        document.getElementById('uploadFileName').textContent = file.name;
-        document.getElementById('uploadPreview').classList.remove('hidden');
-        document.getElementById('uploadDropZone').style.display = 'none';
-        lessonImageUploaded = false; // reset – actual upload happens on Finish
-        showUploadStatus('Image selected! It will be uploaded when you click Finish.', 'info');
-      };
-      reader.readAsDataURL(file);
+      showUploadStatus('Preparing your photo…', 'info');
+
+      let result;
+      try {
+        result = await compressImageFile(file);
+      } catch (err) {
+        console.error('Image compression failed:', err);
+        showUploadStatus('That image could not be read. Please try another photo.', 'error');
+        return;
+      }
+
+      lessonImageBase64 = result.dataUrl; // full data URL
+      document.getElementById('previewImg').src = lessonImageBase64;
+      document.getElementById('uploadFileName').textContent = file.name;
+      document.getElementById('uploadPreview').classList.remove('hidden');
+      document.getElementById('uploadDropZone').style.display = 'none';
+      lessonImageUploaded = false; // reset – actual upload happens on Finish
+      showUploadStatus('Image ready (' + Math.max(1, Math.round(result.bytes / 1024)) +
+        ' KB). It will be uploaded when you click Finish.', 'info');
     }
 
     // ---- Remove selected image ----
@@ -6032,6 +6080,8 @@
     // ---- Upload image to Google Apps Script ----
     async function uploadImageToSheet() {
       if (!lessonImageBase64) return false;
+      // Already accepted by the server — never send the same photo twice.
+      if (lessonImageUploaded) return true;
 
       document.getElementById('uploadLoadingState').style.display = 'block';
       hideUploadStatus();
@@ -6088,11 +6138,18 @@
     }
 
     // ---- Override nextTask to validate image on last task ----
+    let lessonSubmitInFlight = false;
+
     (function () {
       const _origNextTask = window.nextTask;
       window.nextTask = async function () {
         // Only enforce upload on the LAST task
         if (currentTask === totalTasks) {
+
+          // Finishing takes a few seconds. Without this the student can click
+          // Finish again while the first request is still open, and the server
+          // records the lesson twice.
+          if (lessonSubmitInFlight) return;
 
           // Check if an image was selected
           if (!lessonImageBase64) {
@@ -6111,9 +6168,40 @@
             return; // BLOCK completion
           }
 
+          // Lock the button for the whole submit so a second click cannot start
+          // a parallel upload.
+          lessonSubmitInFlight = true;
+          const finishBtn = document.getElementById('nextBtn');
+          const finishLabel = finishBtn ? finishBtn.innerText : '';
+          if (finishBtn) {
+            finishBtn.disabled = true;
+            finishBtn.style.opacity = '.6';
+            finishBtn.style.pointerEvents = 'none';
+            finishBtn.innerText = 'Sending…';
+          }
+          const releaseFinish = () => {
+            lessonSubmitInFlight = false;
+            if (finishBtn) {
+              finishBtn.disabled = false;
+              finishBtn.style.opacity = '';
+              finishBtn.style.pointerEvents = '';
+              finishBtn.innerText = finishLabel || 'Finish';
+            }
+          };
+
           // Upload image and submit question together, then upload audio, then show popup
-          const success = await uploadImageToSheet();
-          if (success) {
+          let success = false;
+          try {
+            success = await uploadImageToSheet();
+          } catch (err) {
+            console.error('Submit failed:', err);
+          }
+          if (!success) {
+            // Let them try again — the error message is already on screen.
+            releaseFinish();
+            return;
+          }
+          {
             await submitQuestion();
 
             // ── Dedicated audio upload (separate request) ──
@@ -6158,8 +6246,9 @@
             }
 
             document.getElementById('completionPopup').classList.remove('hidden');
+            // Stays locked on success: the lesson is submitted, so Finish must
+            // not fire a second time.
           }
-          // If upload fails, the error message is already shown – user can retry
 
         } else {
           _origNextTask();
