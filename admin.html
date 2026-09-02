@@ -3070,16 +3070,46 @@ discipline – controlled behaviour to achieve a goal</textarea>
          * text/plain keeps this a CORS "simple request", so the browser skips the
          * preflight that Apps Script cannot answer. The body is still JSON.
          */
+        // Apps Script serves /exec through a redirect to googleusercontent, and
+        // under load that hop intermittently comes back 404 or 5xx. A single
+        // blip used to blank a whole panel, so transient failures are retried
+        // with a short backoff. Real errors (a 401, a JSON error body) are not
+        // retried - only the transport-level ones worth a second attempt.
+        const ADMIN_FETCH_RETRIES = 2;
+        const ADMIN_RETRY_STATUS = [404, 429, 500, 502, 503, 504];
+
+        function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
         async function adminFetch(payload, tokenOverride) {
             const token = tokenOverride !== undefined ? tokenOverride : ADMIN_TOKEN;
-            const res = await fetch(LESSON_API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(Object.assign({}, payload, { adminToken: token })),
-                redirect: 'follow'
-            });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return res.json();
+            let lastErr;
+
+            for (let attempt = 0; attempt <= ADMIN_FETCH_RETRIES; attempt++) {
+                if (attempt) await wait(400 * Math.pow(2, attempt - 1));
+                try {
+                    const res = await fetch(LESSON_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(Object.assign({}, payload, { adminToken: token })),
+                        redirect: 'follow'
+                    });
+                    if (!res.ok) {
+                        const err = new Error('HTTP ' + res.status);
+                        err.status = res.status;
+                        if (ADMIN_RETRY_STATUS.indexOf(res.status) !== -1 &&
+                            attempt < ADMIN_FETCH_RETRIES) { lastErr = err; continue; }
+                        throw err;
+                    }
+                    return await res.json();
+                } catch (err) {
+                    // A dropped connection is worth another try; a thrown HTTP
+                    // error we already decided not to retry is not.
+                    if (err && err.status && ADMIN_RETRY_STATUS.indexOf(err.status) === -1) throw err;
+                    lastErr = err;
+                    if (attempt === ADMIN_FETCH_RETRIES) throw err;
+                }
+            }
+            throw lastErr || new Error('Request failed');
         }
 
         function showError(message) {
