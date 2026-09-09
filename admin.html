@@ -1262,6 +1262,7 @@
     </style>
     <link rel="stylesheet" href="lessons-view.css">
     <link rel="stylesheet" href="lessons-admin.css">
+    <link rel="stylesheet" href="tests-admin.css">
     <link rel="stylesheet" href="student-record.css">
     <link rel="stylesheet" href="attendance-admin.css">
     <link rel="stylesheet" href="admin-shell.css">
@@ -1319,6 +1320,9 @@
                     <div class="ash-nav-label">Learning</div>
                     <button class="ash-nav-item" data-tab="lessons" onclick="switchTab('lessons')">
                         <i class="fa-regular fa-rectangle-list"></i> Assignments
+                    </button>
+                    <button class="ash-nav-item" data-tab="tests" onclick="switchTab('tests')">
+                        <i class="fa-regular fa-clipboard"></i> Test Management
                     </button>
                     <button class="ash-nav-item" data-tab="lesson" onclick="switchTab('lesson')">
                         <i class="fa-regular fa-book"></i> Lesson Settings
@@ -2125,6 +2129,79 @@ discipline – controlled behaviour to achieve a goal</textarea>
             </div>
         </div>
 
+        <!-- ═══ TAB: TEST MANAGEMENT ═══
+             A new module beside the existing tabs. Everything inside is
+             rendered by tests-admin.js; nothing about the other tabs changes. -->
+        <div id="tab-tests" class="tab-content">
+            <div class="section-box">
+                <h3><i class="fa-regular fa-clipboard"></i> Test Management</h3>
+                <div class="help-text">
+                    <i class="fa-regular fa-circle-info"></i>
+                    Create timed tests, build their questions and review student results.
+                    Only published tests appear on the website's Test page, and all
+                    scheduling uses Riyadh time (Asia/Riyadh).
+                </div>
+
+                <!-- LIST VIEW -->
+                <div id="atListView">
+                    <div class="at-stats" id="atStats"></div>
+
+                    <div class="at-toolbar">
+                        <button class="btn btn-primary" onclick="openTestEditor(null)">
+                            <i class="fa-solid fa-plus"></i> Create New Test
+                        </button>
+                        <button class="btn" onclick="openTestSubmissions('')">
+                            <i class="fa-regular fa-file-lines"></i> All Submissions
+                        </button>
+                        <button class="btn" onclick="loadAdminTests(true)">
+                            <i class="fa-regular fa-arrows-rotate"></i> Refresh
+                        </button>
+                        <span class="at-spacer"></span>
+                        <div class="sm-search">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                            <label for="atSearch" class="sr-only-label">Search tests</label>
+                            <input type="text" id="atSearch" placeholder="Search tests..."
+                                   oninput="renderAdminTests()" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="al-filter-group" id="atStatusFilters">
+                        <span class="al-filter-label">Status</span>
+                        <button class="sm-chip active" data-status="all"
+                                onclick="setTestStatusFilter('all')">All</button>
+                        <button class="sm-chip" data-status="active"
+                                onclick="setTestStatusFilter('active')">Active</button>
+                        <button class="sm-chip" data-status="upcoming"
+                                onclick="setTestStatusFilter('upcoming')">Upcoming</button>
+                        <button class="sm-chip" data-status="closed"
+                                onclick="setTestStatusFilter('closed')">Closed</button>
+                        <button class="sm-chip" data-status="draft"
+                                onclick="setTestStatusFilter('draft')">Draft</button>
+                        <button class="sm-chip" data-status="disabled"
+                                onclick="setTestStatusFilter('disabled')">Disabled</button>
+                    </div>
+
+                    <div class="sm-count" id="atCount"></div>
+                    <div id="atTableWrap" aria-live="polite"></div>
+                </div>
+
+                <!-- EDITOR VIEW -->
+                <div id="atEditorView" style="display:none;">
+                    <div id="atEditorBody"></div>
+                </div>
+
+                <!-- QUESTION BUILDER VIEW -->
+                <div id="atQuestionsView" style="display:none;">
+                    <div id="atQuestionsBody"></div>
+                </div>
+
+                <!-- SUBMISSIONS VIEW -->
+                <div id="atSubmissionsView" style="display:none;">
+                    <div id="atSubmissionsBody"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer Actions -->
         <div class="footer-actions">
             <button class="btn btn-success" onclick="saveAllChanges()">
@@ -2357,6 +2434,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             submissions: 'Submissions',
             attendance: 'Attendance',
             lessons: 'Assignments',
+            tests: 'Test Management',
             lesson: 'Lesson Settings',
             content: 'Site Content',
             performer: 'Top Performer',
@@ -2393,6 +2471,7 @@ discipline – controlled behaviour to achieve a goal</textarea>
             if (tabName === 'students') loadStudents();
             if (tabName === 'messages') loadMessages();
             if (tabName === 'lessons' && typeof loadAdminLessons === 'function') loadAdminLessons();
+            if (tabName === 'tests' && typeof loadAdminTests === 'function') loadAdminTests();
             if (tabName === 'submissions' && typeof loadSubmissions === 'function') loadSubmissions();
             if (tabName === 'attendance' && window.FluencyAttendance) FluencyAttendance.load();
             if (tabName === 'dashboard' && typeof loadDashboard === 'function') loadDashboard();
@@ -3629,6 +3708,10 @@ discipline – controlled behaviour to achieve a goal</textarea>
          Loaded after the admin script so ADMIN_TOKEN and adminFetch are in scope. -->
     <script src="lessons-view.js"></script>
     <script src="lessons-admin.js"></script>
+
+    <!-- TEST SYSTEM: admin controller. Loaded for the same reason — it uses
+         the adminFetch / showNotification helpers defined above. -->
+    <script src="tests-admin.js"></script>
     <script src="student-record.js"></script>
     <script src="attendance-admin.js"></script>
     <script src="admin-shell.js"></script>

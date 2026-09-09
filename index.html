@@ -3653,6 +3653,7 @@
     }
   </style>
   <link rel="stylesheet" href="lessons-view.css">
+  <link rel="stylesheet" href="test-view.css">
 </head>
 
 <body>
@@ -3681,6 +3682,7 @@
       <a onclick="openPage('about')">About</a>
       <a onclick="openPage('services')">Services</a>
       <a href="#assignments" onclick="openPage('lessonsHub'); return false;">Assignments</a>
+      <a href="#test" onclick="openPage('testsHub'); return false;">Test</a>
       <a onclick="openPage('statistics')">Statistics</a>
       <a onclick="openPage('journey')">Journey</a>
       <a onclick="openPage('contact')">Contact</a>
@@ -4209,6 +4211,28 @@
         <span id="flCrumbCurrent" aria-current="page">Assignment</span>
       </nav>
       <div id="flLessonReaderBody" aria-live="polite" aria-busy="false"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TEST SYSTEM — STUDENT PAGE
+         Rendered entirely from the Test API by test-student.js. No test,
+         question or schedule data is hardcoded here, and the correct
+         answers never reach this page at all.
+         ══════════════════════════════════════════════════════════════════ -->
+
+    <div id="testsHub" class="hidden">
+      <div class="section ft-head">
+        <h1>Tests</h1>
+        <p class="ft-lede">Check what you have learned. Each test opens at a set time and is
+          timed, so make sure you are ready before you begin.</p>
+        <p id="ftTestsCount" class="ft-count" hidden>
+          <i class="fa-regular fa-clipboard" aria-hidden="true"></i>
+          <span id="ftTestsCountText"></span>
+        </p>
+      </div>
+
+      <!-- Live region so screen readers hear list changes, loading and errors -->
+      <div id="ftRoot" aria-live="polite" aria-busy="false"></div>
     </div>
 
     <!-- STUDENT JOURNEY PAGE -->
@@ -5408,7 +5432,7 @@
     function reload() { location.reload(); }
 
     function openPage(page) {
-      const pages = ['home', 'lessonPage', 'about', 'services', 'statistics', 'contact', 'journey', 'lessonsHub', 'lessonReader'];
+      const pages = ['home', 'lessonPage', 'about', 'services', 'statistics', 'contact', 'journey', 'lessonsHub', 'lessonReader', 'testsHub'];
       pages.forEach(p => {
         const element = document.getElementById(p);
         if (element) element.classList.add('hidden');
@@ -5433,6 +5457,11 @@
       // keeps openPage working normally if it has not parsed yet.
       if (window.fluencyLessons) {
         window.fluencyLessons.onPageChange(page);
+      }
+
+      // Test system hook, guarded the same way.
+      if (window.fluencyTests) {
+        window.fluencyTests.onPageChange(page);
       }
     }
 
@@ -7159,5 +7188,10 @@
        Loaded last so LESSON_API_URL from the scripts above is in scope. -->
   <script src="lessons-view.js"></script>
   <script src="lessons-student.js"></script>
+
+  <!-- TEST SYSTEM: student controller. Loaded last for the same reason —
+       it reads LESSON_API_URL from the scripts above when no dedicated
+       FLUENCY_TESTS_API_URL is defined. -->
+  <script src="test-student.js"></script>
 </body>
 </html>
